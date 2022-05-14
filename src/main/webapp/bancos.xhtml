@@ -22,7 +22,8 @@
 			<div class="p-grid button-demo">
 				<div class="p-col-12">
 					<div class="card">
-						<p:commandButton value="Agregar Nuevo Banco" action="#{dfvNuevoBanco.viewProducts}" styleClass="p-mr-2 p-mb-2" />
+						<p:commandButton value="Agregar Nuevo Banco"
+							oncomplete="PF('manageProductDialog').show()" styleClass="p-mr-2 p-mb-2" />
 					</div>
 				</div>
 			</div>
@@ -30,36 +31,33 @@
 			<div class="p-grid table-demo">
 				<div class="p-col-12">
 					<div class="card">
-						<p:dataTable widgetVar="customersDT" var="customer"
-							value="#{dataTableDemoView.customers1}" reflow="true"
+						<p:dataTable widgetVar="customersDT" var="bancos"
+							value="#{bancoBean.listaBancos}" reflow="true"
 							selection="#{dataTableDemoView.selectedCustomers}"
-							rowKey="#{customer.id}" paginator="true" rows="10"
+							rowKey="#{bancos.id}" paginator="true" rows="10"
 							paginatorPosition="bottom" rowSelectMode="add">
 							<f:facet name="header">
 								<div class="customers-table-header">
 									<span style="font-weight: bold">Bancos</span> <span
 										class="ui-input-icon-left filter-container"> <i
 										class="pi pi-search" /> <p:inputText id="globalFilter"
-											onkeyup="PF('customersDT').filter()" placeholder="Busqueda" />
+											onkeyup="PF('customersDT').filter()" placeholder="Búsqueda" />
 									</span>
 								</div>
 							</f:facet>
 							<p:column selectionMode="multiple" />
-							<p:column headerText="Clave" sortBy="#{customer.name}"
-								filterBy="#{customer.name}">
-								<h:outputText value="#{customer.name}" />
+							<p:column headerText="Clave" sortBy="#{bancos.clave}"
+								filterBy="#{bancos.clave}">
+								<h:outputText value="#{bancos.clave}" />
 							</p:column>
-							<p:column headerText="Nombre" sortBy="#{customer.country.name}"
-								filterBy="#{customer.country.name}">
-								<span class="flag flag-#{customer.country.code}"
-									style="width: 30px; height: 20px" />
+							<p:column headerText="Nombre" sortBy="#{bancos.nombre}"
+								filterBy="#{bancos.nombre}">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{customer.country.name}" />
+									value="#{bancos.nombre}" />
 							</p:column>
 							<p:column headerText="Acción">
 								<p:column>
-									<p:button
-											value="Modificar" styleClass="p-mr-2 p-mb-2" />
+									<p:button value="Modificar" styleClass="p-mr-2 p-mb-2" />
 								</p:column>
 								<p:column>
 									<p:button value="Eliminar" styleClass="p-mr-2 p-mb-2" />
@@ -69,6 +67,16 @@
 					</div>
 				</div>
 			</div>
+			<p:dialog header="Agregar un nuevo Banco" showEffect="fade" modal="true"
+				widgetVar="manageProductDialog" responsive="true">
+				<p:outputPanel id="manage-product-content" class="ui-fluid">
+					<p:outputLabel for="clave" value="Clave" />
+					<p:inputText id="clave" />
+					<p:outputLabel for="nombre" value="Nombre del Banco" />
+					<p:inputText id="nombre" />
+					<p:commandButton value="Agregar" styleClass="p-mr-2 p-mb-2" />
+					</p:outputPanel>
+			</p:dialog>
 		</h:form>
 	</ui:define>
 
