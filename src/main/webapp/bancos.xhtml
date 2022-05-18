@@ -23,7 +23,7 @@
 				<div class="p-col-12">
 					<div class="card">
 						<p:commandButton value="Agregar Nuevo Banco"
-							oncomplete="PF('manageProductDialog').show()" styleClass="p-mr-2 p-mb-2" />
+							oncomplete="PF('nuevoBancoDialog').show()" styleClass="p-mr-2 p-mb-2" />
 					</div>
 				</div>
 			</div>
@@ -32,8 +32,7 @@
 				<div class="p-col-12">
 					<div class="card">
 						<p:dataTable widgetVar="customersDT" var="bancos"
-							value="#{bancoBean.listaBancos}" reflow="true"
-							selection="#{dataTableDemoView.selectedCustomers}"
+							value="#{mbBanco.listaBancos}" reflow="true"
 							rowKey="#{bancos.id}" paginator="true" rows="10"
 							paginatorPosition="bottom" rowSelectMode="add">
 							<f:facet name="header">
@@ -57,7 +56,7 @@
 							</p:column>
 							<p:column headerText="Acción">
 								<p:column>
-									<p:button value="Modificar" styleClass="p-mr-2 p-mb-2" />
+									<p:commandButton value="Modificar" styleClass="p-mr-2 p-mb-2" oncomplete="PF('modificarBancoDialog').show()"/>
 								</p:column>
 								<p:column>
 									<p:button value="Eliminar" styleClass="p-mr-2 p-mb-2" />
@@ -68,13 +67,23 @@
 				</div>
 			</div>
 			<p:dialog header="Agregar un nuevo Banco" showEffect="fade" modal="true"
-				widgetVar="manageProductDialog" responsive="true">
+				widgetVar="nuevoBancoDialog" responsive="true">
 				<p:outputPanel id="manage-product-content" class="ui-fluid">
 					<p:outputLabel for="clave" value="Clave" />
-					<p:inputText id="clave" />
+					<p:inputText id="clave" value="#{mbBanco.clave}" required="true"/>
 					<p:outputLabel for="nombre" value="Nombre del Banco" />
-					<p:inputText id="nombre" />
-					<p:commandButton value="Agregar" styleClass="p-mr-2 p-mb-2" />
+					<p:inputText id="nombre" value="#{mbBanco.nombre}" required="true"/>
+					<p:commandButton value="Agregar" styleClass="p-mr-2 p-mb-2" action="#{mbBanco.insertBanco}" />
+					</p:outputPanel>
+			</p:dialog>
+			<p:dialog header="Modificar Banco" showEffect="fade" modal="true"
+				widgetVar="modificarBancoDialog" responsive="true">
+				<p:outputPanel id="manage-product-content" class="ui-fluid">
+					<p:outputLabel for="clave" value="Clave" />
+					<p:inputText id="clave" value="#{mbBanco.clave}" required="true"/>
+					<p:outputLabel for="nombre" value="Nombre del Banco" />
+					<p:inputText id="nombre" value="#{mbBanco.nombre}" required="true"/>
+					<p:commandButton value="Agregar" styleClass="p-mr-2 p-mb-2" action="#{mbBanco.updateBanco}" />
 					</p:outputPanel>
 			</p:dialog>
 		</h:form>
