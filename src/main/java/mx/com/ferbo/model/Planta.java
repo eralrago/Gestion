@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -30,8 +32,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Planta.findByPlantaDs", query = "SELECT p FROM Planta p WHERE p.plantaDs = :plantaDs"),
     @NamedQuery(name = "Planta.findByPlantaAbrev", query = "SELECT p FROM Planta p WHERE p.plantaAbrev = :plantaAbrev"),
     @NamedQuery(name = "Planta.findByPlantaSufijo", query = "SELECT p FROM Planta p WHERE p.plantaSufijo = :plantaSufijo"),
-    @NamedQuery(name = "Planta.findByPlantaCod", query = "SELECT p FROM Planta p WHERE p.plantaCod = :plantaCod"),
-    @NamedQuery(name = "Planta.findByIdUsuario", query = "SELECT p FROM Planta p WHERE p.idUsuario = :idUsuario")})
+    @NamedQuery(name = "Planta.findByPlantaCod", query = "SELECT p FROM Planta p WHERE p.plantaCod = :plantaCod")})
 public class Planta implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,8 +53,9 @@ public class Planta implements Serializable {
     @Size(max = 10)
     @Column(name = "PLANTA_COD")
     private String plantaCod;
-    @Column(name = "id_usuario")
-    private Integer idUsuario;
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id")
+    @ManyToOne
+    private Usuario idUsuario;
     @OneToMany(mappedBy = "plantaCve")
     private List<Camara> camaraList;
     @OneToMany(mappedBy = "plantaCve")
@@ -106,11 +108,11 @@ public class Planta implements Serializable {
         this.plantaCod = plantaCod;
     }
 
-    public Integer getIdUsuario() {
+    public Usuario getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(Integer idUsuario) {
+    public void setIdUsuario(Usuario idUsuario) {
         this.idUsuario = idUsuario;
     }
 

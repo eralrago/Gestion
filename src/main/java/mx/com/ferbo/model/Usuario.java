@@ -89,6 +89,8 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 1)
     @Column(name = "st_usuario")
     private String stUsuario;
+    @OneToMany(mappedBy = "idUsuario")
+    private List<Planta> plantaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private List<LogSeguridad> logSeguridadList;
 
@@ -202,6 +204,14 @@ public class Usuario implements Serializable {
 
     public void setStUsuario(String stUsuario) {
         this.stUsuario = stUsuario;
+    }
+
+    public List<Planta> getPlantaList() {
+        return plantaList;
+    }
+
+    public void setPlantaList(List<Planta> plantaList) {
+        this.plantaList = plantaList;
     }
 
     public List<LogSeguridad> getLogSeguridadList() {
