@@ -19,7 +19,10 @@
                     <i class="pi pi-fw pi-cog"/>
                 </a>
                 <ul>
-                    <li><a href="#"><i class="pi pi-fw pi-sign-out"/><span>Logout</span></a></li>
+                    <li><a href="${application.contextPath}/login.xhtml">
+                           <i class="pi pi-fw pi-sign-out"/><span>Cerrar sesión</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="menu">
@@ -104,6 +107,8 @@
                             <p:menuitem id="frb_facturacion_sm11" value="Banco" icon="pi pi-fw pi-money-bill" url="#"/>
                             <p:menuitem id="frb_facturacion_sm12" value="Servicios por Cliente" icon="pi pi-fw pi-user-edit" url="#"/>
                             <p:menuitem id="frb_facturacion_sm13" value="Servicios" icon="pi pi-fw pi-shopping-cart" url="#"/>
+							<p:menuitem value="Artículos" outcome="/protected/catalogos/articulos" />
+							<p:menuitem value="Servicios" outcome="/protected/catalogos/servicios" />
                         </p:submenu>
                     </p:submenu>
                 </po:menu>
