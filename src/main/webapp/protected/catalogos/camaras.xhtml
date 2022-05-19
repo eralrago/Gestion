@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Cámaras</ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Cámaras" />
+			</p:breadCrumb>
+			<div class="p-grid crud-demo">
+                <div class="p-col-12">
+                    <div class="card">
+                        <p:growl id="messages" showDetail="true" />
+
+                        <p:toolbar styleClass="p-mb-4">
+                            <p:toolbarGroup>
+                                <p:commandButton value="Agregar" icon="pi pi-plus" actionListener="#{camarasBean.nuevaCamara}" update="manage-camara-content form:manage-camara-content" oncomplete="PF('camaraDialog').show()" 
+                                    styleClass="ui-button-success" style="margin-right: .5rem" />
+                                <p:commandButton id="delete-camaras-button" value="#{camarasBean.consultaMensajeBtn()}" icon="pi pi-trash" actionListener="#{camarasBean.eliminarCamarasSeleccionadas()}" 
+                                    styleClass="ui-button-danger" disabled="#{!camarasBean.camaraSeleccionada()}" update="@this">
+                                    <p:confirm header="Eliminar" message="Desea eliminar las cámaras seleccionadas?" icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                            <p:toolbarGroup align="right">
+                                <p:commandButton value="Exportar" icon="pi pi-upload" styleClass="ui-button-secondary" ajax="false">
+                                    <p:dataExporter type="pdf" target="dt-camaras" fileName="camaras"/>
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+                        <p:dataTable id="dt-camaras" widgetVar="dtCamaras" var="camara" value="#{camarasBean.lstCamaras}" reflow="true"
+                                    selection="#{camarasBean.lstCamarasSelected}" rowKey="#{camara.camaraCve}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                             <f:facet name="header">
+                                <div class="products-table-header">
+                                    <span style="font-weight: bold">Catálogo de Cámaras</span>
+                                
+                                    <span class="filter-container ui-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <p:inputText id="globalFilter" onkeyup="PF('dtCamaras').filter()" placeholder="Buscar" />
+                                    </span>
+                                </div>
+                            </f:facet>
+
+                            <p:ajax event="rowSelect" update=":form:delete-camaras-button" />
+                            <p:ajax event="rowUnselect" update=":form:delete-camaras-button" />
+                            <p:ajax event="rowSelectCheckbox" update=":form:delete-camaras-button" />
+                            <p:ajax event="rowUnselectCheckbox" update=":form:delete-camaras-button" />
+                            <p:ajax event="toggleSelect" update=":form:delete-camaras-button" />
+
+                            <p:column selectionMode="multiple" exportable="false"></p:column>
+                            
+                            <p:column headerText="Descripción" sortBy="#{camara.camaraDs}" filterBy="#{camara.camaraDs}" width="25%">
+                                <h:outputText value="#{camara.camaraDs}" />
+                            </p:column>
+                            
+                            <p:column headerText="Abreviación" sortBy="#{camara.camaraAbrev}" filterBy="#{camara.camaraAbrev}" width="20%">
+                                <h:outputText value="#{camara.camaraAbrev}" />
+                            </p:column>
+
+							<p:column headerText="Planta" width="25%">
+								<h:outputText value="#{camara.plantaCve.plantaDs}" />
+							</p:column>
+							<p:column exportable="false" width="30%" style="text-align:center" >
+                                <p:commandButton icon="pi pi-pencil" update=":form:manage-camara-content" value="Modificar" oncomplete="PF('camaraDialog').show()" 
+                                    styleClass="edit-button ui-button-success" process="@this">
+                                    <f:setPropertyActionListener value="#{camara}" target="#{camarasBean.camaraSelect}" />
+                                </p:commandButton>
+                                <p:commandButton class="ui-button-warning" icon="pi pi-trash" value="Eliminar" process="@this" oncomplete="PF('eliminaCamaraDialog').show()" >
+                                    <f:setPropertyActionListener value="#{camara}" target="#{camarasBean.camaraSelect}" />
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <p:dialog header="Agregar/Editar registro" showEffect="fade" modal="true" widgetVar="camaraDialog" responsive="true">
+                            <p:outputPanel id="manage-camara-content" class="ui-fluid">
+                                <p:outputPanel rendered="#{not empty camarasBean.camaraSelect}">
+                                    <div class="p-field">
+                                        <p:outputLabel for="txtDescipcion">Descripción</p:outputLabel>
+                                        <p:inputText id="txtDescipcion" value="#{camarasBean.camaraSelect.camaraDs}" required="true" requiredMessage="Campo requerido"/>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="txtCodigo">Abreviación</p:outputLabel>
+                                        <p:inputTextarea id="txtCodigo" value="#{camarasBean.camaraSelect.camaraAbrev}" />
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="soPlanta" value="Planta"/>
+                                        <p:selectOneMenu id="soPlanta" value="#{camarasBean.camaraSelect.plantaCve}"  converter="entityConverter" required="true" requiredMessage="Campo requerido">
+                                            <f:selectItem itemLabel="--Selecciona--"/>
+                                            <f:selectItems value="#{camarasBean.lstPlantas}" var="planta" itemLabel="#{planta.plantaDs}" itemValue="#{planta}" />
+                                        </p:selectOneMenu>
+                                    </div>                                    
+                                </p:outputPanel>
+                            </p:outputPanel>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{camarasBean.guardarCamara()}" update="manage-camara-content" process="manage-camara-content @this" />
+                                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('camaraDialog').hide()" class="ui-button-secondary" />
+                            </f:facet>
+                        </p:dialog> 
+
+                        <p:confirmDialog widgetVar="eliminaCamaraDialog" showEffect="fade" width="400" message="Desea eliminar la cámara?" header="Eliminar" severity="warn">
+                            <p:commandButton value="Sí" icon="pi pi-check" actionListener="#{camarasBean.eliminarCamara()}" process="@this" oncomplete="PF('eliminaCamaraDialog').hide()"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('eliminaCamaraDialog').hide()" />
+                        </p:confirmDialog>
+
+                        <p:confirmDialog global="true" showEffect="fade" width="400" header="Eliminar">
+                            <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary" icon="pi pi-times" />
+                        </p:confirmDialog>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
