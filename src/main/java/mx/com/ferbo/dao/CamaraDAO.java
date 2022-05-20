@@ -1,37 +1,36 @@
 package mx.com.ferbo.dao;
 
-
 import java.util.List;
-import mx.com.ferbo.commons.dao.IBaseDAO;
-import mx.com.ferbo.model.Servicio;
 
-public class ServicioDAO extends IBaseDAO<Servicio, Integer> {
+import mx.com.ferbo.commons.dao.IBaseDAO;
+import mx.com.ferbo.model.Camara;
+
+public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 
 	@Override
-	public Servicio buscarPorId(Integer id) {
+	public Camara buscarPorId(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
 	@Override
-	public List<Servicio> buscarTodos() {
-		List<Servicio> listado = null;
-		listado = em.createNamedQuery("Servicio.findAll", Servicio.class).getResultList();
+	public List<Camara> buscarTodos() {
+		List<Camara> listado = null;
+		listado = em.createNamedQuery("Camara.findAll", Camara.class).getResultList();
 		return listado;
 	}
 
 	@Override
-	public List<Servicio> buscarPorCriterios(Servicio e) {
+	public List<Camara> buscarPorCriterios(Camara e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String actualizar(Servicio servicio) {
+	public String actualizar(Camara camara) {
 		try {
 			em.getTransaction().begin();
-			em.merge(servicio);
+			em.merge(camara);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
@@ -41,24 +40,10 @@ public class ServicioDAO extends IBaseDAO<Servicio, Integer> {
 	}
 
 	@Override
-	public String guardar(Servicio servicio) {
+	public String guardar(Camara camara) {
 		try {
 			em.getTransaction().begin();
-			em.persist(servicio);
-			em.getTransaction().commit();
-			em.close();
-		} catch (Exception e) {
-			System.out.println("ERROR" + e.getMessage());
-			return "ERROR";
-		}
-		return null;
-	}
-
-	@Override
-	public String eliminar(Servicio servicio) {
-		try {
-			em.getTransaction().begin();
-			em.remove(em.merge(servicio));
+			em.persist(camara);
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
@@ -69,11 +54,25 @@ public class ServicioDAO extends IBaseDAO<Servicio, Integer> {
 	}
 
 	@Override
-	public String eliminarListado(List<Servicio> listado) {
+	public String eliminar(Camara camara) {
 		try {
 			em.getTransaction().begin();
-			for (Servicio servicio : listado) {
-				em.remove(em.merge(servicio));
+			em.remove(em.merge(camara));
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
+		return null;
+	}
+
+	@Override
+	public String eliminarListado(List<Camara> listado) {
+		try {
+			em.getTransaction().begin();
+			for (Camara camara : listado) {
+				em.remove(em.merge(camara));
 			}
 			em.getTransaction().commit();
 			em.close();
@@ -83,6 +82,5 @@ public class ServicioDAO extends IBaseDAO<Servicio, Integer> {
 		}
 		return null;
 	}
-
 
 }
