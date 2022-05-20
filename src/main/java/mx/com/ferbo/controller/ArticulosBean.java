@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import mx.com.ferbo.dao.ProductoDAO;
 import mx.com.ferbo.model.Producto;
@@ -25,18 +26,10 @@ public class ArticulosBean implements Serializable {
 	private List<Producto> selectedProductos;
 
 	private ProductoDAO productoDAO;
-//    
-//    @Inject
-//    private Productoservice productoservice;
-//    
-//    @Inject
-//    private OrderService orderService;
-
-//    @Autowired
-//    private PersonaDAO personaDAO;
 
 	public ArticulosBean() {
 		productoDAO = new ProductoDAO();
+		selectedProductos = new ArrayList<>();
 	}
 
 	@PostConstruct

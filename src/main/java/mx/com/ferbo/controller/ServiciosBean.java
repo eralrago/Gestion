@@ -1,6 +1,7 @@
 package mx.com.ferbo.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +37,7 @@ public class ServiciosBean implements Serializable{
 	public ServiciosBean() {
 		servicioDAO = new ServicioDAO();
 		tipoCobroDAO = new TipoCobroDAO();
+		selectedServicios = new ArrayList<>();
 	}
 	
 	@PostConstruct

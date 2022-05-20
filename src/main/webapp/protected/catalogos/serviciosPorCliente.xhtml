@@ -1,6 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
-	<ui:define name="title">Servicios</ui:define>
+	<ui:define name="title">Servicios por cliente</ui:define>
 
 	<ui:define name="content">
 		<h:form id="form">
@@ -8,7 +8,7 @@
 				<p:menuitem value="Home" outcome="/dashboard" />
 				<p:menuitem value="Facturación" />
 				<p:menuitem value="Catálogos" />
-				<p:menuitem value="Servicios por cliente" outcome="/protected/catalogos/serviciosPorCliente"/>
+				<p:menuitem value="Servicios por cliente" outcome="/protected/catalogos/serviciosPorCliente" />
 			</p:breadCrumb>
 
 			<div class="p-grid crud-demo">
@@ -20,20 +20,20 @@
 								<div class="ui-fluid p-formgrid p-grid">
 									<div class="p-field p-col-12 p-md-6">
 										<p:outputLabel for="soClientes" value="Clientes" />
-										<p:selectOneMenu id="soClientes" converter="entityConverter">
+										<p:selectOneMenu id="soClientes" converter="entityConverter" value="#{serviciosClienteBean.clienteSelected}" filter="true" filterMatchMode="contains">
 											<f:selectItem itemLabel="--Seleccione--" />
 											<f:selectItems value="#{serviciosClienteBean.lstClientes}" var="cliente" itemLabel="#{cliente.cteNombre}" itemValue="cliente" />
 										</p:selectOneMenu>
-									</div>									
+									</div>
 								</div>
 							</div>
 						</div>
 
-						<p:dataTable id="dt-servicios" widgetVar="dtServicios" var="servicio" reflow="true" lazy="true" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+						<p:dataTable id="dt-servicios" widgetVar="dtServicios"  var="servicio" reflow="true" lazy="true" paginator="true" rows="10"
+							rowSelectMode="add" paginatorPosition="bottom">
 							<f:facet name="header">
 								<div class="products-table-header">
-									<span style="font-weight: bold">Servicios por cliente</span> <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i> <p:inputText id="globalFilter"
-											onkeyup="PF('dtServicios').filter()" placeholder="Buscar" />
+									<span style="font-weight: bold">Servicios por cliente</span> <span class="filter-container ui-input-icon-left"> <p:commandButton value="Agregar" />
 									</span>
 								</div>
 							</f:facet>

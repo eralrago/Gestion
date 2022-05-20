@@ -24,7 +24,7 @@
                             <p:toolbarGroup>
                                 <p:commandButton value="Agregar" icon="pi pi-plus" actionListener="#{camarasBean.nuevaCamara}" update="manage-camara-content form:manage-camara-content" oncomplete="PF('camaraDialog').show()" 
                                     styleClass="ui-button-success" style="margin-right: .5rem" />
-                                <p:commandButton id="delete-camaras-button" value="#{camarasBean.consultaMensajeBtn()}" icon="pi pi-trash" actionListener="#{camarasBean.eliminarCamarasSeleccionadas()}" 
+                                <p:commandButton id="delete-camaras-button" value="#{camarasBean.consultaMensajeBtn}" icon="pi pi-trash" actionListener="#{camarasBean.eliminarCamarasSeleccionadas()}" 
                                     styleClass="ui-button-danger" disabled="#{!camarasBean.camaraSeleccionada()}" update="@this">
                                     <p:confirm header="Eliminar" message="Desea eliminar las cámaras seleccionadas?" icon="pi pi-exclamation-triangle" />
                                 </p:commandButton>

@@ -1,13 +1,13 @@
 package mx.com.ferbo.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
@@ -36,6 +36,7 @@ public class CamarasBean implements Serializable {
 	public CamarasBean() {
 		camaraDAO = new CamaraDAO();
 		plantaDAO = new PlantaDAO();
+		lstCamarasSelected = new ArrayList<>();
 	}
 
 	/**
@@ -80,6 +81,9 @@ public class CamarasBean implements Serializable {
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-camaras");
 	}
 
+	/**
+	 * Método para eliminar objeto tipo Camara
+	 */
 	public void eliminarCamara() {
 		if (camaraDAO.eliminar(camaraSelect) == null) {
 			this.lstCamaras.remove(this.camaraSelect);
@@ -94,7 +98,10 @@ public class CamarasBean implements Serializable {
 
 	}
 
-	public String consultaMensajeBtn() {
+	/**
+	 * Método para consultar mensaje de eliminación para botón eliminar varios
+	 */
+	public String getConsultaMensajeBtn() {
 		if (camaraSeleccionada()) {
 			int size = this.lstCamarasSelected.size();
 			return size > 1 ? size + " cámaras seleccionadas" : "1 cámara seleccionada";
@@ -103,10 +110,16 @@ public class CamarasBean implements Serializable {
 		return "Eliminar";
 	}
 
+	/**
+	 * Método para validar si se ha seleccionado uno o varios objetos tipo Camara
+	 */
 	public boolean camaraSeleccionada() {
-		return this.camaraSelect != null && !this.lstCamarasSelected.isEmpty();
+		return this.lstCamarasSelected != null && !this.lstCamarasSelected.isEmpty();
 	}
 
+	/**
+	 * Método para eliminar listado de objetos tipo Camara
+	 */
 	public void eliminarCamarasSeleccionadas() {
 		if (camaraDAO.eliminarListado(lstCamarasSelected) == null) {
 			this.lstCamarasSelected.removeAll(this.lstCamarasSelected);
