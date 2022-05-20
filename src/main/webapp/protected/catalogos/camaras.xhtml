@@ -11,8 +11,9 @@
         <h:form id="form">
 			<p:breadCrumb>
 				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Inventarios" />
 				<p:menuitem value="Catálogos" />
-				<p:menuitem value="Cámaras" />
+				<p:menuitem value="Cámaras" outcome="/protected/catalogos/camaras"/>
 			</p:breadCrumb>
 			<div class="p-grid crud-demo">
                 <div class="p-col-12">
@@ -64,7 +65,7 @@
                                 <h:outputText value="#{camara.camaraAbrev}" />
                             </p:column>
 
-							<p:column headerText="Planta" width="25%">
+							<p:column headerText="Planta" width="25%" sortBy="#{camara.plantaCve.plantaDs}" filterBy="#{camara.plantaCve.plantaDs}">
 								<h:outputText value="#{camara.plantaCve.plantaDs}" />
 							</p:column>
 							<p:column exportable="false" width="30%" style="text-align:center" >

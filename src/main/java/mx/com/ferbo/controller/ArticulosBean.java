@@ -15,8 +15,8 @@ import mx.com.ferbo.model.Producto;
 @Named
 @ViewScoped
 public class ArticulosBean implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+	
+	private static final long serialVersionUID = -9171234069697090700L;
 
 	private List<Producto> productos;
 
