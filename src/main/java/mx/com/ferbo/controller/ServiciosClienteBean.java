@@ -31,6 +31,7 @@ public class ServiciosClienteBean implements Serializable {
 	private List<PrecioServicio> lstPrecioServicioFiltered;
 
 	private Cliente clienteSelected;
+	private PrecioServicio precioServicioSelected;
 
 	private ClienteDAO clienteDAO;
 	private UnidadManejoDAO unidadManejoDAO;
@@ -53,6 +54,9 @@ public class ServiciosClienteBean implements Serializable {
 		lstPrecioServicio = precioServicioDAO.buscarTodos();
 	}
 
+	/**
+	 * Método para filtrar del listado original por clave de cliente
+	 */
 	public void filtaListado() {
 		lstPrecioServicioFiltered = lstPrecioServicio.stream()
 				.filter(ps -> clienteSelected != null
@@ -60,7 +64,22 @@ public class ServiciosClienteBean implements Serializable {
 						: false)
 				.collect(Collectors.toList());
 	}
-
+	
+	/**
+	 * Método para filtrar del listado original por clave de cliente
+	 */
+	public void nuevoServicioCliente() {
+		precioServicioSelected = new PrecioServicio();
+		precioServicioSelected.setCliente(clienteSelected);
+		precioServicioSelected.setServicio(new Servicio());
+		precioServicioSelected.setUnidad(new UnidadDeManejo());
+		
+	}
+	
+	
+	/**
+	 * Getters & Setters
+	 */
 	public List<Cliente> getLstClientes() {
 		return lstClientes;
 	}
@@ -100,5 +119,15 @@ public class ServiciosClienteBean implements Serializable {
 	public void setLstPrecioServicioFiltered(List<PrecioServicio> lstPrecioServicioFiltered) {
 		this.lstPrecioServicioFiltered = lstPrecioServicioFiltered;
 	}
+
+	public PrecioServicio getPrecioServicioSelected() {
+		return precioServicioSelected;
+	}
+
+	public void setPrecioServicioSelected(PrecioServicio precioServicioSelected) {
+		this.precioServicioSelected = precioServicioSelected;
+	}
+	
+	
 
 }

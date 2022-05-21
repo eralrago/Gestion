@@ -6,7 +6,7 @@
 package mx.com.ferbo.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +19,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -26,6 +28,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "UNIDAD_DE_MANEJO")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "UnidadDeManejo.findAll", query = "SELECT u FROM UnidadDeManejo u"),
     @NamedQuery(name = "UnidadDeManejo.findByUnidadDeManejoCve", query = "SELECT u FROM UnidadDeManejo u WHERE u.unidadDeManejoCve = :unidadDeManejoCve"),
@@ -42,15 +45,17 @@ public class UnidadDeManejo implements Serializable {
     @Column(name = "UNIDAD_DE_MANEJO_DS")
     private String unidadDeManejoDs;
     @OneToMany(mappedBy = "uMedidaCve")
-    private List<DetallePartida> detallePartidaList;
+    private Collection<DetallePartida> detallePartidaCollection;
     @OneToMany(mappedBy = "unidadDeCobro")
-    private List<Partida> partidaList;
+    private Collection<Partida> partidaCollection;
     @OneToMany(mappedBy = "unidadDeManejoCve")
-    private List<PartidaServicio> partidaServicioList;
+    private Collection<PartidaServicio> partidaServicioCollection;
     @OneToMany(mappedBy = "unidadDeCobro")
-    private List<PartidaServicio> partidaServicioList1;
+    private Collection<PartidaServicio> partidaServicioCollection1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "unidad")
+    private Collection<PrecioServicio> precioServicioCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "unidadDeManejoCve")
-    private List<UnidadDeProducto> unidadDeProductoList;
+    private Collection<UnidadDeProducto> unidadDeProductoCollection;
 
     public UnidadDeManejo() {
     }
@@ -75,44 +80,58 @@ public class UnidadDeManejo implements Serializable {
         this.unidadDeManejoDs = unidadDeManejoDs;
     }
 
-    public List<DetallePartida> getDetallePartidaList() {
-        return detallePartidaList;
+    @XmlTransient
+    public Collection<DetallePartida> getDetallePartidaCollection() {
+        return detallePartidaCollection;
     }
 
-    public void setDetallePartidaList(List<DetallePartida> detallePartidaList) {
-        this.detallePartidaList = detallePartidaList;
+    public void setDetallePartidaCollection(Collection<DetallePartida> detallePartidaCollection) {
+        this.detallePartidaCollection = detallePartidaCollection;
     }
 
-    public List<Partida> getPartidaList() {
-        return partidaList;
+    @XmlTransient
+    public Collection<Partida> getPartidaCollection() {
+        return partidaCollection;
     }
 
-    public void setPartidaList(List<Partida> partidaList) {
-        this.partidaList = partidaList;
+    public void setPartidaCollection(Collection<Partida> partidaCollection) {
+        this.partidaCollection = partidaCollection;
     }
 
-    public List<PartidaServicio> getPartidaServicioList() {
-        return partidaServicioList;
+    @XmlTransient
+    public Collection<PartidaServicio> getPartidaServicioCollection() {
+        return partidaServicioCollection;
     }
 
-    public void setPartidaServicioList(List<PartidaServicio> partidaServicioList) {
-        this.partidaServicioList = partidaServicioList;
+    public void setPartidaServicioCollection(Collection<PartidaServicio> partidaServicioCollection) {
+        this.partidaServicioCollection = partidaServicioCollection;
     }
 
-    public List<PartidaServicio> getPartidaServicioList1() {
-        return partidaServicioList1;
+    @XmlTransient
+    public Collection<PartidaServicio> getPartidaServicioCollection1() {
+        return partidaServicioCollection1;
     }
 
-    public void setPartidaServicioList1(List<PartidaServicio> partidaServicioList1) {
-        this.partidaServicioList1 = partidaServicioList1;
+    public void setPartidaServicioCollection1(Collection<PartidaServicio> partidaServicioCollection1) {
+        this.partidaServicioCollection1 = partidaServicioCollection1;
     }
 
-    public List<UnidadDeProducto> getUnidadDeProductoList() {
-        return unidadDeProductoList;
+    @XmlTransient
+    public Collection<PrecioServicio> getPrecioServicioCollection() {
+        return precioServicioCollection;
     }
 
-    public void setUnidadDeProductoList(List<UnidadDeProducto> unidadDeProductoList) {
-        this.unidadDeProductoList = unidadDeProductoList;
+    public void setPrecioServicioCollection(Collection<PrecioServicio> precioServicioCollection) {
+        this.precioServicioCollection = precioServicioCollection;
+    }
+
+    @XmlTransient
+    public Collection<UnidadDeProducto> getUnidadDeProductoCollection() {
+        return unidadDeProductoCollection;
+    }
+
+    public void setUnidadDeProductoCollection(Collection<UnidadDeProducto> unidadDeProductoCollection) {
+        this.unidadDeProductoCollection = unidadDeProductoCollection;
     }
 
     @Override

@@ -20,7 +20,7 @@
 								<div class="ui-fluid p-formgrid p-grid">
 									<div class="p-field p-col-12 p-md-6">
 										<p:outputLabel for="soClientes" value="Clientes" />
-										<p:selectOneMenu id="soClientes" converter="entityConverter" value="#{serviciosClienteBean.clienteSelected}" filter="true" filterMatchMode="contains">
+										<p:selectOneMenu id="soClientes" converter="entityConverter" value="#{serviciosClienteBean.clienteSelected}"  filter="true" filterMatchMode="contains">
 											<f:selectItem itemLabel="--Seleccione--" />
 											<f:selectItems value="#{serviciosClienteBean.lstClientes}" var="cliente" itemLabel="#{cliente.cteNombre}" itemValue="#{cliente}" />
 											<p:ajax listener="#{serviciosClienteBean.filtaListado()}" update="dt-servicios dt-servicios:btnAdd" />
@@ -34,8 +34,9 @@
 							rows="10" rowSelectMode="add" paginatorPosition="bottom">
 							<f:facet name="header">
 								<div class="products-table-header">
-									<span style="font-weight: bold">Servicios por cliente</span> <span class="filter-container ui-input-icon-left"> <p:commandButton id="btnAdd" value="Agregar"
-											oncomplete="PF('servicioClienteDialog').show()" disabled="#{serviciosClienteBean.clienteSelected eq null or serviciosClienteBean.clienteSelected.cteCve eq null}" />
+									<span style="font-weight: bold">Servicios por cliente</span> <span class="filter-container ui-input-icon-left">
+									<p:commandButton id="btnAdd"  icon="pi pi-plus" value="Agregar" styleClass="ui-button-success" style="margin-right: .5rem" update="form:panel-servicio"
+											oncomplete="PF('servicioClienteDialog').show()" disabled="#{serviciosClienteBean.clienteSelected eq null and serviciosClienteBean.clienteSelected.cteCve eq null}" />
 									</span>
 								</div>
 							</f:facet>
@@ -48,14 +49,14 @@
 								<h:outputText value="#{servicio.servicio.servicioDs}" />
 							</p:column>
 							<p:column headerText="Unidad">
-								<h:outputText value="#{servicio.unidad}" />
+								<h:outputText value="#{servicio.unidad.unidadDeManejoDs}" />
 							</p:column>
 							<p:column headerText="Precio">
 								<h:outputText value="#{servicio.precio}" />
 							</p:column>
 							<p:column>
-								<p:commandButton icon="pi pi-pencil" value="Modificar" styleClass="edit-button ui-button-success" oncomplete="PF('servicioClienteDialog').show()">
-
+								<p:commandButton icon="pi pi-pencil" value="Modificar" process="@this" styleClass="edit-button ui-button-success" oncomplete="PF('servicioClienteDialog').show()" update="form:panel-servicio">
+ 									<f:setPropertyActionListener value="#{servicio}" target="#{serviciosClienteBean.precioServicioSelected}" />
 								</p:commandButton>
 							</p:column>
 						</p:dataTable>
@@ -66,25 +67,25 @@
 								<p:outputPanel>
 									<div class="p-field">
 										<p:outputLabel>Cliente</p:outputLabel>
-										<p:inputText disabled="true" />
+										<p:inputText value="#{serviciosClienteBean.clienteSelected.cteNombre}" disabled="true" />
 									</div>
 									<div class="p-field">
 										<p:outputLabel>Servicio</p:outputLabel>
-										<p:selectOneMenu filter="true" filterMatchMode="contains" converter="entityConverter" required="true" requiredMessage="Campo requerido">
+										<p:selectOneMenu value="#{serviciosClienteBean.precioServicioSelected.servicio}" filter="true" filterMatchMode="contains" converter="entityConverter" required="true" requiredMessage="Campo requerido" disabled="#{serviciosClienteBean.precioServicioSelected.id ne null}">
 											<f:selectItem itemLabel="--Selecciona--" />
 											<f:selectItems value="#{serviciosClienteBean.lstServicio}" var="serv" itemLabel="#{serv.servicioDs}" />
 										</p:selectOneMenu>
 									</div>
 									<div class="p-field">
 										<p:outputLabel>Unidad</p:outputLabel>
-										<p:selectOneMenu filter="true" filterMatchMode="contains" converter="entityConverter" required="true" requiredMessage="Campo requerido">
+										<p:selectOneMenu value="#{serviciosClienteBean.precioServicioSelected.unidad}" filter="true" filterMatchMode="contains" converter="entityConverter" required="true" requiredMessage="Campo requerido" disabled="#{serviciosClienteBean.precioServicioSelected.id ne null}">
 											<f:selectItem itemLabel="--Selecciona--" />
-											<f:selectItems value="#{serviciosClienteBean.lstUnidadManejo}" var="unidad" itemLabel="#{unidad.unidadDeManejoDs}" />
+											<f:selectItems value="#{serviciosClienteBean.lstUnidadManejo}" var="unidad" itemLabel="#{unidad.unidadDeManejoDs}" itemValue="#{unidad}"/>
 										</p:selectOneMenu>
 									</div>
 									<div class="p-field">
 										<p:outputLabel>Precio</p:outputLabel>
-										<p:inputNumber minValue="0" required="true" requiredMessage="Campo requerido" />
+										<p:inputNumber value="#{serviciosClienteBean.precioServicioSelected.precio}" minValue="0" required="true" requiredMessage="Campo requerido" />
 									</div>
 								</p:outputPanel>
 							</p:outputPanel>
