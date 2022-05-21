@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Plantas</ui:define>
+
+	<ui:define name="head">
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" />
+				<p:menuitem value="Inventarios" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Plantas" />
+			</p:breadCrumb>
+
+			<div class="p-grid table-demo">
+				<div class="p-col-12">
+					<div class="card">
+
+						<p:toolbar styleClass="p-mb-4">
+							<p:toolbarGroup>
+								<p:commandButton value="Agregar" icon="pi pi-plus"
+									actionListener="#{articulosBean.openNew}"
+									oncomplete="PF('manageProductDialog').show()"
+									styleClass="ui-button-success p-mr-2 p-mb-2" />
+							</p:toolbarGroup>
+						</p:toolbar>
+
+						<p:dataTable id="lt-plantas" widgetVar="lt-plantas" var="planta"
+							value="#{plantaBean.principal}" selectionMode="single"
+							selection="#{plantaBean.selectPlanta}"
+							rowKey="#{planta.plantaCve}" paginator="true" rows="5"
+							paginatorPosition="bottom"
+							styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Plantas</span> <span
+										class="ui-input-icon-left filter-container"> <i
+										class="pi pi-search" /> <p:inputText id="globalFilter"
+											onkeyup="PF('lt-plantas').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+							<p:column headerText="Nombre" sortBy="#{planta.plantaDs}"
+								filterBy="#{planta.plantaDs}">
+								<h:outputText value="#{planta.plantaDs}" />
+							</p:column>
+							<p:column headerText="Numero" sortBy="#{planta.plantaAbrev}"
+								filterBy="#{planta.plantaAbrev}">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{planta.plantaAbrev}" />
+							</p:column>
+							<p:column headerText="Sufijo" sortBy="#{planta.plantaSufijo}"
+								filterBy="#{planta.plantaSufijo}">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{planta.plantaSufijo}" />
+							</p:column>
+							<p:column headerText="Responsable Planta"
+								sortBy="#{planta.idUsuario}" filterBy="#{planta.idUsuario}">
+								<h:outputText value="#{planta.idUsuario}" />
+							</p:column>
+							<p:column headerText="">
+								<p:column>
+									<p:commandButton value="Modificar" icon="pi pi-pencil"
+										oncomplete="PF('modificaDialog').show()"
+										update="form:planta-form"
+										actionListener="#{plantaBean.RowSelected(planta.plantaCve)}"
+										proccess="@this"
+										styleClass="ui-button-warning p-mr-2 p-mb-2">
+										</p:commandButton>
+								</p:column>
+								<p:column>
+									<p:commandButton value="Eliminar" icon="pi pi-trash"
+										actionListener="#{plantaBean.deleteOne(planta)}"
+										update="form:lt-plantas" process="@this"
+										styleClass="ui-button-danger p-mr-2 p-mb-2" />
+								</p:column>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+
+			<p:dialog header="Modifica Planta" showEffect="fade" modal="true"
+				widgetVar="modificaDialog" responsive="true">
+				<p:outputPanel id="planta-form" class="ui-fluid">
+					<div class="p-field">
+						<p:outputLabel for="name" value="Nombre" />
+						<p:inputText id="name" value="#{plantaBean.selectPlanta.plantaDs}" />
+					</div>
+					<div class="p-field p-md-6">
+						<p:outputLabel for="numero" value="Numero" />
+						<p:inputText id="numero"
+							value="#{plantaBean.selectPlanta.plantaAbrev}" />
+					</div>
+					<div class="p-field p-md-6">
+						<p:outputLabel for="sufijo" value="Sufijo" />
+						<p:inputText id="sufijo"
+							value="#{plantaBean.selectPlanta.plantaSufijo}" />
+					</div>
+					<div class="p-field">
+						<p:outputLabel for="usuario" value="Usuario" />
+						<p:inputText id="usuario"
+							value="#{plantaBean.selectPlanta.plantaCod}" />
+					</div>
+				</p:outputPanel>
+
+				<f:facet name="footer">
+					<p:commandButton value="Guardar" icon="pi pi-check"
+						actionListener="#{articulosBean.saveProduct}" />
+					<p:commandButton value="Cancelar" icon="pi pi-times"
+						onclick="PF('modificaDialog').hide()" class="ui-button-secondary" />
+				</f:facet>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Bancos</ui:define>
+
+	<ui:define name="head">
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+
+			<p:breadCrumb>
+				<p:menuitem value="Home" />
+				<p:menuitem value="Facturación" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Bancos" />
+			</p:breadCrumb>
+
+			<div class="p-grid button-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:commandButton value="Agregar Nuevo Banco"
+							oncomplete="PF('nuevoBancoDialog').show()" styleClass="p-mr-2 p-mb-2" />
+					</div>
+				</div>
+			</div>
+
+			<div class="p-grid table-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:dataTable widgetVar="customersDT" var="bancos"
+							value="#{mbBanco.listaBancos}" reflow="true"
+							rowKey="#{bancos.id}" paginator="true" rows="10"
+							paginatorPosition="bottom" rowSelectMode="add">
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Bancos</span> <span
+										class="ui-input-icon-left filter-container"> <i
+										class="pi pi-search" /> <p:inputText id="globalFilter"
+											onkeyup="PF('customersDT').filter()" placeholder="Búsqueda" />
+									</span>
+								</div>
+							</f:facet>
+							<p:column selectionMode="multiple" />
+							<p:column headerText="Clave" sortBy="#{bancos.clave}"
+								filterBy="#{bancos.clave}">
+								<h:outputText value="#{bancos.clave}" />
+							</p:column>
+							<p:column headerText="Nombre" sortBy="#{bancos.nombre}"
+								filterBy="#{bancos.nombre}">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{bancos.nombre}" />
+							</p:column>
+							<p:column headerText="Acción">
+								<p:column>
+									<p:commandButton value="Modificar" styleClass="p-mr-2 p-mb-2" oncomplete="PF('modificarBancoDialog').show()"/>
+								</p:column>
+								<p:column>
+									<p:button value="Eliminar" styleClass="p-mr-2 p-mb-2" />
+								</p:column>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<p:dialog header="Agregar un nuevo Banco" showEffect="fade" modal="true"
+				widgetVar="nuevoBancoDialog" responsive="true">
+				<p:outputPanel id="manage-product-content" class="ui-fluid">
+					<p:outputLabel for="clave" value="Clave" />
+					<p:inputText id="clave" value="#{mbBanco.clave}" required="true"/>
+					<p:outputLabel for="nombre" value="Nombre del Banco" />
+					<p:inputText id="nombre" value="#{mbBanco.nombre}" required="true"/>
+					<p:commandButton value="Agregar" styleClass="p-mr-2 p-mb-2" action="#{mbBanco.insertBanco}" />
+					</p:outputPanel>
+			</p:dialog>
+			<p:dialog header="Modificar Banco" showEffect="fade" modal="true"
+				widgetVar="modificarBancoDialog" responsive="true">
+				<p:outputPanel id="manage-product-content" class="ui-fluid">
+					<p:outputLabel for="clave" value="Clave" />
+					<p:inputText id="clave" value="#{mbBanco.clave}" required="true"/>
+					<p:outputLabel for="nombre" value="Nombre del Banco" />
+					<p:inputText id="nombre" value="#{mbBanco.nombre}" required="true"/>
+					<p:commandButton value="Agregar" styleClass="p-mr-2 p-mb-2" action="#{mbBanco.updateBanco}" />
+					</p:outputPanel>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

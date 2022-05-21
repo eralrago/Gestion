@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="gestionPU" transaction-type="RESOURCE_LOCAL">
+    <!--<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>-->
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <class>mx.com.ferbo.model.Producto</class>
+    <class>mx.com.ferbo.model.TipoCobro</class>
+    <class>mx.com.ferbo.model.Servicio</class>
+    <class>mx.com.ferbo.model.CancelaNotaCredito</class>
+    <class>mx.com.ferbo.model.DetalleConstanciaCmp</class>
+    <class>mx.com.ferbo.model.ProductoConstanciaDs</class>
+    <class>mx.com.ferbo.model.Camara</class>
+    <class>mx.com.ferbo.model.TmpFacturarInventario</class>
+    <class>mx.com.ferbo.model.Categoria</class>
+    <class>mx.com.ferbo.model.DatosEspeciales</class>
+    <class>mx.com.ferbo.model.TipoPago</class>
+    <class>mx.com.ferbo.model.ServicioConstancia</class>
+    <class>mx.com.ferbo.model.ConstanciaFactura</class>
+    <class>mx.com.ferbo.model.Cheque</class>
+    <class>mx.com.ferbo.model.Perfil</class>
+    <class>mx.com.ferbo.model.ServicioFactura</class>
+    <class>mx.com.ferbo.model.Bitacora</class>
+    <class>mx.com.ferbo.model.SerieFactura</class>
+    <class>mx.com.ferbo.model.UdCobro</class>
+    <class>mx.com.ferbo.model.Aviso</class>
+    <class>mx.com.ferbo.model.DetallePartida</class>
+    <class>mx.com.ferbo.model.EntidadPostal</class>
+    <class>mx.com.ferbo.model.ClienteContacto</class>
+    <class>mx.com.ferbo.model.ConstanciaServicios</class>
+    <class>mx.com.ferbo.model.Telefono</class>
+    <class>mx.com.ferbo.model.Paises</class>
+    <class>mx.com.ferbo.model.TipoTelefono</class>
+    <class>mx.com.ferbo.model.MedioCnt</class>
+    <class>mx.com.ferbo.model.Municipios</class>
+    <class>mx.com.ferbo.model.LogSeguridad</class>
+    <class>mx.com.ferbo.model.ProductoConstancia</class>
+    <class>mx.com.ferbo.model.Factura</class>
+    <class>mx.com.ferbo.model.TmpEntradasAFacturar</class>
+    <class>mx.com.ferbo.model.UnidadDeManejo</class>
+    <class>mx.com.ferbo.model.FacturaMedioPago</class>
+    <class>mx.com.ferbo.model.UnidadDeProducto</class>
+    <class>mx.com.ferbo.model.ConstanciaDepositoDetalle</class>
+    <class>mx.com.ferbo.model.Bancos</class>
+    <class>mx.com.ferbo.model.CandadoSalida</class>
+    <class>mx.com.ferbo.model.ChequeDevuelto</class>
+    <class>mx.com.ferbo.model.CuotaMensualServicio</class>
+    <class>mx.com.ferbo.model.Formato</class>
+    <class>mx.com.ferbo.model.ConstanciaTraspaso</class>
+    <class>mx.com.ferbo.model.TipoMail</class>
+    <class>mx.com.ferbo.model.Planta</class>
+    <class>mx.com.ferbo.model.ProductoPorCliente</class>
+    <class>mx.com.ferbo.model.ServicioConstanciaDs</class>
+    <class>mx.com.ferbo.model.EstadoInventario</class>
+    <class>mx.com.ferbo.model.Partida</class>
+    <class>mx.com.ferbo.model.Parametro</class>
+    <class>mx.com.ferbo.model.Pago</class>
+    <class>mx.com.ferbo.model.StatusConstanciaSalida</class>
+    <class>mx.com.ferbo.model.StatusNotaCredito</class>
+    <class>mx.com.ferbo.model.Ciudades</class>
+    <class>mx.com.ferbo.model.CancelaFactura</class>
+    <class>mx.com.ferbo.model.Usuario</class>
+    <class>mx.com.ferbo.model.SerieConstancia</class>
+    <class>mx.com.ferbo.model.TipoMovimiento</class>
+    <class>mx.com.ferbo.model.Pais</class>
+    <class>mx.com.ferbo.model.DetalleCteProd</class>
+    <class>mx.com.ferbo.model.PreSalida</class>
+    <class>mx.com.ferbo.model.PartidaServicio</class>
+    <class>mx.com.ferbo.model.StatusFactura</class>
+    <class>mx.com.ferbo.model.Contacto</class>
+    <class>mx.com.ferbo.model.TiposDomicilio</class>
+    <class>mx.com.ferbo.model.EstadoConstancia</class>
+    <class>mx.com.ferbo.model.StatusSerie</class>
+    <class>mx.com.ferbo.model.TraspasoServicio</class>
+    <class>mx.com.ferbo.model.Cliente</class>
+    <class>mx.com.ferbo.model.CuotaMinima</class>
+    <class>mx.com.ferbo.model.DetalleConstanciaSalida</class>
+    <class>mx.com.ferbo.model.TraspasoPartida</class>
+    <class>mx.com.ferbo.model.ConstanciaSalida</class>
+    <class>mx.com.ferbo.model.Posicion</class>
+    <class>mx.com.ferbo.model.SerieNota</class>
+    <class>mx.com.ferbo.model.ConstanciaServicioDetalle</class>
+    <class>mx.com.ferbo.model.DetalleFacturacion</class>
+    <class>mx.com.ferbo.model.MedioPago</class>
+    <class>mx.com.ferbo.model.ConstanciaFacturaDs</class>
+    <class>mx.com.ferbo.model.Mail</class>
+    <class>mx.com.ferbo.model.Domicilios</class>
+    <class>mx.com.ferbo.model.CuotaMensualServicioDet</class>
+    <class>mx.com.ferbo.model.DetalleConstanciaServicios</class>
+    <class>mx.com.ferbo.model.NotaCredito</class>
+    <class>mx.com.ferbo.model.ConstanciaDeServicio</class>
+    <class>mx.com.ferbo.model.AsentamientoHumano</class>
+    <class>mx.com.ferbo.model.StatusConstanciaServicio</class>
+    <class>mx.com.ferbo.model.TipoAsentamiento</class>
+    <class>mx.com.ferbo.model.ConstanciaDeDeposito</class>
+    <class>mx.com.ferbo.model.Estados</class>
+    <class>mx.com.ferbo.model.ConstanciaFacturaCmp</class>
+    <class>mx.com.ferbo.model.ClienteDomicilios</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://ferbo.dynalias.com:3306/gestiondb?useSSL=false&amp;useTimezone=true&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
+      <property name="javax.persistence.jdbc.user" value="gestion"/>
+      <property name="javax.persistence.jdbc.password" value="d3vE1o0erferbO"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+      <!--            <property name="eclipselink.logging.level.sql" value="FINE" />
+            <property name="eclipselink.loggin.parameters" value="true" />-->
+    </properties>
+  </persistence-unit>
+</persistence>
