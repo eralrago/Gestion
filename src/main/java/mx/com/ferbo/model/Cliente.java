@@ -79,6 +79,8 @@ public class Cliente implements Serializable {
     private List<Aviso> avisoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cteCve")
     private List<CuotaMensualServicio> cuotaMensualServicioList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    private List<PrecioServicio> precioServicioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cteCve")
     private List<ConstanciaDeServicio> constanciaDeServicioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cteCve")
@@ -213,6 +215,14 @@ public class Cliente implements Serializable {
 
     public void setCuotaMensualServicioList(List<CuotaMensualServicio> cuotaMensualServicioList) {
         this.cuotaMensualServicioList = cuotaMensualServicioList;
+    }
+
+    public List<PrecioServicio> getPrecioServicioList() {
+        return precioServicioList;
+    }
+
+    public void setPrecioServicioList(List<PrecioServicio> precioServicioList) {
+        this.precioServicioList = precioServicioList;
     }
 
     public List<ConstanciaDeServicio> getConstanciaDeServicioList() {
