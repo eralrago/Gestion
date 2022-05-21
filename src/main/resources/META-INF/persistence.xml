@@ -96,9 +96,9 @@
     <class>mx.com.ferbo.model.ConstanciaFacturaCmp</class>
     <class>mx.com.ferbo.model.ClienteDomicilios</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://ferbo.dynalias.com:3306/gestiondb?useSSL=false&amp;useTimezone=true&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
-      <property name="javax.persistence.jdbc.user" value="gestion"/>
-      <property name="javax.persistence.jdbc.password" value="d3vE1o0erferbO"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestiondb?useSSL=false&amp;useTimezone=true&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.password" value="admin1234"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>

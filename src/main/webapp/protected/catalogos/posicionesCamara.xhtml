@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Posiciones en cámara</ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+        <p:breadCrumb>
+            <p:menuitem value="Home" outcome="/dashboard"/>
+            <p:menuitem value="Inventarios"/>
+            <p:menuitem value="Catálogos"/>
+            <p:menuitem value="Posiciones en cámara" outcome="/protected/catalogos/posicionesCamara"/>
+        </p:breadCrumb>
+        <p:dataTable>
+        <div>
+        <span style="font-weight: bold">Consulta de posiciones</span>
+        </div>
+        </p:dataTable>
+        
+            
+        </h:form>
+    </ui:define>
+
+</ui:composition>
