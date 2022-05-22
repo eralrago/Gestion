@@ -1,28 +1,105 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/template.xhtml">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-    <ui:define name="title">Posiciones en cámara</ui:define>
+	<ui:define name="title">Posiciones en cámara</ui:define>
 
-    <ui:define name="content">
-        <h:form id="form">
-        <p:breadCrumb>
-            <p:menuitem value="Home" outcome="/dashboard"/>
-            <p:menuitem value="Inventarios"/>
-            <p:menuitem value="Catálogos"/>
-            <p:menuitem value="Posiciones en cámara" outcome="/protected/catalogos/posicionesCamara"/>
-        </p:breadCrumb>
-        <p:dataTable>
-        <div>
-        <span style="font-weight: bold">Consulta de posiciones</span>
-        </div>
-        </p:dataTable>
-        
-            
-        </h:form>
-    </ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Inventarios" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Posiciones en cámara"
+					outcome="/protected/catalogos/posicionesCamara" />
+			</p:breadCrumb>
+			<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+			<div class="p-col-12">
+				<div class="card">
+					<p:dataTable widgetVar="Posicion" var="posicion"
+						value="#{posicionCamaraBean.posiciones}" reflow="true"
+						paginator="true" rows="10" paginatorPosition="bottom"
+						rowSelectMode="add">
+						<f:facet name="header">
+							<div class="customers-table-header">
+								<span style="font-weight: bold">Consulta de Posiciones</span>
+
+								<div class="ui-fluid p-formgrid p-grid">
+
+
+									<div class="p-field p-col-12 p-md-4">
+										<p:outputLabel for="@next" value="planta:" />
+										<p:selectOneMenu id="planta" value="#{null}" dynamic="true">
+											<f:selectItem
+												itemLabel="TODAS LAS PLANTAS (Seleccione una planta)"
+												itemValue="" />
+											<f:selectItems value="#{selectOneMenuView.options}" />
+										</p:selectOneMenu>
+									</div>
+
+									<div class="p-field ">
+										<p:outputLabel for="@next" value="Camara: " />
+										<p:selectOneMenu id="camara" value="#{null}" dynamic="true">
+											<f:selectItem itemLabel="" itemValue="" />
+											<f:selectItems value="#{selectOneMenuView.options}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+								<div>
+									<p:button value="Buscar Posiciones"
+										styleClass="ui-button-raised ui-button-success"
+										style="width: auto" />
+									<p:button value="Agregar Poscion"
+										styleClass="ui-button-raised ui-button-info"
+										style="width: auto" />
+								</div>
+
+							</div>
+						</f:facet>
+
+						<p:column headerText="Planta">
+							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+						</p:column>
+						<p:column headerText="Camara">
+							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+						</p:column>
+						<p:column headerText="Clave Posicion">
+							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+						</p:column>
+						<p:column headerText="Descripción">
+							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+						</p:column>
+						<p:column headerText="Temp. Min.°C">
+							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+						</p:column>
+						<p:column headerText="Temp. Max.°C">
+							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+						</p:column>
+						<p:column headerText="Status">
+							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+						</p:column>
+						<p:column headerText="Accion">
+							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+						</p:column>
+						<p:column headerText="Imprimir">
+							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+						</p:column>
+
+					</p:dataTable>
+				</div>
+			</div>
+
+
+
+		</h:form>
+	</ui:define>
+
 
 </ui:composition>

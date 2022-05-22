@@ -15,7 +15,20 @@ public class PosicionCamaraDAO {
 	
 	EntityManager entity = JPAEntity.getEntity().createEntityManager();
 	
-	public List<Posicion> findAllPlantas(){
-		
+	@SuppressWarnings("unchecked")
+	public List<Posicion> findAll(){
+		List<Posicion> posiciones;
+		Query sql = entity.createNamedQuery("Posicion.findAll", Posicion.class);
+		posiciones = sql.getResultList();
+		System.out.println(posiciones + "*****************************************************");
+		return posiciones;
 	}
+	
+	public List<Posicion> findIdPosicion() {
+		List<Posicion> idPosiciones = null;
+		Query sqlId = entity.createNamedQuery("Posicion.findByIdPosicion", Posicion.class);
+		return idPosiciones;
+	}
+	
+	 
 }
