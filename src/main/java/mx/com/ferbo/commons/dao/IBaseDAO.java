@@ -13,7 +13,7 @@ import mx.com.ferbo.util.JPAEntity;
  */
 public abstract class IBaseDAO<E, ID> {
 	
-	public EntityManager em = EntityManagerUtil.getEntityManager();
+	public EntityManager em = JPAEntity.getEntity().createEntityManager();
     
     public abstract E buscarPorId(ID id);
 

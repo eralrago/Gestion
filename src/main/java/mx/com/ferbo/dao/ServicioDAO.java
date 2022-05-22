@@ -46,7 +46,6 @@ public class ServicioDAO extends IBaseDAO<Servicio, Integer> {
 			em.getTransaction().begin();
 			em.persist(servicio);
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
@@ -60,7 +59,6 @@ public class ServicioDAO extends IBaseDAO<Servicio, Integer> {
 			em.getTransaction().begin();
 			em.remove(em.merge(servicio));
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
@@ -76,7 +74,6 @@ public class ServicioDAO extends IBaseDAO<Servicio, Integer> {
 				em.remove(em.merge(servicio));
 			}
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";

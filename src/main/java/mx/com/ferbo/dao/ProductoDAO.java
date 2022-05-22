@@ -47,7 +47,6 @@ public class ProductoDAO extends IBaseDAO<Producto, Integer> {
 			em.getTransaction().begin();
 			em.persist(persona);
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
@@ -61,7 +60,6 @@ public class ProductoDAO extends IBaseDAO<Producto, Integer> {
 			em.getTransaction().begin();
 			em.remove(em.merge(persona));
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
@@ -77,7 +75,6 @@ public class ProductoDAO extends IBaseDAO<Producto, Integer> {
 				em.remove(em.merge(producto));
 			}
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";

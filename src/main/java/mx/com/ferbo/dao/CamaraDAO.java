@@ -45,7 +45,6 @@ public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 			em.getTransaction().begin();
 			em.persist(camara);
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
@@ -59,7 +58,6 @@ public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 			em.getTransaction().begin();
 			em.remove(em.merge(camara));
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
@@ -75,7 +73,6 @@ public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 				em.remove(em.merge(camara));
 			}
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";

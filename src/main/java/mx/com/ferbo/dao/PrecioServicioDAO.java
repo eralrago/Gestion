@@ -27,20 +27,43 @@ public class PrecioServicioDAO extends IBaseDAO<PrecioServicio, Integer> {
 	}
 
 	@Override
-	public String actualizar(PrecioServicio e) {
-		// TODO Auto-generated method stub
+	public String actualizar(PrecioServicio precioServicio) {
+		try {
+			em.getTransaction().begin();
+			em.merge(precioServicio);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String guardar(PrecioServicio e) {
-		// TODO Auto-generated method stub
+	public String guardar(PrecioServicio precioServicio) {
+		try {
+			em.getTransaction().begin();
+			em.persist(precioServicio);
+			em.getTransaction().commit();
+//			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String eliminar(PrecioServicio e) {
-		// TODO Auto-generated method stub
+	public String eliminar(PrecioServicio precioServicio) {
+		try {
+			em.getTransaction().begin();
+			em.remove(em.merge(precioServicio));
+			em.getTransaction().commit();
+//			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 

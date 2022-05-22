@@ -65,7 +65,7 @@
                                 <h:outputText value="#{servicio.servicioCod}" />
                             </p:column>
 
-							<p:column headerText="Tipo de cobro">
+							<p:column headerText="Tipo de cobro" sortBy="#{servicio.cobro.nombre}" filterBy="#{servicio.cobro.nombre}">
 								<h:outputText value="#{servicio.cobro.nombre}" />
 							</p:column>
 							<p:column exportable="false" width="15%" style="text-align:center">
