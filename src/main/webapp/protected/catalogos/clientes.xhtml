@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Clientes</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Facturación" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Clientes" outcome="/protected/catalogos/clientes" />
+			</p:breadCrumb>
+
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+
+						<p:dataTable id="dt-clientes" widgetVar="dtClientes" value="#{clientesBean.lstClientes}" var="cliente" rowKey="#{cliente.cteCve}" reflow="true"
+							lazy="true" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Catálogo de Clientes</span> <span class="filter-container ui-input-icon-left"> </span>
+								</div>
+							</f:facet>
+							<p:column headerText="Nombre">
+								<p:outputLabel value="#{cliente.cteNombre}" />
+							</p:column>
+							<p:column headerText="RFC">
+								<p:outputLabel value="#{cliente.cteRfc}" />
+							</p:column>
+							<p:column headerText="Habilitado">
+								<p:outputLabel value="#{cliente.habilitado ? 'Sí' : 'No'}" />
+							</p:column>
+							<p:column headerText="Código">
+								<p:outputLabel value="#{cliente.codUnico}" />
+							</p:column>
+							<p:column>
+								<p:commandButton icon="pi pi-pencil" value="Modificar" styleClass="edit-button ui-button-success">
+								</p:commandButton>
+								<p:commandButton class="ui-button-warning" icon="pi pi-trash" value="Eliminar">
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
