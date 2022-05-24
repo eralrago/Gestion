@@ -2,8 +2,11 @@ package mx.com.ferbo.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.Camara;
+import mx.com.ferbo.util.EntityManagerUtil;
 
 public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 
@@ -16,6 +19,7 @@ public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 	@Override
 	public List<Camara> buscarTodos() {
 		List<Camara> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		listado = em.createNamedQuery("Camara.findAll", Camara.class).getResultList();
 		return listado;
 	}
@@ -29,6 +33,7 @@ public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 	@Override
 	public String actualizar(Camara camara) {
 		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.merge(camara);
 			em.getTransaction().commit();
@@ -42,6 +47,7 @@ public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 	@Override
 	public String guardar(Camara camara) {
 		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.persist(camara);
 			em.getTransaction().commit();
@@ -55,6 +61,7 @@ public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 	@Override
 	public String eliminar(Camara camara) {
 		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.remove(em.merge(camara));
 			em.getTransaction().commit();
@@ -68,6 +75,7 @@ public class CamaraDAO extends IBaseDAO<Camara, Integer> {
 	@Override
 	public String eliminarListado(List<Camara> listado) {
 		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			for (Camara camara : listado) {
 				em.remove(em.merge(camara));

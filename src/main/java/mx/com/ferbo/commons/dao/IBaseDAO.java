@@ -12,8 +12,6 @@ import mx.com.ferbo.util.JPAEntity;
  * @author Gabriel Moreno <gabrielmos0309@gmail.com>
  */
 public abstract class IBaseDAO<E, ID> {
-	
-	public EntityManager em = JPAEntity.getEntity().createEntityManager();
     
     public abstract E buscarPorId(ID id);
 
