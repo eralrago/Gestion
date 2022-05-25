@@ -1,0 +1,146 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Clientes</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Facturación" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Clientes" outcome="/protected/catalogos/clientes" />
+			</p:breadCrumb>
+
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+
+						<p:toolbar styleClass="p-mb-4">
+							<p:toolbarGroup>
+								<p:commandButton value="Agregar" icon="pi pi-plus" styleClass="ui-button-success" style="margin-right: .5rem" />
+								<p:commandButton id="delete-clientes-button" value="#{clientesBean.consultaMensajeBtn}" disabled="#{!clientesBean.clienteSeleccionado()}"
+									icon="pi pi-trash" styleClass="ui-button-danger" update="@this">
+									<p:confirm header="Eliminar" message="Desea eliminar los clientes seleccionados?" icon="pi pi-exclamation-triangle" />
+								</p:commandButton>
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Exportar" icon="pi pi-upload" styleClass="ui-button-secondary" ajax="false">
+									<p:dataExporter type="pdf" target="dt-clientes" fileName="clientes" />
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+
+						<p:dataTable id="dt-clientes" widgetVar="dtClientes" value="#{clientesBean.lstClientes}" var="cliente" rowKey="#{cliente.cteCve}"
+							selection="#{clientesBean.lstClientesSelected}" reflow="true" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Catálogo de Clientes</span> <span class="filter-container ui-input-icon-left"> </span> <span
+										class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtClientes').filter()" placeholder="Buscar" />
+									</span>
+								</div>
+							</f:facet>
+
+							<p:ajax event="rowSelect" update=":form:delete-clientes-button" />
+							<p:ajax event="rowUnselect" update=":form:delete-clientes-button" />
+							<p:ajax event="rowSelectCheckbox" update=":form:delete-clientes-button" />
+							<p:ajax event="rowUnselectCheckbox" update=":form:delete-clientes-button" />
+							<p:ajax event="toggleSelect" update=":form:delete-clientes-button" />
+
+							<p:column selectionMode="multiple" exportable="false" width="3%"></p:column>
+							<p:column exportable="false" width="3%">
+								<p:rowToggler />
+							</p:column>
+							<p:column headerText="Nombre" sortBy="#{cliente.cteNombre}" filterBy="#{cliente.cteNombre}">
+								<h:outputText value="#{cliente.cteNombre}" />
+							</p:column>
+							<p:column headerText="RFC">
+								<h:outputText value="#{cliente.cteRfc}" />
+							</p:column>
+							<p:column headerText="Habilitado">
+								<h:outputText value="#{cliente.habilitado ? 'Sí' : 'No'}" />
+							</p:column>
+							<p:column headerText="Código">
+								<h:outputText value="#{cliente.codUnico}" />
+							</p:column>
+							<p:column width="18%">
+								<p:commandButton icon="pi pi-pencil" value="Modificar" styleClass="edit-button ui-button-success" oncomplete="PF('dialogCliente').show();"
+									process="@this" update=":form:dialogCliente">
+									<f:setPropertyActionListener value="#{cliente}" target="#{clientesBean.clienteSelected}" />
+								</p:commandButton>
+								<p:commandButton class="ui-button-warning" icon="pi pi-trash" value="Eliminar">
+
+								</p:commandButton>
+							</p:column>
+
+							<p:rowExpansion>
+								<div class="orders-subtable">
+									<h5>Contactos para: #{cliente.cteNombre}</h5>
+									<p:dataTable var="contacto" value="#{cliente.clienteContactoList}" reflow="true">
+
+										<p:column headerText="Nombre" sortBy="#{contacto.idContacto.nbNombre}">
+											<h:outputText value="#{contacto.idContacto.nbNombre}" />
+										</p:column>
+										<p:column headerText="Primer apellido" sortBy="#{contacto.idContacto.nbApellido1}">
+											<h:outputText value="#{contacto.idContacto.nbApellido1}" />
+										</p:column>
+										<p:column headerText="Segundo apellido" sortBy="#{contacto.idContacto.nbApellido2}">
+											<h:outputText value="#{contacto.idContacto.nbApellido2}" />
+										</p:column>
+
+										<p:column style="width: 3.5rem">
+											<p:commandButton icon="pi pi-search" />
+										</p:column>
+									</p:dataTable>
+								</div>
+							</p:rowExpansion>
+						</p:dataTable>
+
+						<p:dialog id="dialogCliente" header="Agregar/modificar cliente" widgetVar="dialogCliente" showEffect="fade" modal="true" responsive="true">
+							<p:outputPanel id="pnlCliente" class="ui-fluid">
+								<p:outputPanel>
+									<div class="p-field">
+										<p:outputLabel for="txtNombre">Nombre</p:outputLabel>
+										<p:inputText id="txtNombre" value="#{clientesBean.clienteSelected.cteNombre}" required="true" requiredMessage="Campo requerido" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel for="txtRFC">RFC</p:outputLabel>
+										<p:inputTextarea id="txtRFC" value="#{clientesBean.clienteSelected.cteRfc}" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel for="chkHabilitado" value="Habilitado" />
+										<p:selectOneMenu id="chkHabilitado" value="#{clientesBean.clienteSelected.habilitado}">
+											<f:selectItem itemLabel="Sí" itemValue="1" />
+											<f:selectItem itemLabel="No" itemValue="0" />
+										</p:selectOneMenu>
+									</div>
+								</p:outputPanel>
+							</p:outputPanel>
+							<f:facet name="footer">
+								<p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{clientesBean.guardarCliente()}" process="pnlCliente @this" />
+								<p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogCliente').hide();" class="ui-button-secondary" />
+							</f:facet>
+						</p:dialog>
+
+						<p:dialog id="dialogContacto" widgetVar="dialogContacto" showEffect="fade" modal="true" responsive="true">
+							<p:outputPanel id="pnlContacto" class="ui-fluid">
+								<p:outputPanel>
+									<div class="p-field">
+										<p:outputLabel for="txtNombren">Nombre</p:outputLabel>
+										<p:inputText id="txtNombren" required="true" requiredMessage="Campo requerido" />
+									</div>
+								</p:outputPanel>
+							</p:outputPanel>
+							<f:facet name="footer">
+								<p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{clientesBean.guardarContacto()}" update="pnlContacto"
+									process="pnlContacto @this" />
+								<p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogContacto').hide()" class="ui-button-secondary" />
+							</f:facet>
+						</p:dialog>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

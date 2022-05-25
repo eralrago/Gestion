@@ -2,8 +2,11 @@ package mx.com.ferbo.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.ProductoPorCliente;
+import mx.com.ferbo.util.EntityManagerUtil;
 
 public class ProductoClienteDAO extends IBaseDAO<ProductoPorCliente, Integer> {
 
@@ -16,6 +19,7 @@ public class ProductoClienteDAO extends IBaseDAO<ProductoPorCliente, Integer> {
 	@Override
 	public List<ProductoPorCliente> buscarTodos() {
 		List<ProductoPorCliente> listado;
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		listado = em.createNamedQuery("ProductoPorCliente.findAll", ProductoPorCliente.class).getResultList();
 		return listado;
 	}

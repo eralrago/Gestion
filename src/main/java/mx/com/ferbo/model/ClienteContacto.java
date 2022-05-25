@@ -9,8 +9,12 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,20 +31,17 @@ import javax.validation.constraints.Size;
 @Table(name = "cliente_contacto")
 @NamedQueries({
     @NamedQuery(name = "ClienteContacto.findAll", query = "SELECT c FROM ClienteContacto c"),
-    @NamedQuery(name = "ClienteContacto.findByIdCliente", query = "SELECT c FROM ClienteContacto c WHERE c.clienteContactoPK.idCliente = :idCliente"),
-    @NamedQuery(name = "ClienteContacto.findByIdContacto", query = "SELECT c FROM ClienteContacto c WHERE c.clienteContactoPK.idContacto = :idContacto"),
     @NamedQuery(name = "ClienteContacto.findByStHabilitado", query = "SELECT c FROM ClienteContacto c WHERE c.stHabilitado = :stHabilitado"),
     @NamedQuery(name = "ClienteContacto.findByNbUsuario", query = "SELECT c FROM ClienteContacto c WHERE c.nbUsuario = :nbUsuario"),
     @NamedQuery(name = "ClienteContacto.findByNbPassword", query = "SELECT c FROM ClienteContacto c WHERE c.nbPassword = :nbPassword"),
     @NamedQuery(name = "ClienteContacto.findByStUsuario", query = "SELECT c FROM ClienteContacto c WHERE c.stUsuario = :stUsuario"),
     @NamedQuery(name = "ClienteContacto.findByFhAlta", query = "SELECT c FROM ClienteContacto c WHERE c.fhAlta = :fhAlta"),
     @NamedQuery(name = "ClienteContacto.findByFhCadPasswd", query = "SELECT c FROM ClienteContacto c WHERE c.fhCadPasswd = :fhCadPasswd"),
-    @NamedQuery(name = "ClienteContacto.findByFhUltAcceso", query = "SELECT c FROM ClienteContacto c WHERE c.fhUltAcceso = :fhUltAcceso")})
+    @NamedQuery(name = "ClienteContacto.findByFhUltAcceso", query = "SELECT c FROM ClienteContacto c WHERE c.fhUltAcceso = :fhUltAcceso"),
+    @NamedQuery(name = "ClienteContacto.findById", query = "SELECT c FROM ClienteContacto c WHERE c.id = :id")})
 public class ClienteContacto implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected ClienteContactoPK clienteContactoPK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "st_habilitado")
@@ -67,31 +68,30 @@ public class ClienteContacto implements Serializable {
     @Column(name = "fh_ult_acceso")
     @Temporal(TemporalType.DATE)
     private Date fhUltAcceso;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    @JoinColumn(name = "id_cliente", referencedColumnName = "CTE_CVE")
+    @ManyToOne(optional = false)
+    private Cliente idCliente;
+    @JoinColumn(name = "id_contacto", referencedColumnName = "id_contacto")
+    @ManyToOne(optional = false)
+    private Contacto idContacto;
 
     public ClienteContacto() {
     }
 
-    public ClienteContacto(ClienteContactoPK clienteContactoPK) {
-        this.clienteContactoPK = clienteContactoPK;
+    public ClienteContacto(Integer id) {
+        this.id = id;
     }
 
-    public ClienteContacto(ClienteContactoPK clienteContactoPK, boolean stHabilitado, String stUsuario, Date fhAlta) {
-        this.clienteContactoPK = clienteContactoPK;
+    public ClienteContacto(Integer id, boolean stHabilitado, String stUsuario, Date fhAlta) {
+        this.id = id;
         this.stHabilitado = stHabilitado;
         this.stUsuario = stUsuario;
         this.fhAlta = fhAlta;
-    }
-
-    public ClienteContacto(int idCliente, int idContacto) {
-        this.clienteContactoPK = new ClienteContactoPK(idCliente, idContacto);
-    }
-
-    public ClienteContactoPK getClienteContactoPK() {
-        return clienteContactoPK;
-    }
-
-    public void setClienteContactoPK(ClienteContactoPK clienteContactoPK) {
-        this.clienteContactoPK = clienteContactoPK;
     }
 
     public boolean getStHabilitado() {
@@ -150,10 +150,34 @@ public class ClienteContacto implements Serializable {
         this.fhUltAcceso = fhUltAcceso;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Cliente getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Cliente idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public Contacto getIdContacto() {
+        return idContacto;
+    }
+
+    public void setIdContacto(Contacto idContacto) {
+        this.idContacto = idContacto;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (clienteContactoPK != null ? clienteContactoPK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -164,7 +188,7 @@ public class ClienteContacto implements Serializable {
             return false;
         }
         ClienteContacto other = (ClienteContacto) object;
-        if ((this.clienteContactoPK == null && other.clienteContactoPK != null) || (this.clienteContactoPK != null && !this.clienteContactoPK.equals(other.clienteContactoPK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -172,7 +196,7 @@ public class ClienteContacto implements Serializable {
 
     @Override
     public String toString() {
-        return "mx.com.ferbo.model.ClienteContacto[ clienteContactoPK=" + clienteContactoPK + " ]";
+        return "mx.com.ferbo.model.ClienteContacto[ id=" + id + " ]";
     }
     
 }

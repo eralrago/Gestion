@@ -5,51 +5,51 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
-import mx.com.ferbo.model.Cliente;
+import mx.com.ferbo.model.ClienteContacto;
 import mx.com.ferbo.util.EntityManagerUtil;
 
-public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
+public class ClienteContactoDAO extends IBaseDAO<ClienteContacto, Integer>{
 
 	@Override
-	public Cliente buscarPorId(Integer id) {
+	public ClienteContacto buscarPorId(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Cliente> buscarTodos() {
+	public List<ClienteContacto> buscarTodos() {
+		List<ClienteContacto> listado;
 		EntityManager em = EntityManagerUtil.getEntityManager();
-		List<Cliente> listado = null;
-		listado = em.createNamedQuery("Cliente.findAll", Cliente.class).getResultList();
+		listado = em.createNamedQuery("ClienteContacto.findAll", ClienteContacto.class).getResultList();
 		return listado;
 	}
 
 	@Override
-	public List<Cliente> buscarPorCriterios(Cliente e) {
+	public List<ClienteContacto> buscarPorCriterios(ClienteContacto e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String actualizar(Cliente e) {
+	public String actualizar(ClienteContacto e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String guardar(Cliente e) {
+	public String guardar(ClienteContacto e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String eliminar(Cliente e) {
+	public String eliminar(ClienteContacto e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String eliminarListado(List<Cliente> listado) {
+	public String eliminarListado(List<ClienteContacto> listado) {
 		// TODO Auto-generated method stub
 		return null;
 	}
