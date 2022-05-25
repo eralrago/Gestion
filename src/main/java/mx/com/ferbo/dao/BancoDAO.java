@@ -63,8 +63,16 @@ public class BancoDAO extends IBaseDAO<Bancos, Integer> {
 	}
 
 	@Override
-	public String eliminar(Bancos e) {
-		// TODO Auto-generated method stub
+	public String eliminar(Bancos bancos) {
+		try {
+			em.getTransaction().begin();
+			em.remove(em.merge(bancos));
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
