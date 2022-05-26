@@ -7,11 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.apache.log4j.Logger;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.Bancos;
 import mx.com.ferbo.model.Servicio;
+import mx.com.ferbo.util.EntityManagerUtil;
 
 public class BancoDAO extends IBaseDAO<Bancos, Integer> {
 
@@ -24,6 +27,7 @@ public class BancoDAO extends IBaseDAO<Bancos, Integer> {
 	@Override
 	public List<Bancos> buscarTodos() {
 		List<Bancos> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		listado = em.createNamedQuery("Bancos.findAll", Bancos.class).getResultList();
 		return listado;
 	}
@@ -37,6 +41,7 @@ public class BancoDAO extends IBaseDAO<Bancos, Integer> {
 	@Override
 	public String actualizar(Bancos bancos) {
 		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.merge(bancos);
 			em.getTransaction().commit();
@@ -51,6 +56,7 @@ public class BancoDAO extends IBaseDAO<Bancos, Integer> {
 	@Override
 	public String guardar(Bancos bancos) {
 		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.persist(bancos);
 			em.getTransaction().commit();
@@ -65,6 +71,7 @@ public class BancoDAO extends IBaseDAO<Bancos, Integer> {
 	@Override
 	public String eliminar(Bancos bancos) {
 		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.remove(em.merge(bancos));
 			em.getTransaction().commit();

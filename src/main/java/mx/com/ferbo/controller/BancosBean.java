@@ -73,7 +73,6 @@ public class BancosBean implements Serializable {
 	public void eliminandoBanco() {
 		if (bancoDao.eliminar(bancoSelect) == null) {
 			this.listaBancos.remove(this.bancoSelect);
-//			this.listaBancos = null;
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Banco Eliminado"));
 			PrimeFaces.current().ajax().update("form:messages", "form:dt-bancos");
 		} else {
