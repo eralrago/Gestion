@@ -47,6 +47,7 @@ public class ProdClienteBean implements Serializable {
 	private List<Producto> listProducto;
 	private Producto productoSelected;
 	private ProductoDAO productoDAO;
+	private List<Producto> listProductoFiltered;
 	
 	//Objetos para Productos por cliente
 	private List<ProductoPorCliente> lstProductosClienteFiltered;
@@ -62,24 +63,39 @@ public class ProdClienteBean implements Serializable {
 		productoPorClienteDAO = new ProductoClienteDAO();
 		lstProductosClienteFiltered = new ArrayList<>();
 		lstProductosCliente = new ArrayList<>();
+		listProductoFiltered = new ArrayList<>();
 	}
 
 	@PostConstruct
 	public void init() {
 		lstClientes = clienteDAO.buscarTodos();
+		lstProductosCliente = productoPorClienteDAO.buscarTodos();
+		listProducto = productoDAO.buscarTodos();
 	}
 	
 
 	/**
 	 * Método para filtrar del listado original por clave de cliente
 	 */
-	public void filtaListado() {
+	public void filtraListado() {
+		listProductoFiltered.clear();
 		lstProductosClienteFiltered = lstProductosCliente.stream()
 				.filter(ps -> clienteSelected != null
 						? (ps.getCteCve().getCteCve().intValue() == clienteSelected.getCteCve().intValue())
 						: false)
 				.collect(Collectors.toList());
-	}
+		System.out.println(lstProductosClienteFiltered.toString());
+		
+		for(int indProd=0; indProd<listProducto.size();indProd++) {
+			for(int indProdClien = 0; indProdClien< lstProductosClienteFiltered.size(); indProdClien++) {
+				if(lstProductosClienteFiltered.get(indProdClien).getProductoCve()==listProducto.get(indProd).getProductoCve()) {
+					listProductoFiltered.add(listProducto.get(indProd));
+				}
+			}
+		}
+		
+		System.out.println(listProductoFiltered.toString());		
+		}
 
 	/**
 	 * Método para filtrar del listado original por clave de cliente
@@ -224,6 +240,14 @@ public class ProdClienteBean implements Serializable {
 
 	public void setLstProductosCliente(List<ProductoPorCliente> lstProductosCliente) {
 		this.lstProductosCliente = lstProductosCliente;
+	}
+
+	public List<Producto> getlistProductoFiltered() {
+		return listProductoFiltered;
+	}
+
+	public void setlistProductoFiltered(List<Producto> listProductoFiltered) {
+		this.listProductoFiltered = listProductoFiltered;
 	}
 	
 	
