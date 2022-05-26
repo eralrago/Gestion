@@ -44,7 +44,7 @@ public class UnidadDeManejoBean implements Serializable {
 		this.unidadManejoSelected = new UnidadDeManejo();
 	}
 	
-	public void guardarBanco() {
+	public void guardarUnidadManejo() {
 		if (this.unidadManejoSelected.getUnidadDeManejoCve() == null) {
 			if (unidadManejoDao.guardar(unidadManejoSelected) == null) {
 				this.listaUnidadManejo.add(this.unidadManejoSelected);
@@ -65,7 +65,7 @@ public class UnidadDeManejoBean implements Serializable {
 		PrimeFaces.current().ajax().update("form");
 	}
 
-	public void eliminandoBanco() {
+	public void eliminandoUnidadManejo() {
 		if (unidadManejoDao.eliminar(unidadManejoSelected) == null) {
 			this.listaUnidadManejo.remove(this.unidadManejoSelected);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Unidad de Medida Eliminada"));
@@ -99,7 +99,7 @@ public class UnidadDeManejoBean implements Serializable {
 	}
 
 	public void setUnidadManejoSelected(UnidadDeManejo unidadManejoSelected) {
-		unidadManejoSelected = unidadManejoSelected;
+		this.unidadManejoSelected = unidadManejoSelected;
 	}
 
 	public UnidadDeManejoDAO getUnidadManejoDao() {

@@ -12,7 +12,8 @@
 				<p:menuitem value="Home" outcome="/dashboard" />
 				<p:menuitem value="Facturación" />
 				<p:menuitem value="Catálogos" />
-				<p:menuitem value="Unidad de Medida" outcome="/protected/catalogos/unidadManejo" />
+				<p:menuitem value="Unidad de Medida"
+					outcome="/protected/catalogos/unidadManejo" />
 			</p:breadCrumb>
 			<div class="p-grid button-demo">
 				<div class="p-col-12">
@@ -71,7 +72,7 @@
 								</p:commandButton>
 								<p:commandButton value="Eliminar" styleClass="p-mr-2 p-mb-2"
 									icon="pi pi-trash" process="@this"
-									oncomplete="PF('deletemanejoDialog').show()">
+									oncomplete="PF('deleteManejoDialog').show()">
 									<f:setPropertyActionListener value="#{manejo}"
 										target="#{unidadDeManejoBean.unidadManejoSelected}" />
 								</p:commandButton>
@@ -83,17 +84,20 @@
 			<p:dialog header="Agregar/Editar un Banco" showEffect="fade"
 				modal="true" widgetVar="nuevaUnidadManejoDialog" responsive="true">
 				<p:outputPanel id="manage-unit-content-new" class="ui-fluid">
-					<p:outputPanel rendered="#{not empty unidadDeManejoBean.unidadManejoSelected}">
+					<p:outputPanel
+						rendered="#{not empty unidadDeManejoBean.unidadManejoSelected}">
 						<div class="p-field">
-							<p:outputLabel for="nombre-new" value="Nombre de la Unidad de Manejo" />
+							<p:outputLabel for="nombre-new"
+								value="Nombre de la Unidad de Manejo" />
 							<p:inputText id="nombre-new"
-								value="#{unidadDeManejoBean.unidadManejoSelected.unidadDeManejoDs}" required="true" />
+								value="#{unidadDeManejoBean.unidadManejoSelected.unidadDeManejoDs}"
+								required="true" />
 						</div>
 					</p:outputPanel>
 				</p:outputPanel>
 				<f:facet name="footer">
 					<p:commandButton value="Guardar" icon="pi pi-plus"
-						actionListener="#{unidadDeManejoBean.guardarBanco()}"
+						actionListener="#{unidadDeManejoBean.guardarUnidadManejo()}"
 						update=":form:manage-unit-content-new" styleClass="p-mr-2 p-mb-2" />
 					<p:commandButton value="Cancelar" icon="pi pi-times"
 						onclick="PF('nuevaUnidadManejoDialog').hide()"
@@ -101,23 +105,23 @@
 				</f:facet>
 			</p:dialog>
 			<p:confirmDialog widgetVar="deleteManejoDialog" showEffect="fade"
-				width="400" message="Desea eliminar la Unidad de Manejo?" header="Eliminar"
-				severity="warn">
+				width="400" message="Desea eliminar la Unidad de Manejo?"
+				header="Eliminar" severity="warn">
 				<p:commandButton value="Sí" icon="pi pi-check"
-					actionListener="#{unidadDeManejoBean.eliminandoBanco()}" process="@this"
-					oncomplete="PF('deleteManejoDialog').hide()" />
+					actionListener="#{unidadDeManejoBean.eliminandoUnidadManejo()}"
+					process="@this" oncomplete="PF('deleteManejoDialog').hide()" />
 				<p:commandButton value="No" type="button"
 					styleClass="ui-button-secondary" icon="pi pi-times"
 					onclick="PF('deleteManejoDialog').hide()" />
 			</p:confirmDialog>
-						<p:confirmDialog global="true" showEffect="fade" width="400"
-							header="Eliminar">
-							<p:commandButton value="Sí" type="button"
-								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-							<p:commandButton value="No" type="button"
-								styleClass="ui-confirmdialog-no ui-button-secondary"
-								icon="pi pi-times" />
-						</p:confirmDialog>
+			<p:confirmDialog global="true" showEffect="fade" width="400"
+				header="Eliminar">
+				<p:commandButton value="Sí" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no ui-button-secondary"
+					icon="pi pi-times" />
+			</p:confirmDialog>
 		</h:form>
 	</ui:define>
 
