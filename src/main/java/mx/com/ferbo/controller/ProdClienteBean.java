@@ -52,6 +52,7 @@ public class ProdClienteBean implements Serializable {
 	//Objetos para Productos por cliente
 	private List<ProductoPorCliente> lstProductosClienteFiltered;
 	private List<ProductoPorCliente> lstProductosCliente;
+	private List<ProductoPorCliente> lstProdPorCliente;
 	private ProductoPorCliente prodClienteSelected;
 	private ProductoClienteDAO productoPorClienteDAO;
 	
@@ -64,6 +65,8 @@ public class ProdClienteBean implements Serializable {
 		lstProductosClienteFiltered = new ArrayList<>();
 		lstProductosCliente = new ArrayList<>();
 		listProductoFiltered = new ArrayList<>();
+		lstProdPorCliente = new ArrayList<>();
+		
 	}
 
 	@PostConstruct
@@ -103,7 +106,7 @@ public class ProdClienteBean implements Serializable {
 	public void nuevoProductoCliente() {		
 		prodClienteSelected = new ProductoPorCliente();
 		prodClienteSelected.setCteCve(clienteSelected);
-		prodClienteSelected.setProductoCve(this.productoSelected.getProductoCve());
+		prodClienteSelected.setProductoCve(0);
 	}
 
 	/**
@@ -112,23 +115,31 @@ public class ProdClienteBean implements Serializable {
 	
 	public void guardaProductoCliente() {		
 		if (prodClienteSelected.getProdXCteCve() == null) {
+			prodClienteSelected.setCteCve(clienteSelected);
+			prodClienteSelected.setProductoCve(productoSelected.getProductoCve());
 			if (productoPorClienteDAO.guardar(prodClienteSelected) == null) {
 				lstProductosClienteFiltered.add(prodClienteSelected);
 				lstProductosCliente.add(prodClienteSelected);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Agregado"));
+				PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
+
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"Error", "Ocurrió un error al intentar guardar el Producto"));
 			}
 		}
-		PrimeFaces.current().executeScript("PF('servicioClienteDialog').hide()");
-		PrimeFaces.current().ajax().update("form:messages", "form:dt-servicios");
+		PrimeFaces.current().executeScript("PF('productoClienteDialog').hide()");
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
 	}
 	
 	/**
 	 * Método para actualizar objeto tipo ProductoCliente
 	 */	
 	public void actualizaProductoCliente() {
+		prodClienteSelected.getProdXCteCve();
+		prodClienteSelected.setCteCve(clienteSelected);
+		prodClienteSelected.setProductoCve(productoSelected.getProductoCve());
+		System.out.println(		prodClienteSelected.getProdXCteCve());
 		
 		if (productoPorClienteDAO.actualizar(prodClienteSelected) == null) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Actualizado"));
@@ -137,8 +148,8 @@ public class ProdClienteBean implements Serializable {
 					"Error", "Ocurrió un error al intentar actualizar el Producto"));
 		}	
 		
-		PrimeFaces.current().executeScript("PF('servicioClienteDialog').hide()");
-		PrimeFaces.current().ajax().update("form:messages", "form:dt-servicios");
+		PrimeFaces.current().executeScript("PF('productoClienteActDialog').hide()");
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
 	}
 	
 	
@@ -248,6 +259,22 @@ public class ProdClienteBean implements Serializable {
 
 	public void setlistProductoFiltered(List<Producto> listProductoFiltered) {
 		this.listProductoFiltered = listProductoFiltered;
+	}
+
+	public List<Producto> getListProductoFiltered() {
+		return listProductoFiltered;
+	}
+
+	public void setListProductoFiltered(List<Producto> listProductoFiltered) {
+		this.listProductoFiltered = listProductoFiltered;
+	}
+
+	public List<ProductoPorCliente> getLstProdPorCliente() {
+		return lstProdPorCliente;
+	}
+
+	public void setLstProdPorCliente(List<ProductoPorCliente> lstProdPorCliente) {
+		this.lstProdPorCliente = lstProdPorCliente;
 	}
 	
 	
