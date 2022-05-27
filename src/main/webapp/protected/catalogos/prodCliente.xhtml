@@ -38,7 +38,8 @@
 									<span style="font-weight: bold">Productos por cliente</span> <span class="filter-container ui-input-icon-left"> <p:commandButton
 											id="btnAdd" icon="pi pi-plus" value="Agregar"  process="@this"
 											styleClass="ui-button-primary" style="margin-right: .5rem" update="form:panel-producto" oncomplete="PF('productoClienteDialog').show()"
-											disabled="#{prodClienteBean.clienteSelected eq null and prodClienteBean.clienteSelected.cteCve eq null}" actionListener="#{prodClienteBean.nuevoProductoCliente()}"/>
+											disabled="#{prodClienteBean.clienteSelected eq null and prodClienteBean.clienteSelected.cteCve eq null}" actionListener="#{prodClienteBean.nuevoProductoCliente()}"
+											resetValues="panel-producto"/>
 									</span>		
 								</div>
 							</f:facet>

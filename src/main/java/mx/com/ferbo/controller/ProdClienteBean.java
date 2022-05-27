@@ -115,9 +115,9 @@ public class ProdClienteBean implements Serializable {
 	
 	public void guardaProductoCliente() {		
 		if (prodClienteSelected.getProdXCteCve() == null) {
-			prodClienteSelected.setCteCve(clienteSelected);
 			prodClienteSelected.setProductoCve(productoSelected.getProductoCve());
 			if (productoPorClienteDAO.guardar(prodClienteSelected) == null) {
+				listProductoFiltered.add(productoSelected);
 				lstProductosClienteFiltered.add(prodClienteSelected);
 				lstProductosCliente.add(prodClienteSelected);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Agregado"));
@@ -127,7 +127,11 @@ public class ProdClienteBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"Error", "Ocurrió un error al intentar guardar el Producto"));
 			}
+		}else {
+			actualizaProductoCliente();
 		}
+		
+		productoSelected = new Producto();
 		PrimeFaces.current().executeScript("PF('productoClienteDialog').hide()");
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
 	}
