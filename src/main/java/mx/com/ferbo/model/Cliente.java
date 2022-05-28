@@ -107,7 +107,7 @@ public class Cliente implements Serializable {
         this.habilitado = habilitado;
     }
 
-    public Integer getCteCve() {
+	public Integer getCteCve() {
         return cteCve;
     }
 

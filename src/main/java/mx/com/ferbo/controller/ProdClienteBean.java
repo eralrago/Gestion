@@ -31,32 +31,37 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class ProdClienteBean implements Serializable {
 
+	/**
+	 * @author Juan_Cervantes
+	 */
+
+	private static final long serialVersionUID = -626048119540963939L;
 
 	/**
-	 * @author Juan Cervantes
+	 * Objetos para clientes
 	 */
-	
-	private static final long serialVersionUID = -626048119540963939L;
-	
-	//Objetos para clientes
 	private List<Cliente> lstClientes;
 	private Cliente clienteSelected;
 	private ClienteDAO clienteDAO;
-	
-	//Objetos para Productos
+
+	/**
+	 * Objetos para Productos
+	 */
 	private List<Producto> listProducto;
 	private Producto productoSelected;
 	private ProductoDAO productoDAO;
-	private List<Producto> listProductoFiltered;
-	
-	//Objetos para Productos por cliente
+
+	/**
+	 * Objetos para Productos por Cliente
+	 */
 	private List<ProductoPorCliente> lstProductosClienteFiltered;
 	private List<ProductoPorCliente> lstProductosCliente;
-	private List<ProductoPorCliente> lstProdPorCliente;
 	private ProductoPorCliente prodClienteSelected;
 	private ProductoClienteDAO productoPorClienteDAO;
-	
-	
+
+	/**
+	 * Constructores
+	 */
 
 	public ProdClienteBean() {
 		clienteDAO = new ClienteDAO();
@@ -64,9 +69,6 @@ public class ProdClienteBean implements Serializable {
 		productoPorClienteDAO = new ProductoClienteDAO();
 		lstProductosClienteFiltered = new ArrayList<>();
 		lstProductosCliente = new ArrayList<>();
-		listProductoFiltered = new ArrayList<>();
-		lstProdPorCliente = new ArrayList<>();
-		
 	}
 
 	@PostConstruct
@@ -75,108 +77,89 @@ public class ProdClienteBean implements Serializable {
 		lstProductosCliente = productoPorClienteDAO.buscarTodos();
 		listProducto = productoDAO.buscarTodos();
 	}
-	
 
 	/**
 	 * Método para filtrar del listado original por clave de cliente
 	 */
 	public void filtraListado() {
-		listProductoFiltered.clear();
+		lstProductosClienteFiltered.clear();
 		lstProductosClienteFiltered = lstProductosCliente.stream()
 				.filter(ps -> clienteSelected != null
 						? (ps.getCteCve().getCteCve().intValue() == clienteSelected.getCteCve().intValue())
 						: false)
 				.collect(Collectors.toList());
-		System.out.println(lstProductosClienteFiltered.toString());
-		
-		for(int indProd=0; indProd<listProducto.size();indProd++) {
-			for(int indProdClien = 0; indProdClien< lstProductosClienteFiltered.size(); indProdClien++) {
-				if(lstProductosClienteFiltered.get(indProdClien).getProductoCve()==listProducto.get(indProd).getProductoCve()) {
-					listProductoFiltered.add(listProducto.get(indProd));
-				}
-			}
-		}
-		
-		System.out.println(listProductoFiltered.toString());		
-		}
+		System.out.println("Productos Cliente Filtrados:" + lstProductosClienteFiltered.toString());
+	}
 
 	/**
-	 * Método para filtrar del listado original por clave de cliente
+	 * Métodos para guardar objeto tipo ProductoCliente
 	 */
-	public void nuevoProductoCliente() {		
+	public void nuevoProductoCliente() {
 		prodClienteSelected = new ProductoPorCliente();
 		prodClienteSelected.setCteCve(clienteSelected);
-		prodClienteSelected.setProductoCve(0);
+		prodClienteSelected.setProductoCve(new Producto());
 	}
 
-	/**
-	 * Método para guardar objeto tipo ProductoCliente
-	 */
-	
-	public void guardaProductoCliente() {		
-		if (prodClienteSelected.getProdXCteCve() == null) {
-			prodClienteSelected.setProductoCve(productoSelected.getProductoCve());
-			if (productoPorClienteDAO.guardar(prodClienteSelected) == null) {
-				listProductoFiltered.add(productoSelected);
-				lstProductosClienteFiltered.add(prodClienteSelected);
-				lstProductosCliente.add(prodClienteSelected);
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Agregado"));
-				PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
+	public void guardaProductoCliente() {
+		prodClienteSelected.setProdXCteCve(null);
+		prodClienteSelected.setProductoCve(productoSelected);
+		if (productoPorClienteDAO.guardar(prodClienteSelected) == null) {
+			lstProductosClienteFiltered.add(prodClienteSelected);
+			lstProductosCliente.add(prodClienteSelected);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Agregado"));
+			PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
 
-			} else {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						"Error", "Ocurrió un error al intentar guardar el Producto"));
-			}
-		}else {
-			actualizaProductoCliente();
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Ocurrió un error al intentar guardar el Producto"));
 		}
-		
-		productoSelected = new Producto();
+
+		prodClienteSelected = new ProductoPorCliente();
 		PrimeFaces.current().executeScript("PF('productoClienteDialog').hide()");
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
+
 	}
-	
+
 	/**
 	 * Método para actualizar objeto tipo ProductoCliente
-	 */	
+	 */
 	public void actualizaProductoCliente() {
-		prodClienteSelected.getProdXCteCve();
 		prodClienteSelected.setCteCve(clienteSelected);
-		prodClienteSelected.setProductoCve(productoSelected.getProductoCve());
-		System.out.println(		prodClienteSelected.getProdXCteCve());
-		
+		prodClienteSelected.setProductoCve(productoSelected);
+		System.out.println(prodClienteSelected.toString());
+
 		if (productoPorClienteDAO.actualizar(prodClienteSelected) == null) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Actualizado"));
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error", "Ocurrió un error al intentar actualizar el Producto"));
-		}	
-		
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Ocurrió un error al intentar actualizar el Producto"));
+		}
+
 		PrimeFaces.current().executeScript("PF('productoClienteActDialog').hide()");
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
 	}
-	
-	
 
 	/**
 	 * Método para eliminar objeto tipo PrecioServicio
 	 */
-	public void eliminarPrecioServicio() {
+
+	public void eliminarProductoCliente() {
 		if (productoPorClienteDAO.eliminar(prodClienteSelected) == null) {
 			lstProductosClienteFiltered.remove(this.prodClienteSelected);
 			lstProductosCliente.remove(prodClienteSelected);
 			prodClienteSelected = null;
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Servicio Eliminado"));
-			PrimeFaces.current().ajax().update("form:messages", "form:dt-servicios");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Eliminado"));
+			PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"Ocurrió un error al intentar eliminar el Servicio"));
+					"Ocurrió un error al intentar eliminar el Producto"));
 			PrimeFaces.current().ajax().update("form:messages");
 		}
+		
 	}
 
 	/**
-	 * Getters & Setters
+	 * Getters y Setters
 	 */
 	public List<Cliente> getLstClientes() {
 		return lstClientes;
@@ -193,6 +176,7 @@ public class ProdClienteBean implements Serializable {
 	public void setClienteSelected(Cliente clienteSelected) {
 		this.clienteSelected = clienteSelected;
 	}
+
 	public ClienteDAO getClienteDAO() {
 		return clienteDAO;
 	}
@@ -233,6 +217,14 @@ public class ProdClienteBean implements Serializable {
 		this.lstProductosClienteFiltered = lstProductosClienteFiltered;
 	}
 
+	public List<ProductoPorCliente> getLstProductosCliente() {
+		return lstProductosCliente;
+	}
+
+	public void setLstProductosCliente(List<ProductoPorCliente> lstProductosCliente) {
+		this.lstProductosCliente = lstProductosCliente;
+	}
+
 	public ProductoPorCliente getProdClienteSelected() {
 		return prodClienteSelected;
 	}
@@ -248,41 +240,4 @@ public class ProdClienteBean implements Serializable {
 	public void setProductoPorClienteDAO(ProductoClienteDAO productoPorClienteDAO) {
 		this.productoPorClienteDAO = productoPorClienteDAO;
 	}
-
-	public List<ProductoPorCliente> getLstProductosCliente() {
-		return lstProductosCliente;
-	}
-
-	public void setLstProductosCliente(List<ProductoPorCliente> lstProductosCliente) {
-		this.lstProductosCliente = lstProductosCliente;
-	}
-
-	public List<Producto> getlistProductoFiltered() {
-		return listProductoFiltered;
-	}
-
-	public void setlistProductoFiltered(List<Producto> listProductoFiltered) {
-		this.listProductoFiltered = listProductoFiltered;
-	}
-
-	public List<Producto> getListProductoFiltered() {
-		return listProductoFiltered;
-	}
-
-	public void setListProductoFiltered(List<Producto> listProductoFiltered) {
-		this.listProductoFiltered = listProductoFiltered;
-	}
-
-	public List<ProductoPorCliente> getLstProdPorCliente() {
-		return lstProdPorCliente;
-	}
-
-	public void setLstProdPorCliente(List<ProductoPorCliente> lstProdPorCliente) {
-		this.lstProdPorCliente = lstProdPorCliente;
-	}
-	
-	
-	
-	
-
 }
