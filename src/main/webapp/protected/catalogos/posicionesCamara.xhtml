@@ -65,31 +65,25 @@ button.ui-button {
 						</f:facet>
 
 						<p:column headerText="Planta">
-							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+							<h:outputText value="#{posicion.idPlanta}" />
 						</p:column>
 						<p:column headerText="Camara">
-							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+							<h:outputText value="#{posicion.idCamara}" />
 						</p:column>
 						<p:column headerText="Clave Posicion">
-							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+							<h:outputText value="#{posicion.codPosicion}" />
 						</p:column>
 						<p:column headerText="Descripción">
-							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+							<h:outputText value="#{posicion.descPosicion}" />
 						</p:column>
 						<p:column headerText="Temp. Min.°C">
-							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+							<h:outputText value="#{posicion.tempIni}" />
 						</p:column>
 						<p:column headerText="Temp. Max.°C">
-							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+							<h:outputText value="#{posicion.tempFin}" />
 						</p:column>
 						<p:column headerText="Status">
-							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
-						</p:column>
-						<p:column headerText="Accion">
-							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
-						</p:column>
-						<p:column headerText="Imprimir">
-							<h:outputText value="#{posicionCamaraBean.posiciones.idPlanta}" />
+							<h:outputText value="#{posicion.habilitada ? 'habilitada' : 'No habilitada' }" />
 						</p:column>
 
 					</p:dataTable>
