@@ -1,5 +1,5 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 	<ui:define name="title">Clientes</ui:define>
 
 	<ui:define name="content">
@@ -18,10 +18,12 @@
 
 						<p:toolbar styleClass="p-mb-4">
 							<p:toolbarGroup>
-								<p:commandButton value="Agregar" icon="pi pi-plus" styleClass="ui-button-success" style="margin-right: .5rem" />
+								<p:commandButton value="Agregar" icon="pi pi-plus" styleClass="ui-button-success" style="margin-right: .5rem" actionListener="#{clientesBean.nuevoCliente()}"
+									process="@this" update="dialogCliente" oncomplete="PF('dialogCliente').show();" />
 								<p:commandButton id="delete-clientes-button" value="#{clientesBean.consultaMensajeBtn}" disabled="#{!clientesBean.clienteSeleccionado()}"
-									icon="pi pi-trash" styleClass="ui-button-danger" update="@this">
-									<p:confirm header="Eliminar" message="Desea eliminar los clientes seleccionados?" icon="pi pi-exclamation-triangle" />
+									actionListener="#{clientesBean.eliminarListaCliente()}" icon="pi pi-trash" styleClass="ui-button-danger" update="@this">
+									<p:confirm header="Eliminar" message="Desea eliminar #{clientesBean.lstClientesSelected.size() > 1 ?'los clientes seleccionados?' : 'el cliente'}"
+										icon="pi pi-exclamation-triangle" />
 								</p:commandButton>
 							</p:toolbarGroup>
 							<p:toolbarGroup align="right">
@@ -35,9 +37,8 @@
 							selection="#{clientesBean.lstClientesSelected}" reflow="true" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
 							<f:facet name="header">
 								<div class="products-table-header">
-									<span style="font-weight: bold">Catálogo de Clientes</span> <span class="filter-container ui-input-icon-left"> </span> <span
-										class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i> <p:inputText id="globalFilter"
-											onkeyup="PF('dtClientes').filter()" placeholder="Buscar" />
+									<span style="font-weight: bold">Catálogo de Clientes</span> <span class="filter-container ui-input-icon-left"> </span> <span class="filter-container ui-input-icon-left">
+										<i class="pi pi-search"></i> <p:inputText id="globalFilter" onkeyup="PF('dtClientes').filter()" placeholder="Buscar" />
 									</span>
 								</div>
 							</f:facet>
@@ -64,20 +65,28 @@
 							<p:column headerText="Código">
 								<h:outputText value="#{cliente.codUnico}" />
 							</p:column>
-							<p:column width="18%">
-								<p:commandButton icon="pi pi-pencil" value="Modificar" styleClass="edit-button ui-button-success" oncomplete="PF('dialogCliente').show();"
-									process="@this" update=":form:dialogCliente">
+							<p:column width="22%">
+								<p:commandButton icon="pi pi-pencil" value="Modificar" styleClass="edit-button ui-button-warning" oncomplete="PF('dialogCliente').show();" process="@this"
+									update=":form:dialogCliente">
 									<f:setPropertyActionListener value="#{cliente}" target="#{clientesBean.clienteSelected}" />
 								</p:commandButton>
-								<p:commandButton class="ui-button-warning" icon="pi pi-trash" value="Eliminar">
-
+								<p:commandButton class="ui-button-danger" icon="pi pi-trash" value="Eliminar" process="@this" oncomplete="PF('deleteClienteDialog').show()">
+									<f:setPropertyActionListener value="#{cliente}" target="#{clientesBean.clienteSelected}" />
 								</p:commandButton>
 							</p:column>
 
 							<p:rowExpansion>
 								<div class="orders-subtable">
-									<h5>Contactos para: #{cliente.cteNombre}</h5>
-									<p:dataTable var="contacto" value="#{cliente.clienteContactoList}" reflow="true">
+									<p:dataTable var="contacto" value="#{cliente.clienteContactoList}" reflow="true" rowKey="#{contaco.idContacto.idContacto}">
+										<f:facet name="header">
+											<div class="products-table-header">
+												<span style="font-weight: bold">Contactos para: #{cliente.cteNombre}</span> <span class="filter-container ui-input-icon-left"> </span> <span
+													class="filter-container ui-input-icon-left"> 
+													<p:commandButton value="Agregar" icon="pi pi-plus" styleClass="ui-button-success" style="margin-right: .5rem"
+														actionListener="#{clientesBean.nuevoContacto(cliente)}" process="@this" oncomplete="PF('dialogAddContacto').show();" />
+												</span>
+											</div>
+										</f:facet>
 
 										<p:column headerText="Nombre" sortBy="#{contacto.idContacto.nbNombre}">
 											<h:outputText value="#{contacto.idContacto.nbNombre}" />
@@ -89,8 +98,14 @@
 											<h:outputText value="#{contacto.idContacto.nbApellido2}" />
 										</p:column>
 
-										<p:column style="width: 3.5rem">
-											<p:commandButton icon="pi pi-search" />
+										<p:column width="10%">
+											<p:commandButton icon="pi pi-pencil" styleClass="ui-button-warning p-mr-2 p-mb-2" process="@this" oncomplete="PF('dialogEditContacto').show();"
+											update="form:pnlEditContacto">
+												<f:setPropertyActionListener value="#{contacto.idContacto}" target="#{clientesBean.contactoSelected}" />
+											</p:commandButton>
+											<p:commandButton icon="pi pi-trash" styleClass="ui-button-danger p-mr-2 p-mb-2" process="@this" oncomplete="PF('deleteContactoDialog').show();">
+												<f:setPropertyActionListener value="#{contacto}" target="#{clientesBean.clienteContactoSelected}" />
+											</p:commandButton>
 										</p:column>
 									</p:dataTable>
 								</div>
@@ -102,11 +117,11 @@
 								<p:outputPanel>
 									<div class="p-field">
 										<p:outputLabel for="txtNombre">Nombre</p:outputLabel>
-										<p:inputText id="txtNombre" value="#{clientesBean.clienteSelected.cteNombre}" required="true" requiredMessage="Campo requerido" />
+										<p:inputTextarea id="txtNombre" value="#{clientesBean.clienteSelected.cteNombre}" required="true" requiredMessage="Campo requerido" rows="2" />
 									</div>
 									<div class="p-field">
 										<p:outputLabel for="txtRFC">RFC</p:outputLabel>
-										<p:inputTextarea id="txtRFC" value="#{clientesBean.clienteSelected.cteRfc}" />
+										<p:inputText id="txtRFC" value="#{clientesBean.clienteSelected.cteRfc}" />
 									</div>
 									<div class="p-field">
 										<p:outputLabel for="chkHabilitado" value="Habilitado" />
@@ -115,29 +130,83 @@
 											<f:selectItem itemLabel="No" itemValue="0" />
 										</p:selectOneMenu>
 									</div>
-								</p:outputPanel>
-							</p:outputPanel>
-							<f:facet name="footer">
-								<p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{clientesBean.guardarCliente()}" process="pnlCliente @this" />
-								<p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogCliente').hide();" class="ui-button-secondary" />
-							</f:facet>
-						</p:dialog>
-
-						<p:dialog id="dialogContacto" widgetVar="dialogContacto" showEffect="fade" modal="true" responsive="true">
-							<p:outputPanel id="pnlContacto" class="ui-fluid">
-								<p:outputPanel>
 									<div class="p-field">
-										<p:outputLabel for="txtNombren">Nombre</p:outputLabel>
-										<p:inputText id="txtNombren" required="true" requiredMessage="Campo requerido" />
+										<p:outputLabel for="txtCodigo">Código único</p:outputLabel>
+										<p:inputText id="txtCodigo" value="#{clientesBean.clienteSelected.codUnico}" />
 									</div>
 								</p:outputPanel>
 							</p:outputPanel>
 							<f:facet name="footer">
-								<p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{clientesBean.guardarContacto()}" update="pnlContacto"
-									process="pnlContacto @this" />
-								<p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogContacto').hide()" class="ui-button-secondary" />
+								<p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{clientesBean.guardarCliente()}" process="pnlCliente @this" />
+								<p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogCliente').hide();" class="ui-button-secondary" resetValues="pnlCliente" process=" @this pnlCliente" >
+								</p:commandButton>
 							</f:facet>
 						</p:dialog>
+
+						<p:dialog id="dialogAddContacto" widgetVar="dialogAddContacto" header="Agregar contacto" showEffect="fade" modal="true" responsive="true">
+							<p:outputPanel id="pnlContacto" class="ui-fluid">
+								<p:outputPanel>
+									<div class="p-field">
+										<p:outputLabel>Nombre</p:outputLabel>
+										<p:inputText value="#{clientesBean.contactoSelected.nbNombre}" required="true" requiredMessage="Campo requerido" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Primer apellido</p:outputLabel>
+										<p:inputText value="#{clientesBean.contactoSelected.nbApellido1}" required="true" requiredMessage="Campo requerido" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Segundo apellido</p:outputLabel>
+										<p:inputText value="#{clientesBean.contactoSelected.nbApellido2}" required="true" requiredMessage="Campo requerido" />
+									</div>
+								</p:outputPanel>
+							</p:outputPanel>
+							<f:facet name="footer">
+								<p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{clientesBean.guardarContacto()}" update="pnlContacto" process="pnlContacto @this" />
+								<p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogAddContacto').hide()" class="ui-button-secondary" />
+							</f:facet>
+						</p:dialog>
+
+						<p:dialog id="dialogEditContacto" widgetVar="dialogEditContacto" header="Modificar contacto" showEffect="fade" modal="true" responsive="true">
+							<p:outputPanel id="pnlEditContacto" class="ui-fluid">
+								<p:outputPanel>
+									<div class="p-field">
+										<p:outputLabel>Nombre</p:outputLabel>
+										<p:inputText value="#{clientesBean.contactoSelected.nbNombre}" required="true" requiredMessage="Campo requerido" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Primer apellido</p:outputLabel>
+										<p:inputText value="#{clientesBean.contactoSelected.nbApellido1}" required="true" requiredMessage="Campo requerido" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Segundo apellido</p:outputLabel>
+										<p:inputText value="#{clientesBean.contactoSelected.nbApellido2}" required="true" requiredMessage="Campo requerido" />
+									</div>
+								</p:outputPanel>
+								<f:facet name="footer">
+								<p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{clientesBean.guardarContacto()}" update="pnlContacto" process="pnlContacto @this" />
+								<p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogEditContacto').hide()" class="ui-button-secondary" />
+							</f:facet>
+							</p:outputPanel>
+							<f:facet name="footer">
+								<p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{clientesBean.guardarContacto()}" update="pnlEditContacto" process="pnlEditContacto @this" />
+								<p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogEditContacto').hide()" class="ui-button-secondary" />
+							</f:facet>
+						</p:dialog>
+
+						<p:confirmDialog widgetVar="deleteClienteDialog" showEffect="fade" width="400" message="Desea eliminar el cliente?" header="Eliminar" severity="warn">
+							<p:commandButton value="Sí" icon="pi pi-check" process="@this" actionListener="#{clientesBean.eliminarCliente()}" oncomplete="PF('deleteClienteDialog').hide()" />
+							<p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('deleteClienteDialog').hide()" />
+						</p:confirmDialog>
+
+						<p:confirmDialog global="true" showEffect="fade" width="400" header="Eliminar">
+							<p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary" icon="pi pi-times" />
+						</p:confirmDialog>
+
+						<p:confirmDialog widgetVar="deleteContactoDialog" showEffect="fade" width="400" message="Desea eliminar el contacto?" header="Eliminar" severity="warn">
+							<p:commandButton value="Sí" icon="pi pi-check" process="@this" actionListener="#{clientesBean.eliminarClienteContacto()}" oncomplete="PF('deleteContactoDialog').hide()" />
+							<p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('deleteContactoDialog').hide()" />
+						</p:confirmDialog>
 					</div>
 				</div>
 			</div>

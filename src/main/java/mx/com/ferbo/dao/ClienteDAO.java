@@ -50,7 +50,18 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 
 	@Override
 	public String eliminarListado(List<Cliente> listado) {
-		// TODO Auto-generated method stub
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			for (Cliente cliente : listado) {
+				em.remove(em.merge(cliente));
+			}
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 

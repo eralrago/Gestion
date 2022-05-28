@@ -6,11 +6,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.primefaces.PrimeFaces;
+
 import mx.com.ferbo.dao.ClienteContactoDAO;
 import mx.com.ferbo.dao.ClienteDAO;
+import mx.com.ferbo.dao.ContactoDAO;
 import mx.com.ferbo.model.Cliente;
 import mx.com.ferbo.model.ClienteContacto;
 import mx.com.ferbo.model.Contacto;
@@ -31,16 +36,23 @@ public class ClientesBean implements Serializable {
 
 	private ClienteDAO clienteDAO;
 	private ClienteContactoDAO clienteContactoDAO;
+	private ContactoDAO contactoDAO;
 
 	public ClientesBean() {
 		lstClienteContactoSelected = new ArrayList<>();
 		lstClientesSelected = new ArrayList<>();
 		clienteDAO = new ClienteDAO();
 		clienteContactoDAO = new ClienteContactoDAO();
+		contactoDAO = new ContactoDAO();
+		nuevoCliente();
 	}
 
 	@PostConstruct
 	public void init() {
+		consultaClientes();
+	}
+
+	private void consultaClientes() {
 		lstClientes = clienteDAO.buscarTodos();
 	}
 
@@ -52,8 +64,23 @@ public class ClientesBean implements Serializable {
 			int size = this.lstClientesSelected.size();
 			return size > 1 ? size + " clientes seleccionados" : "1 cliente seleccionado";
 		}
-
 		return "Eliminar";
+	}
+
+	/**
+	 * Método para inicializar objeto tipo Cliente
+	 */
+	public void nuevoCliente() {
+		clienteSelected = new Cliente();
+		clienteSelected.setClienteContactoList(new ArrayList<>());
+	}
+
+	/**
+	 * Método para inicializar objeto tipo Contacto
+	 */
+	public void nuevoContacto(Cliente clienteSel) {
+		contactoSelected = new Contacto();
+		clienteSelected = clienteSel;
 	}
 
 	/**
@@ -62,18 +89,86 @@ public class ClientesBean implements Serializable {
 	public boolean clienteSeleccionado() {
 		return this.lstClientesSelected != null && !this.lstClientesSelected.isEmpty();
 	}
-	
-	
-	public void guardarCliente(){
-		
+
+	public void guardarCliente() {
+		if (clienteSelected.getCteCve() == null) {
+			if (clienteDAO.guardar(clienteSelected) == null) {
+				lstClientes.add(clienteSelected);
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente Agregado"));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Error", "Ocurrió un error al intentar guardar el Cliente"));
+			}
+		} else {
+			if (clienteDAO.actualizar(clienteSelected) == null) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente Actualizado"));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Error", "Ocurrió un error al intentar actualizar el Cliente"));
+			}
+		}
+		PrimeFaces.current().executeScript("PF('dialogCliente').hide()");
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes");
 	}
-	
+
+	public void eliminarCliente() {
+		if (clienteDAO.eliminar(clienteSelected) == null) {
+			lstClientes.remove(clienteSelected);
+			clienteSelected = null;
+			PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes");
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Ocurrió un error al intentar eliminar el Cliente"));
+		}
+		PrimeFaces.current().ajax().update("form:messages");
+	}
+
+	public void eliminarListaCliente() {
+		if (clienteDAO.eliminarListado(lstClientesSelected) == null) {
+			lstClientes.removeAll(lstClientesSelected);
+			lstClientesSelected = null;
+			PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes");
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Ocurrió un error al intentar eliminar los Clientes"));
+		}
+		PrimeFaces.current().ajax().update("form:messages");
+	}
+
 	public void guardarContacto() {
-		
+		if (contactoSelected.getIdContacto() == null) {
+			if (contactoDAO.guardarClienteContacto(contactoSelected, clienteSelected) == null) {
+				consultaClientes();
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contacto Agregado"));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Error", "Ocurrió un error al intentar guardar el Contacto"));
+			}
+			PrimeFaces.current().executeScript("PF('dialogAddContacto').hide()");
+		} else {
+			if (contactoDAO.actualizar(contactoSelected) == null) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contacto Actualizado"));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Error", "Ocurrió un error al intentar actualizar el Contacto"));
+			}
+			PrimeFaces.current().executeScript("PF('dialogEditContacto').hide()");
+		}
+		contactoSelected = null;
+		clienteSelected = null;
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes");
 	}
-	
-	
-	
+
+	public void eliminarClienteContacto() {
+		if(clienteContactoDAO.eliminar(clienteContactoSelected) == null) {
+			consultaClientes();
+		}else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Ocurrió un error al intentar eliminar el Contacto"));
+		}
+		PrimeFaces.current().ajax().update("form:messages","form:dt-clientes");
+
+	}
 
 	/**
 	 * Getters & Setters
