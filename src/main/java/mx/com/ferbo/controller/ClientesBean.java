@@ -45,6 +45,7 @@ public class ClientesBean implements Serializable {
 		clienteContactoDAO = new ClienteContactoDAO();
 		contactoDAO = new ContactoDAO();
 		nuevoCliente();
+		contactoSelected = new Contacto();
 	}
 
 	@PostConstruct
@@ -115,7 +116,8 @@ public class ClientesBean implements Serializable {
 		if (clienteDAO.eliminar(clienteSelected) == null) {
 			lstClientes.remove(clienteSelected);
 			clienteSelected = null;
-			PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente Eliminado"));
+			PrimeFaces.current().ajax().update("form:dt-clientes");
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					"Ocurrió un error al intentar eliminar el Cliente"));
@@ -127,7 +129,8 @@ public class ClientesBean implements Serializable {
 		if (clienteDAO.eliminarListado(lstClientesSelected) == null) {
 			lstClientes.removeAll(lstClientesSelected);
 			lstClientesSelected = null;
-			PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Clientes Eliminados"));
+			PrimeFaces.current().ajax().update("form:dt-clientes");
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					"Ocurrió un error al intentar eliminar los Clientes"));
@@ -160,13 +163,13 @@ public class ClientesBean implements Serializable {
 	}
 
 	public void eliminarClienteContacto() {
-		if(clienteContactoDAO.eliminar(clienteContactoSelected) == null) {
+		if (clienteContactoDAO.eliminar(clienteContactoSelected) == null) {
 			consultaClientes();
-		}else {
+		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					"Ocurrió un error al intentar eliminar el Contacto"));
 		}
-		PrimeFaces.current().ajax().update("form:messages","form:dt-clientes");
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes");
 
 	}
 

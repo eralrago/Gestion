@@ -31,20 +31,47 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 	}
 
 	@Override
-	public String actualizar(Cliente e) {
-		// TODO Auto-generated method stub
+	public String actualizar(Cliente cliente) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.merge(cliente);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String guardar(Cliente e) {
-		// TODO Auto-generated method stub
+	public String guardar(Cliente cliente) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.persist(cliente);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String eliminar(Cliente e) {
-		// TODO Auto-generated method stub
+	public String eliminar(Cliente cliente) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.remove(em.merge(cliente));
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 

@@ -20,11 +20,6 @@
 							<p:toolbarGroup>
 								<p:commandButton value="Agregar" icon="pi pi-plus" styleClass="ui-button-success" style="margin-right: .5rem" actionListener="#{clientesBean.nuevoCliente()}"
 									process="@this" update="dialogCliente" oncomplete="PF('dialogCliente').show();" />
-								<p:commandButton id="delete-clientes-button" value="#{clientesBean.consultaMensajeBtn}" disabled="#{!clientesBean.clienteSeleccionado()}"
-									actionListener="#{clientesBean.eliminarListaCliente()}" icon="pi pi-trash" styleClass="ui-button-danger" update="@this">
-									<p:confirm header="Eliminar" message="Desea eliminar #{clientesBean.lstClientesSelected.size() > 1 ?'los clientes seleccionados?' : 'el cliente'}"
-										icon="pi pi-exclamation-triangle" />
-								</p:commandButton>
 							</p:toolbarGroup>
 							<p:toolbarGroup align="right">
 								<p:commandButton value="Exportar" icon="pi pi-upload" styleClass="ui-button-secondary" ajax="false">
@@ -42,14 +37,6 @@
 									</span>
 								</div>
 							</f:facet>
-
-							<p:ajax event="rowSelect" update=":form:delete-clientes-button" />
-							<p:ajax event="rowUnselect" update=":form:delete-clientes-button" />
-							<p:ajax event="rowSelectCheckbox" update=":form:delete-clientes-button" />
-							<p:ajax event="rowUnselectCheckbox" update=":form:delete-clientes-button" />
-							<p:ajax event="toggleSelect" update=":form:delete-clientes-button" />
-
-							<p:column selectionMode="multiple" exportable="false" width="3%"></p:column>
 							<p:column exportable="false" width="3%">
 								<p:rowToggler />
 							</p:column>
@@ -58,6 +45,12 @@
 							</p:column>
 							<p:column headerText="RFC">
 								<h:outputText value="#{cliente.cteRfc}" />
+							</p:column>
+							<p:column headerText="Número de cliente">
+								<h:outputText value="#{cliente.numeroCte}" />
+							</p:column>
+							<p:column headerText="Correo">
+								<h:outputText value="#{cliente.cteMail}" />
 							</p:column>
 							<p:column headerText="Habilitado">
 								<h:outputText value="#{cliente.habilitado ? 'Sí' : 'No'}" />
@@ -122,6 +115,14 @@
 									<div class="p-field">
 										<p:outputLabel for="txtRFC">RFC</p:outputLabel>
 										<p:inputText id="txtRFC" value="#{clientesBean.clienteSelected.cteRfc}" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel >Número cliente</p:outputLabel>
+										<p:inputText value="#{clientesBean.clienteSelected.numeroCte}" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel >Correo</p:outputLabel>
+										<p:inputText value="#{clientesBean.clienteSelected.cteMail}" />
 									</div>
 									<div class="p-field">
 										<p:outputLabel for="chkHabilitado" value="Habilitado" />
