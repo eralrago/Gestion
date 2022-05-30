@@ -28,7 +28,6 @@ public class PosicionCamaraBean implements Serializable {
 	public PosicionCamaraBean() {
 		result = new PosicionCamaraDAO();
 		this.posiciones = result.findAll();
-		System.out.println(posiciones + "-------------------------------------------");
 	}
 
 

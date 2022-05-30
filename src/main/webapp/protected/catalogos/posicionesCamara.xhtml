@@ -36,7 +36,8 @@ button.ui-button {
 
 									<div class="p-field p-col-12 p-md-4">
 										<p:outputLabel for="@next" value="planta:" />
-										<p:selectOneMenu id="planta" value="#{null}" dynamic="true">
+										<p:selectOneMenu id="planta" value="#{posicion.idPlanta}"
+											dynamic="true">
 											<f:selectItem
 												itemLabel="TODAS LAS PLANTAS (Seleccione una planta)"
 												itemValue="" />
@@ -46,7 +47,8 @@ button.ui-button {
 
 									<div class="p-field ">
 										<p:outputLabel for="@next" value="Camara: " />
-										<p:selectOneMenu id="camara" value="#{null}" dynamic="true">
+										<p:selectOneMenu id="camara" value="#{posicion.idCamara}"
+											dynamic="true">
 											<f:selectItem itemLabel="" itemValue="" />
 											<f:selectItems value="#{selectOneMenuView.options}" />
 										</p:selectOneMenu>
@@ -83,8 +85,14 @@ button.ui-button {
 							<h:outputText value="#{posicion.tempFin}" />
 						</p:column>
 						<p:column headerText="Status">
-							<h:outputText value="#{posicion.habilitada ? 'habilitada' : 'No habilitada' }" />
+							<h:form>
+								<p:growl id="msg" />
+
+								<h5 class="p-mt-0">Desactivar/Activar</h5>
+								<p:toggleSwitch value="#{posicion.habilitada  ? 'habilitada' : 'No habilitada' }" />
+							</h:form>
 						</p:column>
+
 
 					</p:dataTable>
 				</div>
