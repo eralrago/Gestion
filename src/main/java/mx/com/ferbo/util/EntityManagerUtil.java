@@ -8,12 +8,10 @@ import javax.persistence.*;
  */
 public class EntityManagerUtil {
 
-    protected static EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestionPU");
+	protected static String PERSIST_UNIT = "gestionPU";
+    protected static EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSIST_UNIT);
 
     public static EntityManager getEntityManager() {
-//        EntityManagerFactory factory = Persistence.createEntityManagerFactory("gestionPU");
-//        EntityManager manager = factory.createEntityManager();
-//        return manager;
         return emf.createEntityManager();
     }
 }

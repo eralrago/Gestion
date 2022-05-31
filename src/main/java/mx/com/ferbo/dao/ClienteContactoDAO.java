@@ -5,37 +5,37 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
-import mx.com.ferbo.model.Cliente;
+import mx.com.ferbo.model.ClienteContacto;
 import mx.com.ferbo.util.EntityManagerUtil;
 
-public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
+public class ClienteContactoDAO extends IBaseDAO<ClienteContacto, Integer> {
 
 	@Override
-	public Cliente buscarPorId(Integer id) {
+	public ClienteContacto buscarPorId(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Cliente> buscarTodos() {
+	public List<ClienteContacto> buscarTodos() {
+		List<ClienteContacto> listado;
 		EntityManager em = EntityManagerUtil.getEntityManager();
-		List<Cliente> listado = null;
-		listado = em.createNamedQuery("Cliente.findAll", Cliente.class).getResultList();
+		listado = em.createNamedQuery("ClienteContacto.findAll", ClienteContacto.class).getResultList();
 		return listado;
 	}
 
 	@Override
-	public List<Cliente> buscarPorCriterios(Cliente e) {
+	public List<ClienteContacto> buscarPorCriterios(ClienteContacto e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String actualizar(Cliente cliente) {
+	public String actualizar(ClienteContacto clienteContacto) {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.merge(cliente);
+			em.persist(clienteContacto);
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
@@ -46,11 +46,11 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 	}
 
 	@Override
-	public String guardar(Cliente cliente) {
+	public String guardar(ClienteContacto clienteContacto) {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.persist(cliente);
+			em.persist(clienteContacto);
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
@@ -61,11 +61,15 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 	}
 
 	@Override
-	public String eliminar(Cliente cliente) {
+	public String eliminar(ClienteContacto clienteContacto) {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.remove(em.merge(cliente));
+//			em.remove(em.merge(clienteContacto));
+			em.createQuery("DELETE ClienteContacto c WHERE c.id =:clienteContacto")
+					.setParameter("clienteContacto", clienteContacto.getId()).executeUpdate();
+			em.createQuery("DELETE FROM Contacto con WHERE con.idContacto = :idCon")
+					.setParameter("idCon", clienteContacto.getIdContacto().getIdContacto()).executeUpdate();
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
@@ -76,19 +80,8 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 	}
 
 	@Override
-	public String eliminarListado(List<Cliente> listado) {
-		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
-			em.getTransaction().begin();
-			for (Cliente cliente : listado) {
-				em.remove(em.merge(cliente));
-			}
-			em.getTransaction().commit();
-			em.close();
-		} catch (Exception e) {
-			System.out.println("ERROR" + e.getMessage());
-			return "ERROR";
-		}
+	public String eliminarListado(List<ClienteContacto> listado) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

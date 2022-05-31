@@ -19,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -26,10 +27,10 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "precio_servicio")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PrecioServicio.findAll", query = "SELECT p FROM PrecioServicio p"),
     @NamedQuery(name = "PrecioServicio.findById", query = "SELECT p FROM PrecioServicio p WHERE p.id = :id"),
-    @NamedQuery(name = "PrecioServicio.findByUnidad", query = "SELECT p FROM PrecioServicio p WHERE p.unidad = :unidad"),
     @NamedQuery(name = "PrecioServicio.findByPrecio", query = "SELECT p FROM PrecioServicio p WHERE p.precio = :precio")})
 public class PrecioServicio implements Serializable {
 
@@ -39,10 +40,6 @@ public class PrecioServicio implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "unidad")
-    private int unidad;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
@@ -54,6 +51,9 @@ public class PrecioServicio implements Serializable {
     @JoinColumn(name = "servicio", referencedColumnName = "SERVICIO_CVE")
     @ManyToOne(optional = false)
     private Servicio servicio;
+    @JoinColumn(name = "unidad", referencedColumnName = "UNIDAD_DE_MANEJO_CVE")
+    @ManyToOne(optional = false)
+    private UnidadDeManejo unidad;
     @JoinColumn(name = "aviso_cve", referencedColumnName = "aviso_cve")
     @ManyToOne(optional = false)
     private Aviso avisoCve;
@@ -65,9 +65,8 @@ public class PrecioServicio implements Serializable {
         this.id = id;
     }
 
-    public PrecioServicio(Integer id, int unidad, BigDecimal precio) {
+    public PrecioServicio(Integer id, BigDecimal precio) {
         this.id = id;
-        this.unidad = unidad;
         this.precio = precio;
     }
 
@@ -77,14 +76,6 @@ public class PrecioServicio implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public int getUnidad() {
-        return unidad;
-    }
-
-    public void setUnidad(int unidad) {
-        this.unidad = unidad;
     }
 
     public BigDecimal getPrecio() {
@@ -109,6 +100,14 @@ public class PrecioServicio implements Serializable {
 
     public void setServicio(Servicio servicio) {
         this.servicio = servicio;
+    }
+
+    public UnidadDeManejo getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(UnidadDeManejo unidad) {
+        this.unidad = unidad;
     }
 
     public Aviso getAvisoCve() {
