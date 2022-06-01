@@ -5,51 +5,51 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
-import mx.com.ferbo.model.Paises;
+import mx.com.ferbo.model.AsentamientoHumano;
 import mx.com.ferbo.util.EntityManagerUtil;
 
-public class PaisesDAO extends IBaseDAO<Paises, Integer> {
+public class AsentamientoHumanoDAO extends IBaseDAO<AsentamientoHumano, Integer> {
 
 	@Override
-	public Paises buscarPorId(Integer id) {
+	public AsentamientoHumano buscarPorId(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Paises> buscarTodos() {
-		List<Paises> listado;
+	public List<AsentamientoHumano> buscarTodos() {
+		List<AsentamientoHumano> listado;
 		EntityManager em = EntityManagerUtil.getEntityManager();
-		listado = em.createNamedQuery("Paises.findAll", Paises.class).getResultList();
+		listado = em.createNamedQuery("AsentamientoHumano.findAll", AsentamientoHumano.class).getResultList();
 		return listado;
 	}
 
 	@Override
-	public List<Paises> buscarPorCriterios(Paises e) {
+	public List<AsentamientoHumano> buscarPorCriterios(AsentamientoHumano e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String actualizar(Paises e) {
+	public String actualizar(AsentamientoHumano e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String guardar(Paises e) {
+	public String guardar(AsentamientoHumano e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String eliminar(Paises e) {
+	public String eliminar(AsentamientoHumano e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String eliminarListado(List<Paises> listado) {
+	public String eliminarListado(List<AsentamientoHumano> listado) {
 		// TODO Auto-generated method stub
 		return null;
 	}
