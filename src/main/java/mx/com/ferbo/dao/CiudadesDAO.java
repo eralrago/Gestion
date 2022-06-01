@@ -3,9 +3,11 @@ package mx.com.ferbo.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.Ciudades;
+import mx.com.ferbo.model.Estados;
 import mx.com.ferbo.util.EntityManagerUtil;
 
 public class CiudadesDAO extends IBaseDAO<Ciudades, Integer> {
@@ -27,7 +29,15 @@ public class CiudadesDAO extends IBaseDAO<Ciudades, Integer> {
 	@Override
 	public List<Ciudades> buscarPorCriterios(Ciudades e) {
 		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		if (e.getMunicipios().getMunicipiosPK().getMunicipioCve() > 0) {
+			TypedQuery<Ciudades> consEstados = em.createNamedQuery("Ciudades.findByMunicipioCve", Ciudades.class);
+			consEstados.setParameter("municipioCve", e.getMunicipios().getMunicipiosPK().getMunicipioCve());
+			List<Ciudades> listado = consEstados.getResultList();
+			return listado;
+		} else {
+			return null;
+		}
 	}
 
 	@Override

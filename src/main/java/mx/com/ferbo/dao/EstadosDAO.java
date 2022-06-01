@@ -3,6 +3,7 @@ package mx.com.ferbo.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.Estados;
@@ -27,7 +28,15 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer> {
 	@Override
 	public List<Estados> buscarPorCriterios(Estados e) {
 		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		if (e.getPaises().getPaisCve() != null) {
+			TypedQuery<Estados> consEstados = em.createNamedQuery("Estados.findByPaisCve", Estados.class);
+			consEstados.setParameter("paisCve", e.getPaises().getPaisCve());
+			List<Estados> listado = consEstados.getResultList();
+			return listado;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -54,4 +63,4 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer> {
 		return null;
 	}
 
-	}
+}

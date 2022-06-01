@@ -12,6 +12,7 @@ import mx.com.ferbo.dao.ClienteDomiciliosDAO;
 import mx.com.ferbo.dao.DomiciliosDAO;
 import mx.com.ferbo.dao.EstadosDAO;
 import mx.com.ferbo.dao.MunicipiosDAO;
+import mx.com.ferbo.dao.PaisDAO;
 import mx.com.ferbo.dao.PaisesDAO;
 import mx.com.ferbo.dao.PrecioServicioDAO;
 import mx.com.ferbo.dao.ProductoClienteDAO;
@@ -20,6 +21,7 @@ import mx.com.ferbo.dao.ServicioDAO;
 import mx.com.ferbo.dao.TiposDomicilioDAO;
 import mx.com.ferbo.dao.UnidadManejoDAO;
 import mx.com.ferbo.model.AsentamientoHumano;
+import mx.com.ferbo.model.AsentamientoHumanoPK;
 import mx.com.ferbo.model.Aviso;
 import mx.com.ferbo.model.Ciudades;
 import mx.com.ferbo.model.Cliente;
@@ -27,6 +29,7 @@ import mx.com.ferbo.model.ClienteDomicilios;
 import mx.com.ferbo.model.Domicilios;
 import mx.com.ferbo.model.Estados;
 import mx.com.ferbo.model.Municipios;
+import mx.com.ferbo.model.Pais;
 import mx.com.ferbo.model.Paises;
 import mx.com.ferbo.model.PrecioServicio;
 import mx.com.ferbo.model.Producto;
@@ -83,6 +86,14 @@ public class DomiciliosBean implements Serializable {
 	private List<Domicilios> lstDomiciliosFiltered;
 	private Domicilios domicilioSelected;
 	private DomiciliosDAO domiciliosDAO;
+	//domicilio nuevo
+	private Domicilios domicilioNuevo;
+	private String domicilioNvoCalle;
+	private String domicilioNvoNumExt;
+	private String domicilioNvoNumInt;
+	private String domicilioNvoTel1; 
+	private String domicilioNvoTel2; 
+	private String domicilioNvoFax; 
 	
 	/**
 	 * Objetos para Paises
@@ -91,6 +102,12 @@ public class DomiciliosBean implements Serializable {
 	private List<Paises> lstPaisesFiltered;
 	private Paises paisSelected;
 	private PaisesDAO paisesDAO;
+	
+	/**
+	 * Objetos para País
+	 */
+	private PaisDAO paisDAO;
+	private Pais paisComplet;
 	
 	/**
 	 * Objetos para Estados
@@ -183,61 +200,65 @@ public class DomiciliosBean implements Serializable {
 				? (pa.getPaisCve().intValue() == paisSelected.getPaisCve().intValue())
 						: false)
 				.collect(Collectors.toList());
+		System.out.println("Paises Filtrados:" + lstPaisesFiltered.toString());
+
 	}
 	/**
 	 * Método para filtrar del listado original de estados por paisCve
 	 */
 	public void filtraListadoEstados() {
+		estadoSelected.setPaises(paisSelected);
+		lstEstadosFiltered.clear();
 		Estados estadoAux = new Estados();
 		estadoAux.setPaises(paisSelected);
 		lstEstados = estadosDAO.buscarPorCriterios(estadoAux);
-		lstEstadosFiltered.clear();
-		lstEstadosFiltered = lstEstados.stream()
-				.filter(es -> paisSelected != null
-				? (es.getPaises().getPaisCve() == paisSelected.getPaisCve().intValue())
-						: false)
-				.collect(Collectors.toList());
+		lstEstadosFiltered = lstEstados;
+		System.out.println("Estados Filtrados:" + lstEstadosFiltered.toString());
+
+
+		
 	}
 	/**
 	 * Método para filtrar del listado original de municipios por estadoCve
 	 */
 	public void filtraListadoMunicipios() {
-		lstMunicipios = municipiosDAO.buscarPorCriterios(municipioSelected);
+		municipioSelected.setEstados(estadoSelected);
 		lstMunicipiosFiltered.clear();
-		lstMunicipiosFiltered = lstMunicipios.stream()
-				.filter(es -> estadoSelected != null
-				? (es.getEstados().getEstadosPK().getEstadoCve() == estadoSelected.getEstadosPK().getEstadoCve())
-						: false)
-				.collect(Collectors.toList());
+		Municipios municipioAux = new Municipios();
+		municipioAux.setEstados(estadoSelected);
+		lstMunicipios = municipiosDAO.buscarPorCriterios(municipioAux);
+		lstMunicipiosFiltered = lstMunicipios;
+		System.out.println("Municipios Filtrados:" + lstMunicipiosFiltered.toString());		
 	}
 	/**
 	 * Método para filtrar del listado original de ciudades por municipioCve
 	 */
 	public void filtraListadoCiudades() {
-		lstCiudades = ciudadesDAO.buscarPorCriterios(ciudadSelected);
+		ciudadSelected.setMunicipios(municipioSelected);
 		lstCiudadesFiltered.clear();
-		lstCiudadesFiltered = lstCiudades.stream()
-				.filter(mu -> municipioSelected != null
-				? (mu.getMunicipios().getMunicipiosPK().getMunicipioCve() == municipioSelected.getMunicipiosPK().getMunicipioCve())
-						: false)
-				.collect(Collectors.toList());
+		Ciudades ciudadAux = new Ciudades();
+		ciudadAux.setMunicipios(municipioSelected);
+		lstCiudades = ciudadesDAO.buscarPorCriterios(ciudadAux);
+		lstCiudadesFiltered = lstCiudades;
+		System.out.println("Ciudades Filtrados:" + lstCiudadesFiltered.toString());	
 	}
 	/**
 	 * Método para filtrar del listado original de asentamientos Humanos por ciudadCve
 	 */
 	public void filtraListadoAsentamientoHumano() {
-		lstAsentamientoHumano = asentamientoHumanoDAO.buscarPorCriterios(asentamientoHumanoSelected);
 		lstAsentamientoHumanoFiltered.clear();
-		lstAsentamientoHumanoFiltered = lstAsentamientoHumano.stream()
-				.filter(ah -> asentamientoHumanoSelected != null
-				? (ah.getAsentamientoHumanoPK().getCiudadCve() == asentamientoHumanoSelected.getAsentamientoHumanoPK().getCiudadCve())
-						: false)
-				.collect(Collectors.toList());
+		AsentamientoHumano coloniaAux = new AsentamientoHumano();
+		AsentamientoHumanoPK coloniaPKAux = new AsentamientoHumanoPK();
+		coloniaAux.setAsentamientoHumanoPK(coloniaPKAux);
+		coloniaAux.getAsentamientoHumanoPK().setCiudadCve(ciudadSelected.getCiudadesPK().getCiudadCve());
+		lstAsentamientoHumano = asentamientoHumanoDAO.buscarPorCriterios(coloniaAux);
+		lstAsentamientoHumanoFiltered = lstAsentamientoHumano;
+		System.out.println("Colonia Filtrados:" + lstAsentamientoHumanoFiltered.toString());	
 	}
 
 	
 	/**
-	 * Métodos para guardar objeto tipo ProductoCliente
+	 * Métodos para guardar objeto tipo ClienteDomicilio
 	 */
 public void nuevoClienteDomicilio() {
 	clienteDomicilioSelected = new ClienteDomicilios();
@@ -248,6 +269,21 @@ public void guardaClienteDomicilio() {
 	clienteDomicilioSelected.getDomicilios();
 	
 }
+/**
+ * Métodos para guardar objeto tipo Domicilios
+ */
+public void nuevoDomicilio() {
+	domicilioNuevo = new Domicilios();
+	paisComplet= new Pais();
+	paisComplet.setPaisCve(ciudadSelected.getMunicipios().getEstados().getPaises().getPaisCve());
+	domicilioNuevo.setPaisCved(paisComplet);
+	domicilioNuevo.setCiudades(ciudadSelected);
+	domicilioNuevo.setDomicilioCp(asentamientoHumanoSelected.getCp());
+	domicilioNuevo.setDomicilioColonia(asentamientoHumanoSelected.getAsentamientoHumanoPK().getAsentamientoCve());
+	
+	
+}
+
 
 /*
 	public void guardaProductoCliente() {
@@ -582,7 +618,78 @@ public void guardaClienteDomicilio() {
 	public void setAsentamientoHumanoDAO(AsentamientoHumanoDAO asentamientoHumanoDAO) {
 		this.asentamientoHumanoDAO = asentamientoHumanoDAO;
 	}
+
+	public PaisDAO getPaisDAO() {
+		return paisDAO;
+	}
+
+	public void setPaisDAO(PaisDAO paisDAO) {
+		this.paisDAO = paisDAO;
+	}
+
+	public Pais getPaisComplet() {
+		return paisComplet;
+	}
+
+	public void setPaisComplet(Pais paisComplet) {
+		this.paisComplet = paisComplet;
+	}
 	
+	public Domicilios getDomicilioNuevo() {
+		return domicilioNuevo;
+	}
+
+	public void setDomicilioNuevo(Domicilios domicilioNuevo) {
+		this.domicilioNuevo = domicilioNuevo;
+	}
+
+	public String getDomicilioNvoCalle() {
+		return domicilioNvoCalle;
+	}
+
+	public void setDomicilioNvoCalle(String domicilioNvoCalle) {
+		this.domicilioNvoCalle = domicilioNvoCalle;
+	}
+
+	public String getDomicilioNvoNumExt() {
+		return domicilioNvoNumExt;
+	}
+
+	public void setDomicilioNvoNumExt(String domicilioNvoNumExt) {
+		this.domicilioNvoNumExt = domicilioNvoNumExt;
+	}
+
+	public String getDomicilioNvoNumInt() {
+		return domicilioNvoNumInt;
+	}
+
+	public void setDomicilioNvoNumInt(String domicilioNvoNumInt) {
+		this.domicilioNvoNumInt = domicilioNvoNumInt;
+	}
+
+	public String getDomicilioNvoTel1() {
+		return domicilioNvoTel1;
+	}
+
+	public void setDomicilioNvoTel1(String domicilioNvoTel1) {
+		this.domicilioNvoTel1 = domicilioNvoTel1;
+	}
+
+	public String getDomicilioNvoTel2() {
+		return domicilioNvoTel2;
+	}
+
+	public void setDomicilioNvoTel2(String domicilioNvoTel2) {
+		this.domicilioNvoTel2 = domicilioNvoTel2;
+	}
+
+	public String getDomicilioNvoFax() {
+		return domicilioNvoFax;
+	}
+
+	public void setDomicilioNvoFax(String domicilioNvoFax) {
+		this.domicilioNvoFax = domicilioNvoFax;
+	}
 	
 	
 

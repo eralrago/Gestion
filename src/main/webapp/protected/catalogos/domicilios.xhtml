@@ -137,8 +137,9 @@
 											requiredMessage="Campo requerido">
 											<f:selectItem itemLabel="--Selecciona--" />
 											<f:selectItems value="#{domiciliosBean.lstPaises}" var="pais"
-												itemLabel="#{pais.paisDesc}"
-												actionListener="#{domiciliosBean.filtraListadoPaises()}" />
+												itemLabel="#{pais.paisDesc}" />
+											<p:ajax listener="#{domiciliosBean.filtraListadoEstados()}"
+												update="addDireccionCliente" />
 										</p:selectOneMenu>
 									</div>
 									<div class="p-field">
@@ -149,9 +150,10 @@
 											requiredMessage="Campo requerido">
 											<f:selectItem itemLabel="--Selecciona--" />
 											<f:selectItems value="#{domiciliosBean.lstEstadosFiltered}"
-												var="estado" itemLabel="#{estado.estadosPK.estadoCve}"
-												actionListener="#{domiciliosBean.filtraListadoEstados()}" />
-											<p:ajax update="addDireccionCliente" />
+												var="estado" itemLabel="#{estado.estadoDesc}" />
+											<p:ajax
+												listener="#{domiciliosBean.filtraListadoMunicipios()}"
+												update="addDireccionCliente" />
 										</p:selectOneMenu>
 									</div>
 									<div class="p-field">
@@ -164,8 +166,10 @@
 											<f:selectItems
 												value="#{domiciliosBean.lstMunicipiosFiltered}"
 												var="municipio"
-												itemLabel="#{municipio.municipiosPK.municipioCve}"
-												actionListener="#{domiciliosBean.filtraListadoMunicipios()}" />
+												itemLabel="#{municipio.municipioDs}" />
+											<p:ajax
+												listener="#{domiciliosBean.filtraListadoCiudades()}"
+												update="addDireccionCliente" />
 										</p:selectOneMenu>
 									</div>
 									<div class="p-field">
@@ -176,8 +180,10 @@
 											requiredMessage="Campo requerido">
 											<f:selectItem itemLabel="--Selecciona--" />
 											<f:selectItems value="#{domiciliosBean.lstCiudadesFiltered}"
-												var="ciudad" itemLabel="#{ciudad.ciudadesPK.ciudadCve}"
-												actionListener="#{domiciliosBean.filtraListadoCiudades()}" />
+												var="ciudad" itemLabel="#{ciudad.ciudadDs}" />
+												<p:ajax
+												listener="#{domiciliosBean.filtraListadoAsentamientoHumano()}"
+												update="addDireccionCliente" />
 										</p:selectOneMenu>
 									</div>
 									<div class="p-field">
@@ -191,9 +197,37 @@
 											<f:selectItems
 												value="#{domiciliosBean.lstAsentamientoHumanoFiltered}"
 												var="colonia"
-												itemLabel="#{colonia.asentamientoHumanoPK.asentamientoCve}"
-												actionListener="#{domiciliosBean.filtraListadoAsentamientoHumano()}" />
+												itemLabel="#{colonia.asentamientoDs}" />
 										</p:selectOneMenu>
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Colonia</p:outputLabel>
+										<p:selectOneMenu
+											value="#{domiciliosBean.asentamientoHumanoSelected}"
+											filter="true" filterMatchMode="contains"
+											converter="entityConverter" required="true"
+											requiredMessage="Campo requerido">
+											<f:selectItem itemLabel="--Selecciona--" />
+											<f:selectItems
+												value="#{domiciliosBean.lstAsentamientoHumanoFiltered}"
+												var="colonia"
+												itemLabel="#{colonia.asentamientoDs}" />
+										</p:selectOneMenu>
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Código Postal</p:outputLabel>
+										<p:inputText
+											value="#{domiciliosBean.asentamientoHumanoSelected.cp}"/>
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Calle</p:outputLabel>
+										<p:inputText
+											value="#{domiciliosBean.asentamientoHumanoSelected.cp}"/>
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Calle</p:outputLabel>
+										<p:inputText
+											value="#{domiciliosBean.asentamientoHumanoSelected.cp}"/>
 									</div>
 								</p:outputPanel>
 							</p:outputPanel>
