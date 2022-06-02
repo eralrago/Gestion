@@ -2,9 +2,12 @@ package mx.com.ferbo.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.Cliente;
 import mx.com.ferbo.model.Paises;
+import mx.com.ferbo.util.EntityManagerUtil;
 
 public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 
@@ -16,12 +19,10 @@ public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 
 	@Override
 	public List<Paises> buscarTodos() {
-		//TODO ESTEBAN. de manera temporal se inhabilitó esta parte de código para facilitar la compilación de las ramas,
-		//ya que la línea em.createNamedQuery(...) no tiene definido el objeto em.
-		//List<Paises> listado = null;
-		//listado = em.createNamedQuery("Paises.findAll", Paises.class).getResultList();
-		//return listado;
-		return null;
+		List<Paises> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		listado = em.createNamedQuery("Paises.findAll", Paises.class).getResultList();
+		return listado;
 	}
 
 	@Override

@@ -2,9 +2,12 @@ package mx.com.ferbo.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.Estados;
 import mx.com.ferbo.model.Municipios;
+import mx.com.ferbo.util.EntityManagerUtil;
 
 public class MunicipiosDAO extends IBaseDAO<Municipios, Integer> {
 
@@ -17,6 +20,7 @@ public class MunicipiosDAO extends IBaseDAO<Municipios, Integer> {
 	@Override
 	public List<Municipios> buscarTodos() {
 		List<Municipios> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		listado = em.createNamedQuery("Municipios.findAll", Municipios.class).getResultList();
 		return listado;
 	}
