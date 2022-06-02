@@ -23,7 +23,7 @@ button.ui-button {
 </style>
 			<div class="p-col-12">
 				<div class="card">
-					<p:dataTable widgetVar="Posicion" var="posicion"
+					<p:dataTable widgetVar="Posicion" var="posicion" id="dt-posiciones"
 						value="#{posicionCamaraBean.posiciones}" reflow="true"
 						paginator="true" rows="10" paginatorPosition="bottom"
 						rowSelectMode="add">
@@ -36,28 +36,26 @@ button.ui-button {
 
 									<div class="p-field p-col-12 p-md-4">
 										<p:outputLabel for="@next" value="planta:" />
-										<p:selectOneMenu id="planta" value="#{posicion.idPlanta}"
-											dynamic="true">
-											<f:selectItem
-												itemLabel="TODAS LAS PLANTAS (Seleccione una planta)"
-												itemValue="" />
-											<f:selectItems value="#{selectOneMenuView.options}" />
+										<p:selectOneMenu id="planta" converter="entityConverter" value="#{posicionCamaraBean.plantaSelect}" dynamic="true">
+											<f:selectItem itemLabel="TODAS LAS PLANTAS (Seleccione una planta)" itemValue="" />
+											<f:selectItems value="#{posicionCamaraBean.plantas}" var="plantas" itemLabel="#{plantas.plantaDs}" itemValue="#{plantas}"/>
+											<p:ajax listener="#{posicionCamaraBean.filtraListado()}" update="camara" />
 										</p:selectOneMenu>
 									</div>
 
 									<div class="p-field ">
 										<p:outputLabel for="@next" value="Camara: " />
-										<p:selectOneMenu id="camara" value="#{posicion.idCamara}"
-											dynamic="true">
+										<p:selectOneMenu id="camara" converter="entityConverter" value="#{posicionCamaraBean.camaraSelect}"  dynamic="true">
 											<f:selectItem itemLabel="" itemValue="" />
-											<f:selectItems value="#{selectOneMenuView.options}" />
+											<f:selectItems value="#{posicionCamaraBean.camaraPorPlanta}" var="camaraPlanta" itemLabel="#{camaraPlanta.camaraDs}" itemValue="#{camaraPlanta}"/>
 										</p:selectOneMenu>
 									</div>
 								</div>
 								<div>
 									<p:button value="Buscar Posiciones"
-										styleClass="ui-button-raised ui-button-success"
+										styleClass="ui-button-raised ui-button-success" actionListener="#{posicionCamaraBean.filtrarPosiciones()}"
 										style="width: auto" />
+										
 									<p:button value="Agregar Poscion"
 										styleClass="ui-button-raised ui-button-info"
 										style="width: auto" />
