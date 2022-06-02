@@ -25,11 +25,26 @@
 									<div class="p-field p-col-12 p-md-6">
 										<p:outputLabel for="soClienteDom" value="Cliente" />
 										<p:selectOneMenu id="soClienteDom" converter="entityConverter"
-											value="#{domiciliosBean.clienteSelected}">
-											<f:selectItem itemLabel="--Seleccione--" />
+											value="#{domiciliosBean.clienteSelected}" required="true"
+											requiredMessage="Campo requerido">>
+											<f:selectItem itemLabel="--Selecciona--" />
 											<f:selectItems value="#{domiciliosBean.lstClientes}"
 												var="cliente" itemLabel="#{cliente.cteNombre}"
 												itemValue="#{cliente}" />
+										</p:selectOneMenu>
+									</div>
+									<div class="p-field p-col">
+										<p:outputLabel for="soClienteTipoDom"
+											value="Tipo de domicilio" />
+										<p:selectOneMenu id="soClienteTipoDom"
+											converter="entityConverter"
+											value="#{domiciliosBean.tipoDomicilioSelected}"
+											required="true" requiredMessage="Campo requerido">
+											<f:selectItem itemLabel="--Selecciona--" />
+											<f:selectItems value="#{domiciliosBean.lstTiposDomicilio}"
+												var="tipoDomicilio"
+												itemLabel="#{tipoDomicilio.domicilioTipoDesc}"
+												itemValue="#{tipoDomicilio}" />
 											<p:ajax listener="#{domiciliosBean.filtraListado()}"
 												update="dt-domiciliosCliente" />
 										</p:selectOneMenu>
@@ -53,8 +68,7 @@
 											styleClass="ui-button-primary" style="margin-right: .5rem"
 											update="form:panel-addClienteDireccion"
 											oncomplete="PF('clienteDireccionesAddDialog').show()"
-											disabled="#{domiciliosBean.clienteSelected eq null and domiciliosBean.clienteSelected.cteCve eq null}"
-											actionListener="#{domiciliosBean.nuevoClienteDomicilio()}"
+											disabled="#{domiciliosBean.clienteSelected eq null and domiciliosBean.clienteSelected.cteCve eq null and domiciliosBean.tipoDomicilioSelected eq null and domiciliosBean.tipoDomicilioSelected.domicilioTipoCve eq null}"
 											resetValues="panel-addClienteDireccion" />
 									</span>
 								</div>
@@ -91,7 +105,7 @@
 								<p:commandButton icon="pi pi-pencil" process="@this"
 									styleClass="edit-button ui-button-primary"
 									oncomplete="PF('clienteDireccionesActDialog').show()"
-									update="form:panel-actClienteDireccion"
+									update="form:panel-addClienteDireccion"
 									actionListener="#{domiciliosBean.nuevoClienteDomicilio()}">
 									<f:setPropertyActionListener value="#{pClienteDomicilios}"
 										target="#{domiciliosBean.clienteDomicilioSelected}" />
@@ -111,123 +125,107 @@
 							responsive="true" id="addDireccionCliente">
 							<p:outputPanel id="panel-addClienteDireccion" class="ui-fluid">
 								<p:outputPanel>
-									<div class="p-field">
-										<p:outputLabel>Cliente</p:outputLabel>
-										<p:inputText
-											value="#{domiciliosBean.clienteSelected.cteNombre}"
-											disabled="true" />
-									</div>
-									<div class="p-field">
-										<p:outputLabel>Tipo de domicilio</p:outputLabel>
-										<p:selectOneMenu
-											value="#{domiciliosBean.tipoDomicilioSelected}" filter="true"
-											filterMatchMode="contains" converter="entityConverter"
-											required="true" requiredMessage="Campo requerido">
-											<f:selectItem itemLabel="--Selecciona--" />
-											<f:selectItems value="#{domiciliosBean.lstTiposDomicilio}"
-												var="tipoDomicilio"
-												itemLabel="#{tipoDomicilio.domicilioTipoDesc}" />
-										</p:selectOneMenu>
-									</div>
-									<div class="p-field">
-										<p:outputLabel>País</p:outputLabel>
-										<p:selectOneMenu value="#{domiciliosBean.paisSelected}"
-											filter="true" filterMatchMode="contains"
-											converter="entityConverter" required="true"
-											requiredMessage="Campo requerido">
-											<f:selectItem itemLabel="--Selecciona--" />
-											<f:selectItems value="#{domiciliosBean.lstPaises}" var="pais"
-												itemLabel="#{pais.paisDesc}" />
-											<p:ajax listener="#{domiciliosBean.filtraListadoEstados()}"
-												update="addDireccionCliente" />
-										</p:selectOneMenu>
-									</div>
-									<div class="p-field">
-										<p:outputLabel>Estados</p:outputLabel>
-										<p:selectOneMenu value="#{domiciliosBean.estadoSelected}"
-											filter="true" filterMatchMode="contains"
-											converter="entityConverter" required="true"
-											requiredMessage="Campo requerido">
-											<f:selectItem itemLabel="--Selecciona--" />
-											<f:selectItems value="#{domiciliosBean.lstEstadosFiltered}"
-												var="estado" itemLabel="#{estado.estadoDesc}" />
-											<p:ajax
-												listener="#{domiciliosBean.filtraListadoMunicipios()}"
-												update="addDireccionCliente" />
-										</p:selectOneMenu>
-									</div>
-									<div class="p-field">
-										<p:outputLabel>Municipio</p:outputLabel>
-										<p:selectOneMenu value="#{domiciliosBean.municipioSelected}"
-											filter="true" filterMatchMode="contains"
-											converter="entityConverter" required="true"
-											requiredMessage="Campo requerido">
-											<f:selectItem itemLabel="--Selecciona--" />
-											<f:selectItems
-												value="#{domiciliosBean.lstMunicipiosFiltered}"
-												var="municipio"
-												itemLabel="#{municipio.municipioDs}" />
-											<p:ajax
-												listener="#{domiciliosBean.filtraListadoCiudades()}"
-												update="addDireccionCliente" />
-										</p:selectOneMenu>
-									</div>
-									<div class="p-field">
-										<p:outputLabel>Ciudad</p:outputLabel>
-										<p:selectOneMenu value="#{domiciliosBean.ciudadSelected}"
-											filter="true" filterMatchMode="contains"
-											converter="entityConverter" required="true"
-											requiredMessage="Campo requerido">
-											<f:selectItem itemLabel="--Selecciona--" />
-											<f:selectItems value="#{domiciliosBean.lstCiudadesFiltered}"
-												var="ciudad" itemLabel="#{ciudad.ciudadDs}" />
+									<div class="p-formgrid p-grid">
+										<div class="p-field p-col">
+											<p:outputLabel>País</p:outputLabel>
+											<p:selectOneMenu value="#{domiciliosBean.paisSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems value="#{domiciliosBean.lstPaises}"
+													var="pais" itemLabel="#{pais.paisDesc}" />
+												<p:ajax listener="#{domiciliosBean.filtraListadoEstados()}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Estados</p:outputLabel>
+											<p:selectOneMenu value="#{domiciliosBean.estadoSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems value="#{domiciliosBean.lstEstadosFiltered}"
+													var="estado" itemLabel="#{estado.estadoDesc}" />
 												<p:ajax
-												listener="#{domiciliosBean.filtraListadoAsentamientoHumano()}"
-												update="addDireccionCliente" />
-										</p:selectOneMenu>
+													listener="#{domiciliosBean.filtraListadoMunicipios()}" />
+											</p:selectOneMenu>
+										</div>
 									</div>
-									<div class="p-field">
-										<p:outputLabel>Colonia</p:outputLabel>
-										<p:selectOneMenu
-											value="#{domiciliosBean.asentamientoHumanoSelected}"
-											filter="true" filterMatchMode="contains"
-											converter="entityConverter" required="true"
-											requiredMessage="Campo requerido">
-											<f:selectItem itemLabel="--Selecciona--" />
-											<f:selectItems
-												value="#{domiciliosBean.lstAsentamientoHumanoFiltered}"
-												var="colonia"
-												itemLabel="#{colonia.asentamientoDs}" />
-										</p:selectOneMenu>
+									<div class="p-formgrid p-grid">
+										<div class="p-field p-col">
+											<p:outputLabel>Municipio</p:outputLabel>
+											<p:selectOneMenu value="#{domiciliosBean.municipioSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems
+													value="#{domiciliosBean.lstMunicipiosFiltered}"
+													var="municipio" itemLabel="#{municipio.municipioDs}" />
+												<p:ajax listener="#{domiciliosBean.filtraListadoCiudades()}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Ciudad</p:outputLabel>
+											<p:selectOneMenu value="#{domiciliosBean.ciudadSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems value="#{domiciliosBean.lstCiudadesFiltered}"
+													var="ciudad" itemLabel="#{ciudad.ciudadDs}" />
+												<p:ajax
+													listener="#{domiciliosBean.filtraListadoAsentamientoHumano()}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Colonia</p:outputLabel>
+											<p:selectOneMenu
+												value="#{domiciliosBean.asentamientoHumanoSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems
+													value="#{domiciliosBean.lstAsentamientoHumanoFiltered}"
+													var="colonia" itemLabel="#{colonia.asentamientoDs}" />
+											</p:selectOneMenu>
+										</div>
+
+										<div class="p-field p-col">
+											<p:outputLabel>Código Postal</p:outputLabel>
+											<p:inputText
+												value="#{domiciliosBean.asentamientoHumanoSelected.cp}" />
+										</div>
 									</div>
-									<div class="p-field">
-										<p:outputLabel>Colonia</p:outputLabel>
-										<p:selectOneMenu
-											value="#{domiciliosBean.asentamientoHumanoSelected}"
-											filter="true" filterMatchMode="contains"
-											converter="entityConverter" required="true"
-											requiredMessage="Campo requerido">
-											<f:selectItem itemLabel="--Selecciona--" />
-											<f:selectItems
-												value="#{domiciliosBean.lstAsentamientoHumanoFiltered}"
-												var="colonia"
-												itemLabel="#{colonia.asentamientoDs}" />
-										</p:selectOneMenu>
+									<div class="p-formgrid p-grid">
+										<div class="p-field p-col">
+											<p:outputLabel>Calle</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoCalle}" />
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Número Exterior</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoNumExt}" />
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Número Interior</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoNumInt}" />
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Teléfono 1</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoTel1}" />
+										</div>
 									</div>
-									<div class="p-field">
-										<p:outputLabel>Código Postal</p:outputLabel>
-										<p:inputText
-											value="#{domiciliosBean.asentamientoHumanoSelected.cp}"/>
-									</div>
-									<div class="p-field">
-										<p:outputLabel>Calle</p:outputLabel>
-										<p:inputText
-											value="#{domiciliosBean.asentamientoHumanoSelected.cp}"/>
-									</div>
-									<div class="p-field">
-										<p:outputLabel>Calle</p:outputLabel>
-										<p:inputText
-											value="#{domiciliosBean.asentamientoHumanoSelected.cp}"/>
+									<div class="p-formgrid p-grid">
+										<div class="p-field p-col">
+											<p:outputLabel>Teléfono 2</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoTel2}" />
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Fax</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoFax}" />
+										</div>
 									</div>
 								</p:outputPanel>
 							</p:outputPanel>
@@ -235,6 +233,7 @@
 							<f:facet name="footer">
 								<p:commandButton value="Guardar" icon="pi pi-check"
 									actionListener="#{domiciliosBean.guardaClienteDomicilio()}"
+									onclick="PF('clienteDireccionesAddDialog').hide()"
 									update="panel-addClienteDireccion"
 									process="panel-addClienteDireccion @this" />
 								<p:commandButton value="Cancelar" icon="pi pi-times"

@@ -162,6 +162,11 @@ public class DomiciliosBean implements Serializable {
 		lstMunicipiosFiltered = new ArrayList<>();
 		lstCiudadesFiltered = new ArrayList<>();
 		lstAsentamientoHumanoFiltered = new ArrayList<>();
+		paisSelected = new Paises();
+		estadoSelected = new Estados();
+		municipioSelected = new Municipios();
+		ciudadSelected = new Ciudades();
+		asentamientoHumanoSelected = new AsentamientoHumano();
 	}
 
 	@PostConstruct
@@ -214,10 +219,8 @@ public class DomiciliosBean implements Serializable {
 		lstEstados = estadosDAO.buscarPorCriterios(estadoAux);
 		lstEstadosFiltered = lstEstados;
 		System.out.println("Estados Filtrados:" + lstEstadosFiltered.toString());
-
-
-		
-	}
+		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion");
+		}
 	/**
 	 * Método para filtrar del listado original de municipios por estadoCve
 	 */
@@ -228,7 +231,8 @@ public class DomiciliosBean implements Serializable {
 		municipioAux.setEstados(estadoSelected);
 		lstMunicipios = municipiosDAO.buscarPorCriterios(municipioAux);
 		lstMunicipiosFiltered = lstMunicipios;
-		System.out.println("Municipios Filtrados:" + lstMunicipiosFiltered.toString());		
+		System.out.println("Municipios Filtrados:" + lstMunicipiosFiltered.toString());	
+		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion");
 	}
 	/**
 	 * Método para filtrar del listado original de ciudades por municipioCve
@@ -241,6 +245,7 @@ public class DomiciliosBean implements Serializable {
 		lstCiudades = ciudadesDAO.buscarPorCriterios(ciudadAux);
 		lstCiudadesFiltered = lstCiudades;
 		System.out.println("Ciudades Filtrados:" + lstCiudadesFiltered.toString());	
+		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion");
 	}
 	/**
 	 * Método para filtrar del listado original de asentamientos Humanos por ciudadCve
@@ -253,7 +258,8 @@ public class DomiciliosBean implements Serializable {
 		coloniaAux.getAsentamientoHumanoPK().setCiudadCve(ciudadSelected.getCiudadesPK().getCiudadCve());
 		lstAsentamientoHumano = asentamientoHumanoDAO.buscarPorCriterios(coloniaAux);
 		lstAsentamientoHumanoFiltered = lstAsentamientoHumano;
-		System.out.println("Colonia Filtrados:" + lstAsentamientoHumanoFiltered.toString());	
+		System.out.println("Colonia Filtrados:" + lstAsentamientoHumanoFiltered.toString());
+		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion");
 	}
 
 	
@@ -263,11 +269,20 @@ public class DomiciliosBean implements Serializable {
 public void nuevoClienteDomicilio() {
 	clienteDomicilioSelected = new ClienteDomicilios();
 	clienteDomicilioSelected.setCteCve(clienteSelected);
-	clienteDomicilioSelected.setDomicilios(new Domicilios());
+	clienteDomicilioSelected.setDomicilios(domicilioNuevo);
 }
 public void guardaClienteDomicilio() {
-	clienteDomicilioSelected.getDomicilios();
-	
+	nuevoDomicilio();
+	if(clienteDomiciliosDAO.guardar(clienteDomicilioSelected)==null) {
+		lstClienteDomiciliosFiltered.add(clienteDomicilioSelected);
+		lstClienteDomicilios.add(clienteDomicilioSelected);
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Domicilio Agregado"));
+	}else {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+				"Ocurrió un error al intentar guardar el Domicilio"));
+	}
+	clienteDomicilioSelected = new ClienteDomicilios();
+	PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente");	
 }
 /**
  * Métodos para guardar objeto tipo Domicilios
@@ -279,9 +294,16 @@ public void nuevoDomicilio() {
 	domicilioNuevo.setPaisCved(paisComplet);
 	domicilioNuevo.setCiudades(ciudadSelected);
 	domicilioNuevo.setDomicilioCp(asentamientoHumanoSelected.getCp());
-	domicilioNuevo.setDomicilioColonia(asentamientoHumanoSelected.getAsentamientoHumanoPK().getAsentamientoCve());
-	
-	
+	domicilioNuevo.setDomicilioColonia(asentamientoHumanoSelected.getAsentamientoHumanoPK().getAsentamientoCve());	
+	domicilioNuevo.setDomicilioCalle(domicilioNvoCalle);
+	domicilioNuevo.setDomicilioFax(domicilioNvoFax);
+	domicilioNuevo.setDomicilioNumExt(domicilioNvoNumExt);
+	domicilioNuevo.setDomicilioNumInt(domicilioNvoNumInt);
+	domicilioNuevo.setDomicilioTel1(domicilioNvoTel1);
+	domicilioNuevo.setDomicilioTel2(domicilioNvoTel2);
+	domicilioNuevo.setDomicilioTipoCve(tipoDomicilioSelected);
+	domiciliosDAO.guardar(domicilioNuevo);
+	nuevoClienteDomicilio();
 }
 
 
