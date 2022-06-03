@@ -56,14 +56,13 @@ public class DomiciliosBean implements Serializable {
 
 	private static final long serialVersionUID = 4150584435387992139L;
 
-
 	/**
 	 * Objetos para clientes
 	 */
 	private List<Cliente> lstClientes;
 	private Cliente clienteSelected;
 	private ClienteDAO clienteDAO;
-	
+
 	/**
 	 * Objetos para domicilio_cliente
 	 */
@@ -71,14 +70,14 @@ public class DomiciliosBean implements Serializable {
 	private List<ClienteDomicilios> lstClienteDomiciliosFiltered;
 	private ClienteDomicilios clienteDomicilioSelected;
 	private ClienteDomiciliosDAO clienteDomiciliosDAO;
-		
+
 	/**
 	 * Objetos para tipos_domicilio
 	 */
 	private List<TiposDomicilio> lstTiposDomicilio;
 	private TiposDomicilio tipoDomicilioSelected;
 	private TiposDomicilioDAO tiposDomicilioDAO;
-	
+
 	/**
 	 * Objetos para domicilio
 	 */
@@ -86,15 +85,15 @@ public class DomiciliosBean implements Serializable {
 	private List<Domicilios> lstDomiciliosFiltered;
 	private Domicilios domicilioSelected;
 	private DomiciliosDAO domiciliosDAO;
-	//domicilio nuevo
+	// domicilio nuevo
 	private Domicilios domicilioNuevo;
 	private String domicilioNvoCalle;
 	private String domicilioNvoNumExt;
 	private String domicilioNvoNumInt;
-	private String domicilioNvoTel1; 
-	private String domicilioNvoTel2; 
-	private String domicilioNvoFax; 
-	
+	private String domicilioNvoTel1;
+	private String domicilioNvoTel2;
+	private String domicilioNvoFax;
+
 	/**
 	 * Objetos para Paises
 	 */
@@ -102,21 +101,21 @@ public class DomiciliosBean implements Serializable {
 	private List<Paises> lstPaisesFiltered;
 	private Paises paisSelected;
 	private PaisesDAO paisesDAO;
-	
+
 	/**
 	 * Objetos para País
 	 */
 	private PaisDAO paisDAO;
 	private Pais paisComplet;
-	
+
 	/**
 	 * Objetos para Estados
-	 */	
+	 */
 	private List<Estados> lstEstados;
 	private List<Estados> lstEstadosFiltered;
 	private Estados estadoSelected;
 	private EstadosDAO estadosDAO;
-	
+
 	/**
 	 * Objetos para Municipios
 	 */
@@ -124,7 +123,7 @@ public class DomiciliosBean implements Serializable {
 	private List<Municipios> lstMunicipiosFiltered;
 	private Municipios municipioSelected;
 	private MunicipiosDAO municipiosDAO;
-	
+
 	/**
 	 * Objetos para Ciudades
 	 */
@@ -132,7 +131,7 @@ public class DomiciliosBean implements Serializable {
 	private List<Ciudades> lstCiudadesFiltered;
 	private Ciudades ciudadSelected;
 	private CiudadesDAO ciudadesDAO;
-	
+
 	/**
 	 * Objetos para Asentamiento Humano
 	 */
@@ -140,7 +139,7 @@ public class DomiciliosBean implements Serializable {
 	private List<AsentamientoHumano> lstAsentamientoHumanoFiltered;
 	private AsentamientoHumano asentamientoHumanoSelected;
 	private AsentamientoHumanoDAO asentamientoHumanoDAO;
-	
+
 	/**
 	 * Constructores
 	 */
@@ -194,7 +193,22 @@ public class DomiciliosBean implements Serializable {
 				.collect(Collectors.toList());
 		System.out.println("Productos Cliente Filtrados:" + lstClienteDomiciliosFiltered.toString());
 	}
-	
+
+	/**
+	 * Método para filtrar del listado original por tipo de domicilio
+	 */
+	public void filtraListadoDomicilio() {
+		lstClienteDomiciliosFiltered.clear();
+		lstClienteDomiciliosFiltered = lstClienteDomicilios.stream()
+				.filter(ps -> tipoDomicilioSelected != null
+						? (ps.getDomicilios().getDomicilioTipoCve().getDomicilioTipoCve() == tipoDomicilioSelected
+								.getDomicilioTipoCve()
+								&& ps.getCteCve().getCteCve().intValue() == clienteSelected.getCteCve().intValue())
+						: false)
+				.collect(Collectors.toList());
+		System.out.println("Productos Cliente Filtrados:" + lstClienteDomiciliosFiltered.toString());
+	}
+
 	/**
 	 * Método para filtrar del listado original de paises por paiscve
 	 */
@@ -202,12 +216,13 @@ public class DomiciliosBean implements Serializable {
 		lstPaisesFiltered.clear();
 		lstPaisesFiltered = lstPaises.stream()
 				.filter(pa -> paisSelected != null
-				? (pa.getPaisCve().intValue() == paisSelected.getPaisCve().intValue())
+						? (pa.getPaisCve().intValue() == paisSelected.getPaisCve().intValue())
 						: false)
 				.collect(Collectors.toList());
 		System.out.println("Paises Filtrados:" + lstPaisesFiltered.toString());
 
 	}
+
 	/**
 	 * Método para filtrar del listado original de estados por paisCve
 	 */
@@ -220,7 +235,8 @@ public class DomiciliosBean implements Serializable {
 		lstEstadosFiltered = lstEstados;
 		System.out.println("Estados Filtrados:" + lstEstadosFiltered.toString());
 		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion");
-		}
+	}
+
 	/**
 	 * Método para filtrar del listado original de municipios por estadoCve
 	 */
@@ -231,9 +247,10 @@ public class DomiciliosBean implements Serializable {
 		municipioAux.setEstados(estadoSelected);
 		lstMunicipios = municipiosDAO.buscarPorCriterios(municipioAux);
 		lstMunicipiosFiltered = lstMunicipios;
-		System.out.println("Municipios Filtrados:" + lstMunicipiosFiltered.toString());	
+		System.out.println("Municipios Filtrados:" + lstMunicipiosFiltered.toString());
 		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion");
 	}
+
 	/**
 	 * Método para filtrar del listado original de ciudades por municipioCve
 	 */
@@ -244,11 +261,13 @@ public class DomiciliosBean implements Serializable {
 		ciudadAux.setMunicipios(municipioSelected);
 		lstCiudades = ciudadesDAO.buscarPorCriterios(ciudadAux);
 		lstCiudadesFiltered = lstCiudades;
-		System.out.println("Ciudades Filtrados:" + lstCiudadesFiltered.toString());	
+		System.out.println("Ciudades Filtrados:" + lstCiudadesFiltered.toString());
 		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion");
 	}
+
 	/**
-	 * Método para filtrar del listado original de asentamientos Humanos por ciudadCve
+	 * Método para filtrar del listado original de asentamientos Humanos por
+	 * ciudadCve
 	 */
 	public void filtraListadoAsentamientoHumano() {
 		lstAsentamientoHumanoFiltered.clear();
@@ -262,110 +281,104 @@ public class DomiciliosBean implements Serializable {
 		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion");
 	}
 
-	
 	/**
 	 * Métodos para guardar objeto tipo ClienteDomicilio
 	 */
-public void nuevoClienteDomicilio() {
-	clienteDomicilioSelected = new ClienteDomicilios();
-	clienteDomicilioSelected.setCteCve(clienteSelected);
-	clienteDomicilioSelected.setDomicilios(domicilioNuevo);
-}
-public void guardaClienteDomicilio() {
-	nuevoDomicilio();
-	if(clienteDomiciliosDAO.guardar(clienteDomicilioSelected)==null) {
-		lstClienteDomiciliosFiltered.add(clienteDomicilioSelected);
-		lstClienteDomicilios.add(clienteDomicilioSelected);
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Domicilio Agregado"));
-	}else {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-				"Ocurrió un error al intentar guardar el Domicilio"));
+	public void nuevoClienteDomicilio() {
+		clienteDomicilioSelected = new ClienteDomicilios();
+		clienteDomicilioSelected.setCteCve(clienteSelected);
+		clienteDomicilioSelected.setDomicilios(domicilioNuevo);
 	}
-	clienteDomicilioSelected = new ClienteDomicilios();
-	PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente");	
-}
-/**
- * Métodos para guardar objeto tipo Domicilios
- */
-public void nuevoDomicilio() {
-	domicilioNuevo = new Domicilios();
-	paisComplet= new Pais();
-	paisComplet.setPaisCve(ciudadSelected.getMunicipios().getEstados().getPaises().getPaisCve());
-	domicilioNuevo.setPaisCved(paisComplet);
-	domicilioNuevo.setCiudades(ciudadSelected);
-	domicilioNuevo.setDomicilioCp(asentamientoHumanoSelected.getCp());
-	domicilioNuevo.setDomicilioColonia(asentamientoHumanoSelected.getAsentamientoHumanoPK().getAsentamientoCve());	
-	domicilioNuevo.setDomicilioCalle(domicilioNvoCalle);
-	domicilioNuevo.setDomicilioFax(domicilioNvoFax);
-	domicilioNuevo.setDomicilioNumExt(domicilioNvoNumExt);
-	domicilioNuevo.setDomicilioNumInt(domicilioNvoNumInt);
-	domicilioNuevo.setDomicilioTel1(domicilioNvoTel1);
-	domicilioNuevo.setDomicilioTel2(domicilioNvoTel2);
-	domicilioNuevo.setDomicilioTipoCve(tipoDomicilioSelected);
-	domiciliosDAO.guardar(domicilioNuevo);
-	nuevoClienteDomicilio();
-}
 
-
-/*
-	public void guardaProductoCliente() {
-		prodClienteSelected.setProdXCteCve(null);
-		prodClienteSelected.setProductoCve(productoSelected);
-		if (productoPorClienteDAO.guardar(prodClienteSelected) == null) {
-			lstProductosClienteFiltered.add(prodClienteSelected);
-			lstProductosCliente.add(prodClienteSelected);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Agregado"));
-			PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
-
+	public void guardaClienteDomicilio() {
+		nuevoDomicilio();
+		if (clienteDomiciliosDAO.guardar(clienteDomicilioSelected) == null) {
+			lstClienteDomiciliosFiltered.add(clienteDomicilioSelected);
+			lstClienteDomicilios.add(clienteDomicilioSelected);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Domicilio Agregado"));
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"Ocurrió un error al intentar guardar el Producto"));
+					"Ocurrió un error al intentar guardar el Domicilio"));
 		}
-
-		prodClienteSelected = new ProductoPorCliente();
-		PrimeFaces.current().executeScript("PF('productoClienteDialog').hide()");
-		PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
-
+		clienteDomicilioSelected = new ClienteDomicilios();
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente");
 	}
-*/
+
+	public void nuevoDomicilio() {
+		domicilioNuevo = new Domicilios();
+		paisComplet = new Pais();
+		paisComplet.setPaisCve(ciudadSelected.getMunicipios().getEstados().getPaises().getPaisCve());
+		domicilioNuevo.setPaisCved(paisComplet);
+		domicilioNuevo.setCiudades(ciudadSelected);
+		domicilioNuevo.setDomicilioCp(asentamientoHumanoSelected.getCp());
+		domicilioNuevo.setDomicilioColonia(asentamientoHumanoSelected.getAsentamientoHumanoPK().getAsentamientoCve());
+		domicilioNuevo.setDomicilioCalle(domicilioNvoCalle);
+		domicilioNuevo.setDomicilioFax(domicilioNvoFax);
+		domicilioNuevo.setDomicilioNumExt(domicilioNvoNumExt);
+		domicilioNuevo.setDomicilioNumInt(domicilioNvoNumInt);
+		domicilioNuevo.setDomicilioTel1(domicilioNvoTel1);
+		domicilioNuevo.setDomicilioTel2(domicilioNvoTel2);
+		domicilioNuevo.setDomicilioTipoCve(tipoDomicilioSelected);
+		domiciliosDAO.guardar(domicilioNuevo);
+		nuevoClienteDomicilio();
+	}
+
+	/**
+	 * Métodos para actualizar objeto tipo Domicilios
+	 */
+
+	public void actualizaClienteDomicilio() {
+		clienteDomicilioSelected.setCteCve(clienteSelected);
+		clienteDomicilioSelected.setDomicilios(domicilioNuevo);
+		if (clienteDomiciliosDAO.actualizar(clienteDomicilioSelected) == null) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Domicilio del cliente actualizado"));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Ocurrió un error al intentar actualizar el domicilio"));
+		}
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente");
+	}
+
 	/**
 	 * Método para actualizar objeto tipo ProductoCliente
 	 */
-/*	public void actualizaProductoCliente() {
-		prodClienteSelected.setCteCve(clienteSelected);
-		prodClienteSelected.setProductoCve(productoSelected);
-		System.out.println(prodClienteSelected.toString());
-
-		if (productoPorClienteDAO.actualizar(prodClienteSelected) == null) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Actualizado"));
-		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"Ocurrió un error al intentar actualizar el Producto"));
-		}
-
-		PrimeFaces.current().executeScript("PF('productoClienteActDialog').hide()");
-		PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
-	}
-*/
+	/*
+	 * public void actualizaProductoCliente() {
+	 * prodClienteSelected.setCteCve(clienteSelected);
+	 * prodClienteSelected.setProductoCve(productoSelected);
+	 * System.out.println(prodClienteSelected.toString());
+	 * 
+	 * if (productoPorClienteDAO.actualizar(prodClienteSelected) == null) {
+	 * FacesContext.getCurrentInstance().addMessage(null, new
+	 * FacesMessage("Producto Actualizado")); } else {
+	 * FacesContext.getCurrentInstance().addMessage(null, new
+	 * FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+	 * "Ocurrió un error al intentar actualizar el Producto")); }
+	 * 
+	 * PrimeFaces.current().executeScript("PF('productoClienteActDialog').hide()");
+	 * PrimeFaces.current().ajax().update("form:messages",
+	 * "form:dt-productosCliente"); }
+	 */
 	/**
 	 * Método para eliminar objeto tipo PrecioServicio
 	 */
 
-/*	public void eliminarProductoCliente() {
-		if (productoPorClienteDAO.eliminar(prodClienteSelected) == null) {
-			lstProductosClienteFiltered.remove(this.prodClienteSelected);
-			lstProductosCliente.remove(prodClienteSelected);
-			prodClienteSelected = null;
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Eliminado"));
-			PrimeFaces.current().ajax().update("form:messages", "form:dt-productosCliente");
-		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"Ocurrió un error al intentar eliminar el Producto"));
-			PrimeFaces.current().ajax().update("form:messages");
-		}
-		
-	}
-*/
+	/*
+	 * public void eliminarProductoCliente() { if
+	 * (productoPorClienteDAO.eliminar(prodClienteSelected) == null) {
+	 * lstProductosClienteFiltered.remove(this.prodClienteSelected);
+	 * lstProductosCliente.remove(prodClienteSelected); prodClienteSelected = null;
+	 * FacesContext.getCurrentInstance().addMessage(null, new
+	 * FacesMessage("Producto Eliminado"));
+	 * PrimeFaces.current().ajax().update("form:messages",
+	 * "form:dt-productosCliente"); } else {
+	 * FacesContext.getCurrentInstance().addMessage(null, new
+	 * FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+	 * "Ocurrió un error al intentar eliminar el Producto"));
+	 * PrimeFaces.current().ajax().update("form:messages"); }
+	 * 
+	 * }
+	 */
 	/**
 	 * Getters y Setters
 	 */
@@ -544,7 +557,7 @@ public void nuevoDomicilio() {
 	public void setEstadosDAO(EstadosDAO estadosDAO) {
 		this.estadosDAO = estadosDAO;
 	}
-		
+
 	public List<Municipios> getLstMunicipios() {
 		return lstMunicipios;
 	}
@@ -656,7 +669,7 @@ public void nuevoDomicilio() {
 	public void setPaisComplet(Pais paisComplet) {
 		this.paisComplet = paisComplet;
 	}
-	
+
 	public Domicilios getDomicilioNuevo() {
 		return domicilioNuevo;
 	}
@@ -712,8 +725,5 @@ public void nuevoDomicilio() {
 	public void setDomicilioNvoFax(String domicilioNvoFax) {
 		this.domicilioNvoFax = domicilioNvoFax;
 	}
-	
-	
-
 
 }

@@ -31,16 +31,25 @@ public class ClienteDomiciliosDAO extends IBaseDAO<ClienteDomicilios, Integer> {
 	}
 
 	@Override
-	public String actualizar(ClienteDomicilios productoCliente) {
+	public String actualizar(ClienteDomicilios clienteDomicilio) {
 		// TODO Auto-generated method stub
 
 		return null;
 	}
 
 	@Override
-	public String guardar(ClienteDomicilios prodCliente) {
+	public String guardar(ClienteDomicilios clienteDomicilio) {
 		// TODO Auto-generated method stub
-
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.persist(clienteDomicilio);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 

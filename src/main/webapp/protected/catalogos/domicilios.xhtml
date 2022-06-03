@@ -23,14 +23,15 @@
 							<div class="card">
 								<div class="ui-fluid p-formgrid p-grid">
 									<div class="p-field p-col-12 p-md-6">
-										<p:outputLabel for="soClienteDom" value="Cliente" />
-										<p:selectOneMenu id="soClienteDom" converter="entityConverter"
+										<p:outputLabel for="soClientes" value="Cliente" />
+										<p:selectOneMenu id="soClientes" converter="entityConverter"
 											value="#{domiciliosBean.clienteSelected}" required="true"
-											requiredMessage="Campo requerido">>
+											requiredMessage="Campo requerido">
 											<f:selectItem itemLabel="--Selecciona--" />
 											<f:selectItems value="#{domiciliosBean.lstClientes}"
 												var="cliente" itemLabel="#{cliente.cteNombre}"
 												itemValue="#{cliente}" />
+											<p:ajax listener="#{domiciliosBean.filtraListado()}" />
 										</p:selectOneMenu>
 									</div>
 									<div class="p-field p-col">
@@ -45,9 +46,13 @@
 												var="tipoDomicilio"
 												itemLabel="#{tipoDomicilio.domicilioTipoDesc}"
 												itemValue="#{tipoDomicilio}" />
-											<p:ajax listener="#{domiciliosBean.filtraListado()}"
-												update="dt-domiciliosCliente" />
+											<p:ajax listener="#{domiciliosBean.filtraListadoDomicilio()}" />
 										</p:selectOneMenu>
+									</div>
+									<div class="p-field p-col-3 p-md-6">
+										<p:commandButton icon="pi pi-search" process="@this"
+											styleClass="edit-button ui-button-primary" value="Buscar"
+											update="dt-domiciliosCliente" />
 									</div>
 								</div>
 							</div>
@@ -75,7 +80,7 @@
 							</f:facet>
 							<p:column headerText="Estado">
 								<h:outputText
-									value="#{pClienteDomicilios.domicilios.ciudades.municipios.estados.estado_desc}" />
+									value="#{pClienteDomicilios.domicilios.ciudades.municipios.estados.estadoDesc}" />
 							</p:column>
 							<p:column headerText="Municipio">
 								<h:outputText
@@ -105,7 +110,7 @@
 								<p:commandButton icon="pi pi-pencil" process="@this"
 									styleClass="edit-button ui-button-primary"
 									oncomplete="PF('clienteDireccionesActDialog').show()"
-									update="form:panel-addClienteDireccion"
+									update="form:panel-actClienteDireccion"
 									actionListener="#{domiciliosBean.nuevoClienteDomicilio()}">
 									<f:setPropertyActionListener value="#{pClienteDomicilios}"
 										target="#{domiciliosBean.clienteDomicilioSelected}" />
@@ -239,6 +244,129 @@
 								<p:commandButton value="Cancelar" icon="pi pi-times"
 									onclick="PF('clienteDireccionesAddDialog').hide()"
 									class="ui-button-secondary" update="panel-addClienteDireccion"
+									resetValues="true" />
+							</f:facet>
+						</p:dialog>
+
+						<p:dialog header="Actualizar Dirección" showEffect="fade"
+							modal="true" widgetVar="clienteDireccionesActDialog"
+							responsive="true" id="actDireccionCliente">
+							<p:outputPanel id="panel-actClienteDireccion" class="ui-fluid">
+								<p:outputPanel>
+									<div class="p-formgrid p-grid">
+										<div class="p-field p-col">
+											<p:outputLabel>País</p:outputLabel>
+											<p:selectOneMenu value="#{domiciliosBean.paisSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems value="#{domiciliosBean.lstPaises}"
+													var="pais" itemLabel="#{pais.paisDesc}" />
+												<p:ajax listener="#{domiciliosBean.filtraListadoEstados()}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Estados</p:outputLabel>
+											<p:selectOneMenu value="#{domiciliosBean.estadoSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems value="#{domiciliosBean.lstEstadosFiltered}"
+													var="estado" itemLabel="#{estado.estadoDesc}" />
+												<p:ajax
+													listener="#{domiciliosBean.filtraListadoMunicipios()}" />
+											</p:selectOneMenu>
+										</div>
+									</div>
+									<div class="p-formgrid p-grid">
+										<div class="p-field p-col">
+											<p:outputLabel>Municipio</p:outputLabel>
+											<p:selectOneMenu value="#{domiciliosBean.municipioSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems
+													value="#{domiciliosBean.lstMunicipiosFiltered}"
+													var="municipio" itemLabel="#{municipio.municipioDs}" />
+												<p:ajax listener="#{domiciliosBean.filtraListadoCiudades()}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Ciudad</p:outputLabel>
+											<p:selectOneMenu value="#{domiciliosBean.ciudadSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems value="#{domiciliosBean.lstCiudadesFiltered}"
+													var="ciudad" itemLabel="#{ciudad.ciudadDs}" />
+												<p:ajax
+													listener="#{domiciliosBean.filtraListadoAsentamientoHumano()}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Colonia</p:outputLabel>
+											<p:selectOneMenu
+												value="#{domiciliosBean.asentamientoHumanoSelected}"
+												filter="true" filterMatchMode="contains"
+												converter="entityConverter" required="true"
+												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItems
+													value="#{domiciliosBean.lstAsentamientoHumanoFiltered}"
+													var="colonia" itemLabel="#{colonia.asentamientoDs}" />
+											</p:selectOneMenu>
+										</div>
+
+										<div class="p-field p-col">
+											<p:outputLabel>Código Postal</p:outputLabel>
+											<p:inputText
+												value="#{domiciliosBean.asentamientoHumanoSelected.cp}" />
+										</div>
+									</div>
+									<div class="p-formgrid p-grid">
+										<div class="p-field p-col">
+											<p:outputLabel>Calle</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoCalle}" />
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Número Exterior</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoNumExt}" />
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Número Interior</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoNumInt}" />
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Teléfono 1</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoTel1}" />
+										</div>
+									</div>
+									<div class="p-formgrid p-grid">
+										<div class="p-field p-col">
+											<p:outputLabel>Teléfono 2</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoTel2}" />
+										</div>
+										<div class="p-field p-col">
+											<p:outputLabel>Fax</p:outputLabel>
+											<p:inputText value="#{domiciliosBean.domicilioNvoFax}" />
+										</div>
+									</div>
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Guardar" icon="pi pi-check"
+									actionListener="#{domiciliosBean.guardaClienteDomicilio()}"
+									onclick="PF('clienteDireccionesActDialog').hide()"
+									update="panel-actClienteDireccion"
+									process="panel-actClienteDireccion @this" />
+								<p:commandButton value="Cancelar" icon="pi pi-times"
+									onclick="PF('clienteDireccionesActDialog').hide()"
+									class="ui-button-secondary" update="panel-actClienteDireccion"
 									resetValues="true" />
 							</f:facet>
 						</p:dialog>
