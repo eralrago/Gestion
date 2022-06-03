@@ -58,7 +58,8 @@ button.ui-button {
 										
 									<p:button value="Agregar Poscion"
 										styleClass="ui-button-raised ui-button-info"
-										style="width: auto" />
+										style="width: auto" oncomplete="PF('dg-agrega').show();" update="frm-agrega"
+									actionListener="#{null}" process="@this" />
 								</div>
 
 							</div>
@@ -95,6 +96,48 @@ button.ui-button {
 					</p:dataTable>
 				</div>
 			</div>
+			
+			<p:dialog header="Agregar Nueva Planta" widgetVar="dg-agrega"
+				modal="true" showEffect="fade" responsive="true">
+
+				<p:outputPanel id="frm-agrega" class="ui-fluid">
+					<div class="p-field">
+						<p:outputLabel for="@next">Nombre:</p:outputLabel>
+						<p:inputText value="#{plantaBean.nuevo.plantaDs}" required="true"></p:inputText>
+					</div>
+
+					<div class="p-field">
+						<p:outputLabel for="@next">Número:</p:outputLabel>
+						<p:inputText value="#{plantaBean.nuevo.plantaAbrev}"
+							required="true"></p:inputText>
+					</div>
+
+					<div class="p-field">
+						<p:outputLabel for="@next">Súfijo:</p:outputLabel>
+						<p:inputText value="#{plantaBean.nuevo.plantaSufijo}"
+							required="true"></p:inputText>
+					</div>
+
+					<div class="p-field">
+						<p:outputLabel for="@next">Responsable Planta:</p:outputLabel>
+						<p:selectOneMenu alwaysDisplayLabel="true"
+							value="#{plantaBean.nuevo.idUsuario.id}">
+							<f:selectItem itemLabel="---Seleccione---" itemValue=""></f:selectItem>
+							<f:selectItems itemLabel="#{plantaBean.listaUsuario}"
+								value="#{plantaBean.listaUsuario}" />
+						</p:selectOneMenu>
+					</div>
+				</p:outputPanel>
+
+				<f:facet name="footer">
+					<p:commandButton value="Guardar" icon="pi pi-check"
+						actionListener="#{plantaBean.save()}" update="frm-agrega"
+						process="frm-agrega @this" />
+					<p:commandButton value="Cancelar" icon="pi pi-times"
+						class="ui-button-secondary" oncomplete="PF('dg-agrega').hide()" />
+				</f:facet>
+
+			</p:dialog>
 
 
 
