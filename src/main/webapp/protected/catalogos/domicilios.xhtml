@@ -110,8 +110,7 @@
 								<p:commandButton icon="pi pi-pencil" process="@this"
 									styleClass="edit-button ui-button-primary"
 									oncomplete="PF('clienteDireccionesActDialog').show()"
-									update="form:panel-actClienteDireccion"
-									actionListener="#{domiciliosBean.nuevoClienteDomicilio()}">
+									update="form:panel-actClienteDireccion">
 									<f:setPropertyActionListener value="#{pClienteDomicilios}"
 										target="#{domiciliosBean.clienteDomicilioSelected}" />
 								</p:commandButton>
@@ -360,7 +359,7 @@
 
 							<f:facet name="footer">
 								<p:commandButton value="Guardar" icon="pi pi-check"
-									actionListener="#{domiciliosBean.guardaClienteDomicilio()}"
+									actionListener="#{domiciliosBean.actualizaClienteDomicilio()}"
 									onclick="PF('clienteDireccionesActDialog').hide()"
 									update="panel-actClienteDireccion"
 									process="panel-actClienteDireccion @this" />
