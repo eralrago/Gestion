@@ -36,6 +36,7 @@
 						<p:selectOneMenu id="countrys" autoWidth="false" value="#{localizacionBean.pais}">
 							<f:selectItem itemLabel="Selecione Pais" itemValue=""/>
 							<f:selectItems value="#{localizacionBean.listaPaises}" itemLabel="#{selectedCountrys.paisDesc}" var="selectedCountrys" itemValue="#{selectedCountrys.paisCve}"/>
+							<p:commandButton value="Agregar"/>
 						</p:selectOneMenu>
 						<p:outputLabel for="@next" value="Estados: " />
 						<p:selectOneMenu id="states" autoWidth="false" value="#{localizacionBean.estado}">

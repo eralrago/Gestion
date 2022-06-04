@@ -32,20 +32,47 @@ public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 	}
 
 	@Override
-	public String actualizar(Paises e) {
-		// TODO Auto-generated method stub
+	public String actualizar(Paises paises) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.merge(paises);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR actualizando Países" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String guardar(Paises e) {
-		// TODO Auto-generated method stub
+	public String guardar(Paises paises) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.persist(paises);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR guardando Países" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String eliminar(Paises e) {
-		// TODO Auto-generated method stub
+	public String eliminar(Paises paises) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.remove(em.merge(paises));
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
