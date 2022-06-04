@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Posiciones en cámara</ui:define>
+
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Inventarios" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Posiciones en cámara"
+					outcome="/protected/catalogos/posicionesCamara" />
+			</p:breadCrumb>
+			<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+			<div class="p-col-12">
+				<div class="card">
+					<p:dataTable widgetVar="Posicion" var="posicion"
+						value="#{posicionCamaraBean.posiciones}" reflow="true"
+						paginator="true" rows="10" paginatorPosition="bottom"
+						rowSelectMode="add">
+						<f:facet name="header">
+							<div class="customers-table-header">
+								<span style="font-weight: bold">CATÁLOGOS</span>
+							</div>
+						</f:facet>
+						<f:facet name="head">
+							<div class="customers-table-head">
+								<span style="font-weight: bold">CATÁLOGOS</span>
+							</div>
+						</f:facet>
+								
+						<p:column headerText="ID">
+							<h:outputText value="#{null}" />
+						</p:column>
+						<p:column headerText="SERIE">
+							<h:outputText value="#{null}" />
+						</p:column>
+						<p:column headerText="FECHA INICIO">
+							<h:outputText value="#{null}" />
+						</p:column>
+						<p:column headerText="No. INICIAL">
+							<h:outputText value="#{null}" />
+						</p:column>
+						<p:column headerText="No. ACTUAL">
+							<h:outputText value="#{null}" />
+						</p:column>
+						<p:column headerText="No. FINAL">
+							<h:outputText value="#{null}" />
+						</p:column>
+						<p:column headerText="STATUS">
+							<h:outputText value="#{null}" />
+						</p:column>
+						<p:column headerText="DEFAULT">
+							<h:outputText value="#{null}" />
+						</p:column>
+						<p:column headerText="TIPO FACTURACIÓN">
+							<div class="p-field p-col-12 p-md-4">
+										<p:outputLabel for="@next" />
+										<p:selectOneMenu id="planta" value="#{null}"
+											dynamic="true">
+											<f:selectItem
+												itemLabel=""
+												itemValue="" />
+											<f:selectItems value="#{null}" />
+										</p:selectOneMenu>
+									</div>
+						</p:column>
+						<p:column headerText="ACCIÓN">
+							<div>
+									<p:button value="Modificar"
+										styleClass="ui-button-raised ui-button-warning"
+										style="width: auto" />
+									<p:button value="Eliminar"
+										styleClass="ui-button-raised ui-button-danger"
+										style="width: auto" />
+								</div>
+						</p:column>
+
+
+					</p:dataTable>
+				</div>
+			</div>
+
+
+
+		</h:form>
+	</ui:define>
+
+
+</ui:composition>
