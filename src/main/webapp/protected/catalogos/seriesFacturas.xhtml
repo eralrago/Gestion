@@ -4,7 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-	<ui:define name="title">Posiciones en cámara</ui:define>
+	<ui:define name="title">Series Factura</ui:define>
 
 
 	<ui:define name="content">
@@ -13,14 +13,10 @@
 				<p:menuitem value="Home" outcome="/dashboard" />
 				<p:menuitem value="Inventarios" />
 				<p:menuitem value="Catálogos" />
-				<p:menuitem value="Posiciones en cámara"
-					outcome="/protected/catalogos/posicionesCamara" />
+				<p:menuitem value="Series Factura"
+					outcome="/protected/catalogos/seriesFacturas" />
 			</p:breadCrumb>
-			<style type="text/css">
-button.ui-button {
-	margin-right: .5rem;
-}
-</style>
+
 			<div class="p-col-12">
 				<div class="card">
 					<p:dataTable widgetVar="Posicion" var="posicion"
@@ -32,7 +28,7 @@ button.ui-button {
 								<span style="font-weight: bold">CATÁLOGOS</span>
 							</div>
 						</f:facet>
-								
+
 						<p:column headerText="ID">
 							<h:outputText value="#{null}" />
 						</p:column>
@@ -59,28 +55,24 @@ button.ui-button {
 						</p:column>
 						<p:column headerText="TIPO FACTURACIÓN">
 							<div class="p-field p-col-12 p-md-4">
-										<p:outputLabel for="@next" />
-										<p:selectOneMenu id="planta" value="#{null}"
-											dynamic="true">
-											<f:selectItem
-												itemLabel=""
-												itemValue="" />
-											<f:selectItems value="#{null}" />
-										</p:selectOneMenu>
-									</div>
+								<p:outputLabel for="@next" />
+								<p:selectOneMenu id="planta" value="#{null}" dynamic="true">
+									<f:selectItem itemLabel="" itemValue="" />
+									<f:selectItems value="#{null}" />
+								</p:selectOneMenu>
+							</div>
 						</p:column>
 						<p:column headerText="ACCIÓN">
 							<div>
-									<p:button value="Modificar"
-										styleClass="ui-button-raised ui-button-warning"
-										style="width: auto" />
-									<p:commandButton class="ui-button-danger" icon="pi pi-trash"
+								<p:button value="Modificar"
+									styleClass="ui-button-raised ui-button-warning"
+									style="width: auto" />
+								<p:commandButton class="ui-button-danger" icon="pi pi-trash"
 									value="Eliminar" process="@this"
 									oncomplete="PF('dg-delete').show()">
-									<f:setPropertyActionListener value="#{null}"
-										target="#{null}" />
+									<f:setPropertyActionListener value="#{null}" target="#{null}" />
 								</p:commandButton>
-								</div>
+							</div>
 						</p:column>
 
 

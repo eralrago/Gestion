@@ -36,7 +36,7 @@ public class PlantaDAO {
 			EntityManager entity = getEntityManager();
 			entity.getTransaction().begin();
 			Query sql = entity.createNativeQuery(
-					"insert into planta (planta_ds, planta_abrev, planta_sufijo, id_usuario) values(?,?,?,?)");
+					"insert into PLANTA (PLANTA_DS, planta_abrev, planta_sufijo, id_usuario) values(?,?,?,?)");
 			sql.setParameter(1, p.getPlantaDs());
 			sql.setParameter(2, p.getPlantaAbrev());
 			sql.setParameter(3, p.getPlantaSufijo());
@@ -55,7 +55,7 @@ public class PlantaDAO {
 			EntityManager entity = getEntityManager();
 			entity.getTransaction().begin();
 			Query sql = entity.createNativeQuery(
-					"update planta set planta_ds=?, planta_abrev=?, planta_sufijo=?, id_usuario=? where planta_cve=?;");
+					"update PLANTA set PLANTA_DS=?, planta_abrev=?, planta_sufijo=?, id_usuario=? where PLANTA_CVE=?;");
 			sql.setParameter(1, p.getPlantaDs());
 			sql.setParameter(2, p.getPlantaAbrev());
 			sql.setParameter(3, p.getPlantaSufijo());
