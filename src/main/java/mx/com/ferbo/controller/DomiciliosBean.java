@@ -329,7 +329,7 @@ public class DomiciliosBean implements Serializable {
 	 */
 
 	public void actualizaClienteDomicilio() {
-		actualizaDomicilio();
+		this.actualizaDomicilio();
 		clienteDomicilioSelected.setCteCve(clienteSelected);
 		clienteDomicilioSelected.setDomicilios(domicilioNuevo);
 		if (clienteDomiciliosDAO.actualizar(clienteDomicilioSelected) == null) {

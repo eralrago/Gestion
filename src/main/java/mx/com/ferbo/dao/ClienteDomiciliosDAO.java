@@ -36,7 +36,13 @@ public class ClienteDomiciliosDAO extends IBaseDAO<ClienteDomicilios, Integer> {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.persist(clienteDomicilio);
+			em.createQuery("update ClienteDomicilios as cd set cd.cteCve.cteCve = :cteCve," 
+					+ "cd.domicilios.domicilioTipoCve.domicilioTipoCve = :domicilioTipoCve, cd.domicilios.domCve= :domCve where cd.id= :id")
+			.setParameter("cteCve",clienteDomicilio.getCteCve().getCteCve())
+			.setParameter("domicilioTipoCve", clienteDomicilio.getDomicilios().getDomicilioTipoCve().getDomicilioTipoCve())
+			.setParameter("domCve", clienteDomicilio.getDomicilios().getDomCve())
+			.setParameter("id",clienteDomicilio.getId())
+			.executeUpdate();
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
