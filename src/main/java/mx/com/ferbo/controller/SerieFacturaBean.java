@@ -23,6 +23,10 @@ public class SerieFacturaBean implements Serializable {
 		daoSerie = new SerieFacturaDAO();
 		listSerie = daoSerie.findAll();
 	};
+	
+	public void save() {
+		
+	};
 
 	public List<SerieFactura> getListSerie() {
 		return listSerie;
