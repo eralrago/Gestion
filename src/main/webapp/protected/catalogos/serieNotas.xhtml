@@ -4,7 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-	<ui:define name="title">SERIE DE FACTURAS</ui:define>
+	<ui:define name="title">SERIE DE NOTAS</ui:define>
 
 
 	<ui:define name="content">
@@ -13,13 +13,13 @@
 				<p:menuitem value="Home" outcome="/dashboard" />
 				<p:menuitem value="Inventarios" />
 				<p:menuitem value="Catálogos" />
-				<p:menuitem value="Serie de Facturas"
-					outcome="/protected/catalogos/seriesFacturas" />
+				<p:menuitem value="Serie de Notas"
+					outcome="/protected/catalogos/serieNotas" />
 			</p:breadCrumb>
 
 			<div class="p-col-12">
 				<div class="card">
-					<p:dataTable widgetVar="seriesFactura" var="sFactura"
+					<p:dataTable widgetVar="serieNotas}" var="sNotas"
 						value="#{serieFacturaBean.listSerie}" reflow="true"
 						paginator="true" rows="10" paginatorPosition="bottom"
 						rowSelectMode="add">
@@ -30,42 +30,27 @@
 							</div>
 							<div class="p-grid">
 								<div class="p-col-6 p-offset-3 p-text-center p-text-normal ">SERIE
-									FACTURAS</div>
+									NOTAS</div>
 							</div>
 						</f:facet>
 
-						<p:column headerText="ID" class="p-text-center ">
-							<h:outputText value="#{sFactura.id}" />
-						</p:column>
 						<p:column headerText="SERIE" class="p-text-center ">
-							<h:outputText value="#{sFactura.nomSerie}" />
+							<h:outputText value="#{null}" />
 						</p:column>
 						<p:column headerText="FECHA INICIO" class="p-text-center ">
-							<h:outputText value="#{sFactura.fechaInicio}" />
+							<h:outputText value="#{null}" />
 						</p:column>
 						<p:column headerText="No. INICIAL" class="p-text-center ">
-							<h:outputText value="#{sFactura.numeroInicial}" />
+							<h:outputText value="#{null}" />
 						</p:column>
 						<p:column headerText="No. ACTUAL" class="p-text-center ">
-							<h:outputText value="#{sFactura.numeroActual}" />
+							<h:outputText value="#{null}" />
 						</p:column>
 						<p:column headerText="No. FINAL" class="p-text-center ">
-							<h:outputText value="#{sFactura.numeroFinal}" />
+							<h:outputText value="#{null}" />
 						</p:column>
 						<p:column headerText="STATUS" class="p-text-center ">
-							<h:outputText value="#{sFactura.statusSerie.id}" />
-						</p:column>
-						<p:column headerText="DEFAULT" class="p-text-center ">
-							<h:outputText value="#{sFactura.isDflt}" />
-						</p:column>
-						<p:column headerText="TIPO FACTURACIÓN" class="p-text-center ">
-							<div class="p-field p-col-12 p-md-4">
-								<p:outputLabel for="@next" />
-								<p:selectOneMenu id="planta" value="#{null}" dynamic="true">
-									<f:selectItem itemLabel="" itemValue="" />
-									<f:selectItems value="#{null}" />
-								</p:selectOneMenu>
-							</div>
+							<h:outputText value="#{null}" />
 						</p:column>
 						<p:column headerText="ACCIÓN" class="p-text-center ">
 							<div class="p-d-flex p-flex-column">
@@ -85,26 +70,22 @@
 						</p:column>
 					</p:dataTable>
 
-					<p:commandButton
-						class="ui-button-raised ui-button-primary p-mb-2 p-shadow-7"
-						icon="pi pi-plus" value="Agregar" process="@this"
-						oncomplete="PF('dg-agrega').show();" >
-						<f:setPropertyActionListener value="#{null}" target="#{null}" />
-					</p:commandButton>
+					<p:toolbar styleClass="p-mb-4">
+							<p:toolbarGroup>
+								<p:commandButton value="Agregar" icon="pi pi-plus"
+									styleClass="ui-button-success p-mr-2 p-mb-2"
+									oncomplete="PF('dg-agrega').show();" update="frm-agrega"
+									actionListener="#{plantaBean.openNew()}" process="@this" />
+							</p:toolbarGroup>
+						</p:toolbar>
 
 				</div>
 			</div>
 
-			<p:dialog header="AGREGAR NUEVA SERIE" widgetVar="dg-agrega"
+			<p:dialog header="AGREGAR UNA NUEVA SERIE" widgetVar="dg-agrega"
 				modal="true" showEffect="fade" responsive="true">
 
 				<p:outputPanel id="frm-agrega" class="ui-fluid">
-					<div class="p-field">
-						<p:outputLabel for="@next">Serie:</p:outputLabel>
-						<p:inputText value="#{null}"></p:inputText>
-					</div>
-
-
 					<div class="p-field p-col-12 p-md-4">
 						<p:outputLabel value="Fecha Inicio:" />
 						<p:datePicker id="navigatorAgr" value="#{null}"
@@ -128,14 +109,6 @@
 					</div>
 
 					<div class="p-field">
-						<p:outputLabel for="@next">Tipo de Facturación:</p:outputLabel>
-						<p:selectOneMenu value="#{null}" required="true">
-							<f:selectItem itemLabel="---SELECCIONE UN TIPO DE FACTURACION---"
-								itemValue="null"></f:selectItem>
-							<f:selectItems itemLabel="#{null}" value="#{null}" />
-						</p:selectOneMenu>
-					</div>
-					<div class="p-field">
 						<p:outputLabel for="@next">Status de la Serie:</p:outputLabel>
 						<p:selectOneMenu value="#{null}" required="true">
 							<f:selectItem itemLabel="Selecciona un Status" itemValue="null"></f:selectItem>
@@ -154,9 +127,9 @@
 
 			</p:dialog>
 
-			<p:dialog header="MODIFICAR SERIE"
-				class=" p-text-bold p-mb-4" widgetVar="dg-modifica" modal="true"
-				showEffect="fade" responsive="true">
+			<p:dialog header="MODIFICAR SERIE" class=" p-text-bold p-mb-4"
+				widgetVar="dg-modifica" modal="true" showEffect="fade"
+				responsive="true">
 
 				<p:outputPanel id="frm-modifica" class="ui-fluid">
 					<div class="p-field">
@@ -187,14 +160,6 @@
 						<p:inputText value="#{null}"></p:inputText>
 					</div>
 
-					<div class="p-field">
-						<p:outputLabel for="@next">Tipo de Facturación:</p:outputLabel>
-						<p:selectOneMenu value="#{null}" required="true">
-							<f:selectItem itemLabel="---SELECCIONE UN TIPO DE FACTURACION---"
-								itemValue="null"></f:selectItem>
-							<f:selectItems itemLabel="#{null}" value="#{null}" />
-						</p:selectOneMenu>
-					</div>
 					<div class="p-field">
 						<p:outputLabel for="@next">Status de la Serie:</p:outputLabel>
 						<p:selectOneMenu value="#{null}" required="true">
