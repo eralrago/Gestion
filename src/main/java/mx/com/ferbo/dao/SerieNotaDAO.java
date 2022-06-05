@@ -5,16 +5,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import mx.com.ferbo.model.SerieFactura;
+import mx.com.ferbo.model.SerieNota;
 import mx.com.ferbo.model.StatusSerie;
 import mx.com.ferbo.util.EntityManagerUtil;
 
-public class SerieFacturaDAO {
+public class SerieNotaDAO {
 
-	public List<SerieFactura> findAll() {
+	public List<SerieNota> findAll() {
 		EntityManager entity = EntityManagerUtil.getEntityManager();
-		List<SerieFactura> list = null;
-		list = entity.createNamedQuery("SerieFactura.findAll", SerieFactura.class).getResultList();
+		List<SerieNota> list = null;
+		list = entity.createNamedQuery("SerieNota.findAll", SerieNota.class).getResultList();
 		return list;
 	};
 
@@ -25,11 +25,11 @@ public class SerieFacturaDAO {
 		return list;
 	};
 
-	public String save(SerieFactura sF) {
+	public String save(SerieNota sN) {
 		try {
 			EntityManager entity = EntityManagerUtil.getEntityManager();
 			entity.getTransaction().begin();
-			entity.persist(sF);
+			entity.persist(sN);
 			entity.getTransaction().commit();
 			entity.close();
 		} catch (Exception e) {
@@ -38,11 +38,11 @@ public class SerieFacturaDAO {
 		return null;
 	};
 
-	public String update(SerieFactura sF) {
+	public String update(SerieNota sN) {
 		try {
 			EntityManager entity = EntityManagerUtil.getEntityManager();
 			entity.getTransaction().begin();
-			entity.merge(sF);
+			entity.merge(sN);
 			entity.getTransaction().commit();
 			entity.close();
 		} catch (Exception e) {
@@ -54,7 +54,7 @@ public class SerieFacturaDAO {
 	public String cancelar(int id) {
 		EntityManager entity = EntityManagerUtil.getEntityManager();
 		entity.getTransaction().begin();
-		Query sql = entity.createNativeQuery("update serie_factura set status_serie = 3 where id = ?;");
+		Query sql = entity.createNativeQuery("update SERIE_NOTA set STATUS_SERIE = 3 where ID = ?;");
 		sql.setParameter(1, id);
 		sql.executeUpdate();
 		entity.getTransaction().commit();
@@ -62,11 +62,11 @@ public class SerieFacturaDAO {
 		return null;
 	};
 
-	public String delete(SerieFactura sF) {
+	public String delete(SerieNota sN) {
 		try {
 			EntityManager entity = EntityManagerUtil.getEntityManager();
 			entity.getTransaction().begin();
-			entity.remove(entity.merge(sF));
+			entity.remove(entity.merge(sN));
 			entity.getTransaction().commit();
 			entity.close();
 		} catch (Exception e) {

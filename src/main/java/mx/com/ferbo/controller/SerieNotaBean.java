@@ -10,33 +10,33 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
-import mx.com.ferbo.dao.SerieFacturaDAO;
-import mx.com.ferbo.model.SerieFactura;
+import mx.com.ferbo.dao.SerieNotaDAO;
+import mx.com.ferbo.model.SerieNota;
 import mx.com.ferbo.model.StatusSerie;
 
 @Named
 @ViewScoped
-public class SerieFacturaBean implements Serializable {
+public class SerieNotaBean implements Serializable {
 
 	private static final long serialVersionUID = 1;
 
-	private List<SerieFactura> listSerie;
+	private List<SerieNota> listSerie;
 	private List<StatusSerie> status;
 
-	private SerieFactura nuevo;
-	private SerieFactura seleccion;
+	private SerieNota nuevo;
+	private SerieNota seleccion;
 
-	private SerieFacturaDAO daoSerie;
+	private SerieNotaDAO daoSerie;
 
-	public SerieFacturaBean() {
-		daoSerie = new SerieFacturaDAO();
+	public SerieNotaBean() {
+		daoSerie = new SerieNotaDAO();
 		listSerie = daoSerie.findAll();
 		status = daoSerie.findStatus();
-		seleccion = new SerieFactura();
+		seleccion = new SerieNota();
 	};
 
 	public void openNew() {
-		nuevo = new SerieFactura();
+		nuevo = new SerieNota();
 	};
 
 	public void save() {
@@ -54,7 +54,7 @@ public class SerieFacturaBean implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al agregar serie", message));
 			PrimeFaces.current().ajax().update("form:messages");
 		}
-		nuevo = new SerieFactura();
+		nuevo = new SerieNota();
 	};
 
 	public void update() {
@@ -65,47 +65,47 @@ public class SerieFacturaBean implements Serializable {
 			listSerie.clear();
 			listSerie = daoSerie.findAll();
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Serie Modificada " + seleccion.getNomSerie(), null));
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Serie Modificada", null));
 			PrimeFaces.current().ajax().update("form:messages", "form:dtSerieFac");
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error al modificar " + seleccion.getNomSerie(), message));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar", message));
 			PrimeFaces.current().ajax().update("form:messages");
 		}
-		this.seleccion = new SerieFactura();
+		this.seleccion = new SerieNota();
 	};
-	
+
 	public void cancelar() {
 		PrimeFaces.current().executeScript("PF('dg-delete').hide()");
 		String message = daoSerie.cancelar(seleccion.getId());
-		
+
 		if (message == null) {
 			listSerie.clear();
 			listSerie = daoSerie.findAll();
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Serie Cancelada " + seleccion.getNomSerie(), null));
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Serie Cancelada", null));
 			PrimeFaces.current().ajax().update("form:messages", "form:dtSerieFac");
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error al cancelar " + seleccion.getNomSerie(), message));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al cancelar", message));
 			PrimeFaces.current().ajax().update("form:messages");
 		}
-		this.seleccion = new SerieFactura();
+		this.seleccion = new SerieNota();
 	};
 
-	public List<SerieFactura> getListSerie() {
+	public List<SerieNota> getListSerie() {
 		return listSerie;
 	};
 
-	public void setListSerie(List<SerieFactura> listSerie) {
+	public void setListSerie(List<SerieNota> listSerie) {
 		this.listSerie = listSerie;
 	};
 
-	public SerieFactura getNuevo() {
+	public SerieNota getNuevo() {
 		return nuevo;
 	};
 
-	public void setNuevo(SerieFactura nuevo) {
+	public void setNuevo(SerieNota nuevo) {
 		this.nuevo = nuevo;
 	};
 
@@ -113,11 +113,11 @@ public class SerieFacturaBean implements Serializable {
 		return status;
 	};
 
-	public SerieFactura getSeleccion() {
+	public SerieNota getSeleccion() {
 		return seleccion;
 	};
 
-	public void setSeleccion(SerieFactura seleccion) {
+	public void setSeleccion(SerieNota seleccion) {
 		this.seleccion = seleccion;
 	};
 

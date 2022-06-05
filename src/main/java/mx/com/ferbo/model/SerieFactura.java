@@ -59,6 +59,8 @@ public class SerieFactura implements Serializable {
     @NotNull
     @Column(name = "numero_actual")
     private int numeroActual;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "numero_final")
     private Integer numeroFinal;
     @Basic(optional = false)
@@ -81,11 +83,12 @@ public class SerieFactura implements Serializable {
         this.id = id;
     }
 
-    public SerieFactura(Integer id, Date fechaInicio, int numeroInicial, int numeroActual, String nomSerie, boolean isDflt) {
+    public SerieFactura(Integer id, Date fechaInicio, int numeroInicial, int numeroActual, int numeroFinal, String nomSerie, boolean isDflt) {
         this.id = id;
         this.fechaInicio = fechaInicio;
         this.numeroInicial = numeroInicial;
         this.numeroActual = numeroActual;
+        this.numeroFinal = numeroFinal;
         this.nomSerie = nomSerie;
         this.isDflt = isDflt;
     }
