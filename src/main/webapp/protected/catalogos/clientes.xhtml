@@ -23,11 +23,6 @@
 								<p:commandButton value="Agregar" icon="pi pi-plus" styleClass="ui-button-success" style="margin-right: .5rem" actionListener="#{clientesBean.nuevoCliente()}"
 									process="@this" update="dialogCliente" oncomplete="PF('dialogCliente').show();" />
 							</p:toolbarGroup>
-							<p:toolbarGroup align="right">
-								<p:commandButton value="Exportar" icon="pi pi-upload" styleClass="ui-button-secondary" ajax="false">
-									<p:dataExporter type="pdf" target="dt-clientes" fileName="clientes" />
-								</p:commandButton>
-							</p:toolbarGroup>
 						</p:toolbar>
 
 						<p:dataTable id="dt-clientes" widgetVar="dtClientes" value="#{clientesBean.lstClientes}" var="cliente" rowKey="#{cliente.cteCve}"
