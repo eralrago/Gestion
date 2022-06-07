@@ -36,11 +36,11 @@ public class DomiciliosDAO extends IBaseDAO<Domicilios, Integer> {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.createQuery(
-					"update Domicilios as dm  set dm.ciudades.ciudadesPK.ciudadCve = :ciudadCve, dm.ciudades.municipios.estados.estadosPK.estadoCve = :estadoCve ,dm.ciudades.municipios.municipiosPK.municipioCve = :municipioCve, dm.paisCved.paisCve = :paisCve"
-							+ ",dm.domicilioCalle= :domicilioCalle, dm.domicilioColonia=:domicilioColonia, dm.domicilioCp= :domicilioCp , dm.domicilioFax = :domicilioFax"
-							+ ",dm.domicilioNumExt = :domicilioNumExt , dm.domicilioNumInt = :domicilioNumInt , dm.domicilioTel1 =:domicilioTel1"
-							+ ",dm.domicilioTel2 = :domicilioTel2, dm.domicilioTipoCve.domicilioTipoCve = :domicilioTipoCve where dm.domCve=:domCve")
+			em.createNativeQuery(
+					"update gestion.domicilios set ciudad_cve = :ciudadCve, estado_cve = :estadoCve, municipio_cve = :municipioCve, pais_cve = :paisCve,"
+							+ "domicilio_calle= :domicilioCalle, domicilio_colonia=:domicilioColonia, domicilio_cp=:domicilioCp, domicilio_fax=:domicilioFax"
+							+ ", domicilio_num_ext = :domicilioNumExt , domicilio_num_int = :domicilioNumInt , domicilio_tel1 = :domicilioTel1,"
+							+ "domicilio_tel2= :domicilioTel2, domicilio_tipo_cve = :domicilioTipoCve where dom_cve = :domCve")
 					.setParameter("ciudadCve", dom.getCiudades().getCiudadesPK().getCiudadCve())
 					.setParameter("estadoCve",
 							dom.getCiudades().getMunicipios().getEstados().getEstadosPK().getEstadoCve())
@@ -55,7 +55,7 @@ public class DomiciliosDAO extends IBaseDAO<Domicilios, Integer> {
 					.setParameter("domicilioTel1", dom.getDomicilioTel1())
 					.setParameter("domicilioTel2", dom.getDomicilioTel2())
 					.setParameter("domicilioTipoCve", dom.getDomicilioTipoCve().getDomicilioTipoCve())
-					.setParameter("domCve", dom.getDomCve());
+					.setParameter("domCve", dom.getDomCve()).executeUpdate();
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
@@ -82,8 +82,19 @@ public class DomiciliosDAO extends IBaseDAO<Domicilios, Integer> {
 	}
 
 	@Override
-	public String eliminar(Domicilios e) {
+	public String eliminar(Domicilios dom) {
 		// TODO Auto-generated method stub
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.createNativeQuery("DELETE FROM domicilios WHERE (dom_cve = :domCve)")
+					.setParameter("domCve", dom.getDomCve()).executeUpdate();
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
@@ -93,4 +104,4 @@ public class DomiciliosDAO extends IBaseDAO<Domicilios, Integer> {
 		return null;
 	}
 
-	}
+}

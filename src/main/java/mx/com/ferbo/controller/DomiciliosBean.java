@@ -235,7 +235,7 @@ public class DomiciliosBean implements Serializable {
 		lstEstadosFiltered = lstEstados;
 		System.out.println("Estados Filtrados:" + lstEstadosFiltered.toString());
 		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion", "form:panel-actClienteDireccion");
-		
+
 	}
 
 	/**
@@ -330,15 +330,19 @@ public class DomiciliosBean implements Serializable {
 
 	public void actualizaClienteDomicilio() {
 		this.actualizaDomicilio();
-		clienteDomicilioSelected.setCteCve(clienteSelected);
-		clienteDomicilioSelected.setDomicilios(domicilioNuevo);
-		if (clienteDomiciliosDAO.actualizar(clienteDomicilioSelected) == null) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Domicilio del cliente actualizado"));
-		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"Ocurrió un error al intentar actualizar el domicilio"));
-		}
-		PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente");
+
+		/*
+		 * clienteDomicilioSelected.setCteCve(clienteSelected);
+		 * clienteDomicilioSelected.setDomicilios(domicilioNuevo); if
+		 * (clienteDomiciliosDAO.actualizar(clienteDomicilioSelected) == null) {
+		 * FacesContext.getCurrentInstance().addMessage(null, new
+		 * FacesMessage("Domicilio del cliente actualizado")); } else {
+		 * FacesContext.getCurrentInstance().addMessage(null, new
+		 * FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+		 * "Ocurrió un error al intentar actualizar el domicilio")); }
+		 * PrimeFaces.current().ajax().update("form:messages",
+		 * "form:dt-domiciliosCliente");
+		 */
 	}
 
 	public void actualizaDomicilio() {
@@ -357,49 +361,41 @@ public class DomiciliosBean implements Serializable {
 		domicilioNuevo.setDomicilioTel2(domicilioNvoTel2);
 		domicilioNuevo.setDomicilioTipoCve(tipoDomicilioSelected);
 		domicilioNuevo.setDomCve(clienteDomicilioSelected.getDomicilios().getDomCve());
-		domiciliosDAO.actualizar(domicilioNuevo);
+
+		if (domiciliosDAO.actualizar(domicilioNuevo) == null) {
+			clienteDomicilioSelected.setCteCve(clienteSelected);
+			clienteDomicilioSelected.setDomicilios(domicilioNuevo);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Domicilio del cliente actualizado"));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Ocurrió un error al intentar actualizar el domicilio"));
+		}
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente");
 	}
 
-	/**
-	 * Método para actualizar objeto tipo ProductoCliente
-	 */
-	/*
-	 * public void actualizaProductoCliente() {
-	 * prodClienteSelected.setCteCve(clienteSelected);
-	 * prodClienteSelected.setProductoCve(productoSelected);
-	 * System.out.println(prodClienteSelected.toString());
-	 * 
-	 * if (productoPorClienteDAO.actualizar(prodClienteSelected) == null) {
-	 * FacesContext.getCurrentInstance().addMessage(null, new
-	 * FacesMessage("Producto Actualizado")); } else {
-	 * FacesContext.getCurrentInstance().addMessage(null, new
-	 * FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-	 * "Ocurrió un error al intentar actualizar el Producto")); }
-	 * 
-	 * PrimeFaces.current().executeScript("PF('productoClienteActDialog').hide()");
-	 * PrimeFaces.current().ajax().update("form:messages",
-	 * "form:dt-productosCliente"); }
-	 */
 	/**
 	 * Método para eliminar objeto tipo PrecioServicio
 	 */
 
-	/*
-	 * public void eliminarProductoCliente() { if
-	 * (productoPorClienteDAO.eliminar(prodClienteSelected) == null) {
-	 * lstProductosClienteFiltered.remove(this.prodClienteSelected);
-	 * lstProductosCliente.remove(prodClienteSelected); prodClienteSelected = null;
-	 * FacesContext.getCurrentInstance().addMessage(null, new
-	 * FacesMessage("Producto Eliminado"));
-	 * PrimeFaces.current().ajax().update("form:messages",
-	 * "form:dt-productosCliente"); } else {
-	 * FacesContext.getCurrentInstance().addMessage(null, new
-	 * FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-	 * "Ocurrió un error al intentar eliminar el Producto"));
-	 * PrimeFaces.current().ajax().update("form:messages"); }
-	 * 
-	 * }
-	 */
+	public void eliminaClienteDomicilio() {
+		clienteDomicilioSelected.setCteCve(clienteSelected);
+		if (clienteDomiciliosDAO.eliminar(clienteDomicilioSelected) == null) {
+			if (domiciliosDAO.eliminar(clienteDomicilioSelected.getDomicilios()) == null) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Domicilio eliminado"));
+				PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente");
+			} else {
+				clienteDomiciliosDAO.guardar(clienteDomicilioSelected);
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Error", "Ocurrió un error al intentar eliminar el domicilio"));
+			}
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error", "Ocurrió un error al intentar eliminar el domicilio"));
+		}		
+		PrimeFaces.current().ajax().update("form:messages");
+
+	}
+
 	/**
 	 * Getters y Setters
 	 */

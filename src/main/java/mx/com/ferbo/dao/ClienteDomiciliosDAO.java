@@ -36,8 +36,7 @@ public class ClienteDomiciliosDAO extends IBaseDAO<ClienteDomicilios, Integer> {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.createQuery("update ClienteDomicilios as cd set cd.cteCve.cteCve = :cteCve," 
-					+ "cd.domicilios.domicilioTipoCve.domicilioTipoCve = :domicilioTipoCve, cd.domicilios.domCve= :domCve where cd.id= :id")
+			em.createNativeQuery("UPDATE cliente_domicilios SET CTE_CVE = :cteCve, domicilio_tipo_cve = :domicilioTipoCve WHERE (id = :id)")
 			.setParameter("cteCve",clienteDomicilio.getCteCve().getCteCve())
 			.setParameter("domicilioTipoCve", clienteDomicilio.getDomicilios().getDomicilioTipoCve().getDomicilioTipoCve())
 			.setParameter("domCve", clienteDomicilio.getDomicilios().getDomCve())
@@ -69,9 +68,19 @@ public class ClienteDomiciliosDAO extends IBaseDAO<ClienteDomicilios, Integer> {
 	}
 
 	@Override
-	public String eliminar(ClienteDomicilios prodCliente) {
+	public String eliminar(ClienteDomicilios clienteDom) {
 		// TODO Auto-generated method stub
-
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.createNativeQuery("DELETE FROM cliente_domicilios WHERE (id = :id)")
+					.setParameter("id", clienteDom.getId()).executeUpdate();
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 

@@ -369,7 +369,17 @@
 									resetValues="true" />
 							</f:facet>
 						</p:dialog>
-
+						<p:confirmDialog widgetVar="deleteClienteDireccionesDialog"
+							showEffect="fade" width="400"
+							message="¿Desea eliminar esta dirección?" header="Eliminar"
+							severity="warn">
+							<p:commandButton value="Sí" icon="pi pi-check" process="@this"
+								actionListener="#{domiciliosBean.eliminaClienteDomicilio()}"
+								update="dt-domiciliosCliente" oncomplete="PF('deleteClienteDireccionesDialog').hide()" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-button-secondary" icon="pi pi-times"
+								onclick="PF('deleteClienteDireccionesDialog').hide()" />
+						</p:confirmDialog>
 					</div>
 				</div>
 			</div>
