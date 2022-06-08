@@ -5,17 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.model.SelectItem;
+import javax.faces.application.FacesMessage;
+
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import mx.com.ferbo.dao.CiudadesDAO;
+import org.primefaces.PrimeFaces;
+
 import mx.com.ferbo.dao.EstadosDAO;
 import mx.com.ferbo.dao.MunicipiosDAO;
 import mx.com.ferbo.dao.PaisesDAO;
-import mx.com.ferbo.model.Ciudades;
 import mx.com.ferbo.model.Estados;
+import mx.com.ferbo.model.EstadosPK;
 import mx.com.ferbo.model.Municipios;
+import mx.com.ferbo.model.MunicipiosPK;
 import mx.com.ferbo.model.Paises;
 
 @Named
@@ -23,71 +27,109 @@ import mx.com.ferbo.model.Paises;
 public class MunicipiosBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	private Paises pais;
-	private Estados estado;
-	private Municipios municipio;
-	private Ciudades ciudad;
-	
+
 	private List<Paises> listaPaises;
 	private List<Estados> listaEstados;
 	private List<Municipios> listaMunicipios;
-	private List<Ciudades> listaCiudades;
-	
+
+	private List<Municipios> listaMunicipiosSelect;
+
+	private Paises pais;
+	private Paises paisSelect;
+	private EstadosPK estadoPkSelect;
+	private Estados estadoSelect;
+	private MunicipiosPK municipioPkSelect;
+	private Municipios municipioSelect;
+
 	private PaisesDAO paisesDao;
 	private EstadosDAO estadosDao;
 	private MunicipiosDAO municipiosDao;
-	private CiudadesDAO ciudadesDao;
-	
+
+	private int idPais;
+	private int idEstado;
+
 	public MunicipiosBean() {
 		paisesDao = new PaisesDAO();
 		estadosDao = new EstadosDAO();
 		municipiosDao = new MunicipiosDAO();
-		ciudadesDao = new CiudadesDAO();
 		listaPaises = new ArrayList<>();
 		listaEstados = new ArrayList<>();
 		listaMunicipios = new ArrayList<>();
-		listaCiudades = new ArrayList<>();
 	}
-	
+
 	@PostConstruct
 	public void init() {
 		listaPaises = paisesDao.buscarTodos();
 		listaEstados = estadosDao.buscarTodos();
 		listaMunicipios = municipiosDao.buscarTodos();
-		listaCiudades = ciudadesDao.buscarTodos();
 	}
 
-	public Paises getPais() {
-		return pais;
+	public void nuevoEstado() {
+		this.paisSelect = new Paises();
+		this.estadoSelect = new Estados();
+		this.estadoPkSelect = new EstadosPK();
+		estadoSelect.setEstadosPK(estadoPkSelect);
 	}
 
-	public void setPais(Paises pais) {
-		this.pais = pais;
+	public void guardarEstado() {
+		if (this.estadoSelect.getEstadosPK().getEstadoCve() == 0) {
+			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
+			estadoSelect.setEstadosPK(estadoPkSelect);
+			List<Estados> listaEstadosPais = estadosDao.buscarPorCriterios(estadoSelect);
+			int tamanioListaEstadosPais = listaEstadosPais.size() + 1;
+			estadoPkSelect.setEstadoCve(tamanioListaEstadosPais);
+			estadoSelect.setEstadosPK(estadoPkSelect);
+			if (estadosDao.guardar(estadoSelect) == null) {
+				this.listaEstados.add(this.estadoSelect);
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estado Agregado"));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Error", "Ocurrió un error al intentar guardar el Estado"));
+			}
+		} else {
+			int idEstado = this.estadoSelect.getEstadosPK().getEstadoCve();
+			this.paisSelect = new Paises();
+			this.estadoPkSelect = new EstadosPK();
+			handleContrySelect();
+			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
+			estadoPkSelect.setEstadoCve(idEstado);
+			estadoSelect.setEstadosPK(estadoPkSelect);
+			if (estadosDao.actualizar(estadoSelect) == null) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estado Actualizado"));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Error", "Ocurrió un error al intentar actualizar el Estado"));
+			}
+		}
+		PrimeFaces.current().executeScript("PF('nuevoEstadoDialog').hide()");
+		PrimeFaces.current().ajax().update("form");
+
 	}
 
-	public Estados getEstado() {
-		return estado;
+	public void eliminandoEstado() {
+		if (estadosDao.eliminar(estadoSelect) == null) {
+			this.listaEstados.remove(this.estadoSelect);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estado Eliminado"));
+			PrimeFaces.current().ajax().update("form:messages", "form:dt-Estado");
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Ocurrió un error al intentar eliminar el Estado"));
+		}
+		PrimeFaces.current().executeScript("PF('deleteEstadoDialog').hide()");
+		PrimeFaces.current().ajax().update("form:messages");
 	}
 
-	public void setEstado(Estados estado) {
-		this.estado = estado;
+	public void handleContrySelect() {
+		if (this.idPais != -1) {
+			this.paisSelect.setPaisCve(idPais);
+		}
 	}
-
-	public Municipios getMunicipio() {
-		return municipio;
-	}
-
-	public void setMunicipio(Municipios municipio) {
-		this.municipio = municipio;
-	}
-
-	public Ciudades getCiudad() {
-		return ciudad;
-	}
-
-	public void setCiudad(Ciudades ciudad) {
-		this.ciudad = ciudad;
+	
+	public void handleStateSelect() {
+		if (this.idEstado != -1) {
+			this.estadoPkSelect.setEstadoCve(idEstado);
+			this.estadoSelect.setEstadosPK(estadoPkSelect);
+		}
 	}
 
 	public List<Paises> getListaPaises() {
@@ -114,12 +156,60 @@ public class MunicipiosBean implements Serializable {
 		this.listaMunicipios = listaMunicipios;
 	}
 
-	public List<Ciudades> getListaCiudades() {
-		return listaCiudades;
+	public List<Municipios> getListaMunicipiosSelect() {
+		return listaMunicipiosSelect;
 	}
 
-	public void setListaCiudades(List<Ciudades> listaCiudades) {
-		this.listaCiudades = listaCiudades;
+	public void setListaMunicipiosSelect(List<Municipios> listaMunicipiosSelect) {
+		this.listaMunicipiosSelect = listaMunicipiosSelect;
+	}
+
+	public Paises getPais() {
+		return pais;
+	}
+
+	public void setPais(Paises pais) {
+		this.pais = pais;
+	}
+
+	public Paises getPaisSelect() {
+		return paisSelect;
+	}
+
+	public void setPaisSelect(Paises paisSelect) {
+		this.paisSelect = paisSelect;
+	}
+
+	public EstadosPK getEstadoPkSelect() {
+		return estadoPkSelect;
+	}
+
+	public void setEstadoPkSelect(EstadosPK estadoPkSelect) {
+		this.estadoPkSelect = estadoPkSelect;
+	}
+
+	public Estados getEstadoSelect() {
+		return estadoSelect;
+	}
+
+	public void setEstadoSelect(Estados estadoSelect) {
+		this.estadoSelect = estadoSelect;
+	}
+
+	public MunicipiosPK getMunicipioPkSelect() {
+		return municipioPkSelect;
+	}
+
+	public void setMunicipioPkSelect(MunicipiosPK municipioPkSelect) {
+		this.municipioPkSelect = municipioPkSelect;
+	}
+
+	public Municipios getMunicipioSelect() {
+		return municipioSelect;
+	}
+
+	public void setMunicipioSelect(Municipios municipioSelect) {
+		this.municipioSelect = municipioSelect;
 	}
 
 	public PaisesDAO getPaisesDao() {
@@ -146,12 +236,20 @@ public class MunicipiosBean implements Serializable {
 		this.municipiosDao = municipiosDao;
 	}
 
-	public CiudadesDAO getCiudadesDao() {
-		return ciudadesDao;
+	public int getIdPais() {
+		return idPais;
 	}
 
-	public void setCiudadesDao(CiudadesDAO ciudadesDao) {
-		this.ciudadesDao = ciudadesDao;
+	public void setIdPais(int idPais) {
+		this.idPais = idPais;
+	}
+
+	public int getIdEstado() {
+		return idEstado;
+	}
+
+	public void setIdEstado(int idEstado) {
+		this.idEstado = idEstado;
 	}
 
 	

@@ -4,7 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-	<ui:define name="title">Bancos</ui:define>
+	<ui:define name="title">Estados</ui:define>
 
 	<ui:define name="content">
 		<h:form id="form">
@@ -12,15 +12,17 @@
 				<p:menuitem value="Home" outcome="/dashboard" />
 				<p:menuitem value="Facturación" />
 				<p:menuitem value="Catálogos" />
-				<p:menuitem value="Bancos" outcome="/protected/catalogos/bancos" />
+				<p:menuitem value="Domicilios" />
+				<p:menuitem value="Cambios" />
+				<p:menuitem value="Ciudades" outcome="/protected/catalogos/ciudades" />
 			</p:breadCrumb>
 			<div class="p-grid button-demo">
 				<div class="p-col-12">
 					<div class="card">
 						<p:commandButton value="Agregar" icon="pi pi-plus"
-							actionListener="#{bancosBean.nuevoBanco}"
-							update="manage-bank-content-new form:manage-bank-content-new"
-							oncomplete="PF('nuevoBancoDialog').show()"
+							actionListener="#{estadosBean.nuevoEstado}"
+							update="manage-state-content-new form:manage-state-content-new"
+							oncomplete="PF('nuevoEstadoDialog').show()"
 							styleClass="p-mr-2 p-mb-2" process="@this" />
 					</div>
 				</div>
@@ -30,103 +32,113 @@
 				<div class="p-col-12">
 					<div class="card">
 						<p:growl id="messages" showDetail="true" />
-						<p:dataTable id="dt-bancos" widgetVar="dtBancos" var="bancos"
-							value="#{bancosBean.listaBancos}" reflow="true"
-							rowKey="#{bancos.id}" paginator="true" rows="10"
+						<p:dataTable id="dt-Estados" widgetVar="dtEstados" var="estados"
+							value="#{estadosBean.listaEstados}" reflow="true"
+							rowKey="#{estados.estadoDesc}" paginator="true" rows="10"
 							paginatorPosition="bottom" rowSelectMode="add">
 							<f:facet name="header">
 								<div class="customers-table-header">
-									<span style="font-weight: bold">Bancos</span> <span
+									<span style="font-weight: bold">Estados</span> <span
 										class="ui-input-icon-left filter-container"> <i
 										class="pi pi-search" /> <p:inputText id="globalFilter"
-											onkeyup="PF('dtBancos').filter()" placeholder="Búsqueda" />
+											onkeyup="PF('dtEstados').filter()" placeholder="Búsqueda" />
 									</span>
 								</div>
 							</f:facet>
 
 							<!-- 							<p:ajax event="rowSelect" update=":form:delete-servicios-button" /> -->
 							<!-- 							<p:ajax event="rowUnselect" -->
-							<!-- 								update=":form:delete-bancos-button" /> -->
+							<!-- 								update=":form:delete-Estados-button" /> -->
 							<!-- 							<p:ajax event="rowSelectCheckbox" -->
-							<!-- 								update=":form:delete-bancos-button" /> -->
+							<!-- 								update=":form:delete-Estados-button" /> -->
 							<!-- 							<p:ajax event="rowUnselectCheckbox" -->
-							<!-- 								update=":form:delete-bancos-button" /> -->
+							<!-- 								update=":form:delete-Estados-button" /> -->
 							<!-- 							<p:ajax event="toggleSelect" -->
-							<!-- 								update=":form:delete-bancos-button" /> -->
+							<!-- 								update=":form:delete-Estados-button" /> -->
 
 							<p:column selectionMode="multiple" />
-
-							<p:column headerText="Clave" sortBy="#{bancos.clave}"
-								filterBy="#{bancos.clave}" style="text-align:center">
-								<h:outputText value="#{bancos.clave}" style="vertical-align: middle; margin-left: .5rem" />
-							</p:column>
-							<p:column headerText="Nombre" sortBy="#{bancos.nombre}"
-								filterBy="#{bancos.nombre}" style="text-align:center">
+							<p:column headerText="Estado" sortBy="#{estados.paises.paisDesc}"
+								filterBy="#{estados.paises.paisDesc}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{bancos.nombre}" />
+									value="#{estados.paises.paisDesc}" />
+							</p:column>
+							<p:column headerText="Estado" sortBy="#{estados.estadoDesc}"
+								filterBy="#{estados.estadoDesc}" style="text-align:center">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{estados.estadoDesc}" />
 							</p:column>
 							<p:column headerText="Acción" style="text-align:center">
 								<p:commandButton icon="pi pi-pencil"
-									update=":form:manage-bank-content-new" value="Modificar"
-									oncomplete="PF('nuevoBancoDialog').show()"
+									update=":form:manage-state-content-new" value="Modificar"
+									oncomplete="PF('nuevoEstadoDialog').show()"
 									styleClass="p-mr-2 p-mb-2" process="@this">
-									<f:setPropertyActionListener value="#{bancos}"
-										target="#{bancosBean.bancoSelect}" />
+									<f:setPropertyActionListener value="#{estados}"
+										target="#{estadosBean.estadoSelect}" />
 								</p:commandButton>
 								<p:commandButton value="Eliminar" styleClass="p-mr-2 p-mb-2"
 									icon="pi pi-trash" process="@this"
-									oncomplete="PF('deleteBancosDialog').show()">
-									<f:setPropertyActionListener value="#{bancos}"
-										target="#{bancosBean.bancoSelect}" />
+									oncomplete="PF('deleteEstadoDialog').show()">
+									<f:setPropertyActionListener value="#{estados}"
+										target="#{estadosBean.estadoSelect}" />
 								</p:commandButton>
 							</p:column>
 						</p:dataTable>
 					</div>
 				</div>
 			</div>
-			<p:dialog header="Agregar/Editar un Banco" showEffect="fade"
-				modal="true" widgetVar="nuevoBancoDialog" responsive="true">
-				<p:outputPanel id="manage-bank-content-new" class="ui-fluid">
-					<p:outputPanel rendered="#{not empty bancosBean.bancoSelect}">
+			<p:dialog header="Agregar/Editar un Estado" showEffect="fade"
+				modal="true" widgetVar="nuevoEstadoDialog" responsive="true">
+				<p:outputPanel id="manage-state-content-new" class="ui-fluid">
+					<p:outputPanel rendered="#{not empty estadosBean.estadoSelect}">
 						<div class="p-field">
-							<p:outputLabel for="clave-new" value="Clave" />
-							<p:inputText id="clave-new"
-								value="#{bancosBean.bancoSelect.clave}" required="true" />
+						<p:outputLabel for="states" value="Paises:"/>
+						<p:selectOneMenu id="states" autoWidth="false" value="#{estadosBean.idPais}">
+							<f:selectItem itemLabel="Selecione Pais" itemValue="" noSelectionOption="true"/>
+							<f:selectItems var="selectedStates"  value="#{estadosBean.listaPaises}" itemLabel="#{selectedStates.paisDesc}" itemValue="#{selectedStates.paisCve}"/>
+							<p:ajax listener="#{estadosBean.handleContrySelect}" process="@this"/>
+						</p:selectOneMenu>
 						</div>
 						<div class="p-field">
-							<p:outputLabel for="nombre-new" value="Nombre del Banco" />
-							<p:inputText id="nombre-new"
-								value="#{bancosBean.bancoSelect.nombre}" required="true" />
+							<p:outputLabel for="Estado-new" value="Estado" />
+							<p:inputText id="Estado-new"
+								value="#{estadosBean.estadoSelect.estadoDesc}" required="true" />
+						</div>
+						<div class="p-field">
+							<p:outputLabel for="abreviacion-new" value="Abreviación" />
+							<p:inputText id="abreviacion-new"
+								value="#{estadosBean.estadoSelect.estadoDsCorta}"
+								required="true" />
 						</div>
 					</p:outputPanel>
 				</p:outputPanel>
 				<f:facet name="footer">
 					<p:commandButton value="Guardar" icon="pi pi-plus"
-						actionListener="#{bancosBean.guardarBanco()}"
-						update=":form:manage-bank-content-new" styleClass="p-mr-2 p-mb-2" />
+						actionListener="#{estadosBean.guardarEstado()}"
+						update=":form:manage-state-content-new"
+						styleClass="p-mr-2 p-mb-2" />
 					<p:commandButton value="Cancelar" icon="pi pi-times"
-						onclick="PF('nuevoBancoDialog').hide()"
+						onclick="PF('nuevoEstadoDialog').hide()"
 						class="ui-button-secondary" />
 				</f:facet>
 			</p:dialog>
-			<p:confirmDialog widgetVar="deleteBancosDialog" showEffect="fade"
-				width="400" message="Desea eliminar el Banco?" header="Eliminar"
+			<p:confirmDialog widgetVar="deleteEstadoDialog" showEffect="fade"
+				width="400" message="Desea eliminar el Estado?" header="Eliminar"
 				severity="warn">
 				<p:commandButton value="Sí" icon="pi pi-check"
-					actionListener="#{bancosBean.eliminandoBanco()}" process="@this"
-					oncomplete="PF('deleteBancosDialog').hide()" />
+					actionListener="#{estadosBean.eliminandoEstado()}" process="@this"
+					oncomplete="PF('deleteEstadoDialog').hide()" />
 				<p:commandButton value="No" type="button"
 					styleClass="ui-button-secondary" icon="pi pi-times"
-					onclick="PF('deleteBancosDialog').hide()" />
+					onclick="PF('deleteEstadoDialog').hide()" />
 			</p:confirmDialog>
-						<p:confirmDialog global="true" showEffect="fade" width="400"
-							header="Eliminar">
-							<p:commandButton value="Sí" type="button"
-								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-							<p:commandButton value="No" type="button"
-								styleClass="ui-confirmdialog-no ui-button-secondary"
-								icon="pi pi-times" />
-						</p:confirmDialog>
+			<p:confirmDialog global="true" showEffect="fade" width="400"
+				header="Eliminar">
+				<p:commandButton value="Sí" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no ui-button-secondary"
+					icon="pi pi-times" />
+			</p:confirmDialog>
 		</h:form>
 	</ui:define>
 
