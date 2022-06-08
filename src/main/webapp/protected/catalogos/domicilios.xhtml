@@ -260,7 +260,7 @@
 												filter="true" filterMatchMode="contains"
 												converter="entityConverter" required="true"
 												requiredMessage="Campo requerido">
-												<f:selectItem itemLabel="--Selecciona--" />
+												<f:selectItem itemLabel="#{domiciliosBean.paisSelected.paisDesc}" />
 												<f:selectItems value="#{domiciliosBean.lstPaises}"
 													var="pais" itemLabel="#{pais.paisDesc}" />
 												<p:ajax listener="#{domiciliosBean.filtraListadoEstados()}" />
