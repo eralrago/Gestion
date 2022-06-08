@@ -290,6 +290,22 @@ public class DomiciliosBean implements Serializable {
 		clienteDomicilioSelected.setCteCve(clienteSelected);
 		clienteDomicilioSelected.setDomicilios(domicilioNuevo);
 	}
+	public void limpiaClienteDomicilio() {
+		clienteDomicilioSelected = new ClienteDomicilios();
+		domicilioSelected = new Domicilios();
+		ciudadSelected = new Ciudades();
+		asentamientoHumanoSelected = new AsentamientoHumano();
+		paisSelected = new Paises();
+		estadoSelected = new Estados();
+		municipioSelected = new Municipios();
+		paisComplet = new Pais();
+		domicilioNvoCalle = "";
+		domicilioNvoFax = "";
+		domicilioNvoNumExt ="";
+		domicilioNvoNumInt = "";
+		domicilioNvoTel1 ="";
+		domicilioNvoTel2 ="";
+	}
 
 	public void guardaClienteDomicilio() {
 		nuevoDomicilio();
@@ -302,7 +318,9 @@ public class DomiciliosBean implements Serializable {
 					"Ocurrió un error al intentar guardar el Domicilio"));
 		}
 		clienteDomicilioSelected = new ClienteDomicilios();
-		PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente");
+		domicilioNuevo = new Domicilios();
+		limpiaClienteDomicilio();
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente", "form:addDireccionCliente");
 	}
 
 	public void nuevoDomicilio() {
@@ -327,23 +345,6 @@ public class DomiciliosBean implements Serializable {
 	/**
 	 * Métodos para actualizar objeto tipo Domicilios
 	 */
-
-	public void actualizaClienteDomicilio() {
-		this.actualizaDomicilio();
-
-		/*
-		 * clienteDomicilioSelected.setCteCve(clienteSelected);
-		 * clienteDomicilioSelected.setDomicilios(domicilioNuevo); if
-		 * (clienteDomiciliosDAO.actualizar(clienteDomicilioSelected) == null) {
-		 * FacesContext.getCurrentInstance().addMessage(null, new
-		 * FacesMessage("Domicilio del cliente actualizado")); } else {
-		 * FacesContext.getCurrentInstance().addMessage(null, new
-		 * FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-		 * "Ocurrió un error al intentar actualizar el domicilio")); }
-		 * PrimeFaces.current().ajax().update("form:messages",
-		 * "form:dt-domiciliosCliente");
-		 */
-	}
 
 	public void actualizaDomicilio() {
 		domicilioNuevo = new Domicilios();
@@ -381,6 +382,8 @@ public class DomiciliosBean implements Serializable {
 		clienteDomicilioSelected.setCteCve(clienteSelected);
 		if (clienteDomiciliosDAO.eliminar(clienteDomicilioSelected) == null) {
 			if (domiciliosDAO.eliminar(clienteDomicilioSelected.getDomicilios()) == null) {
+				lstClienteDomiciliosFiltered.remove(clienteDomicilioSelected);
+				lstClienteDomicilios.remove(clienteDomicilioSelected);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Domicilio eliminado"));
 				PrimeFaces.current().ajax().update("form:messages", "form:dt-domiciliosCliente");
 			} else {
@@ -389,9 +392,9 @@ public class DomiciliosBean implements Serializable {
 						"Error", "Ocurrió un error al intentar eliminar el domicilio"));
 			}
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error", "Ocurrió un error al intentar eliminar el domicilio"));
-		}		
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"Ocurrió un error al intentar eliminar el domicilio"));
+		}
 		PrimeFaces.current().ajax().update("form:messages");
 
 	}

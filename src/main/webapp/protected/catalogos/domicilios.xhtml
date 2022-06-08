@@ -70,8 +70,9 @@
 									<span style="font-weight: bold">Domicilios del cliente</span> <span
 										class="filter-container ui-input-icon-left"> <p:commandButton
 											id="btnAdd" icon="pi pi-plus" value="Agregar" process="@this"
-											styleClass="ui-button-primary" style="margin-right: .5rem"
 											update="form:panel-addClienteDireccion"
+											styleClass="ui-button-primary" style="margin-right: .5rem"											
+											actionListener= "#{domiciliosBean.limpiaClienteDomicilio()}"
 											oncomplete="PF('clienteDireccionesAddDialog').show()"
 											disabled="#{domiciliosBean.clienteSelected eq null and domiciliosBean.clienteSelected.cteCve eq null and domiciliosBean.tipoDomicilioSelected eq null and domiciliosBean.tipoDomicilioSelected.domicilioTipoCve eq null}"
 											resetValues="panel-addClienteDireccion" />
@@ -359,7 +360,7 @@
 
 							<f:facet name="footer">
 								<p:commandButton value="Guardar" icon="pi pi-check"
-									actionListener="#{domiciliosBean.actualizaClienteDomicilio()}"
+									actionListener="#{domiciliosBean.actualizaDomicilio()}"
 									onclick="PF('clienteDireccionesActDialog').hide()"
 									update="panel-actClienteDireccion"
 									process="panel-actClienteDireccion @this" />
@@ -375,7 +376,7 @@
 							severity="warn">
 							<p:commandButton value="Sí" icon="pi pi-check" process="@this"
 								actionListener="#{domiciliosBean.eliminaClienteDomicilio()}"
-								update="dt-domiciliosCliente" oncomplete="PF('deleteClienteDireccionesDialog').hide()" />
+								update="" oncomplete="PF('deleteClienteDireccionesDialog').hide()" />
 							<p:commandButton value="No" type="button"
 								styleClass="ui-button-secondary" icon="pi pi-times"
 								onclick="PF('deleteClienteDireccionesDialog').hide()" />
