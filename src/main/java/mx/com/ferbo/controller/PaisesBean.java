@@ -7,19 +7,12 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
-import mx.com.ferbo.dao.CiudadesDAO;
-import mx.com.ferbo.dao.EstadosDAO;
-import mx.com.ferbo.dao.MunicipiosDAO;
 import mx.com.ferbo.dao.PaisesDAO;
-import mx.com.ferbo.model.Ciudades;
-import mx.com.ferbo.model.Estados;
-import mx.com.ferbo.model.Municipios;
 import mx.com.ferbo.model.Paises;
 
 @Named
