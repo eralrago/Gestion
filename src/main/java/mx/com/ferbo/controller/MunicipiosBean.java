@@ -30,6 +30,7 @@ public class MunicipiosBean implements Serializable {
 
 	private List<Paises> listaPaises;
 	private List<Estados> listaEstados;
+	private List<Estados> listaTmpEstados;
 	private List<Municipios> listaMunicipios;
 
 	private List<Municipios> listaMunicipiosSelect;
@@ -64,50 +65,46 @@ public class MunicipiosBean implements Serializable {
 		listaMunicipios = municipiosDao.buscarTodos();
 	}
 
-	public void nuevoEstado() {
+	public void nuevoMunicipio() {
 		this.paisSelect = new Paises();
 		this.estadoSelect = new Estados();
 		this.estadoPkSelect = new EstadosPK();
 		estadoSelect.setEstadosPK(estadoPkSelect);
+		this.municipioSelect = new Municipios();
+		this.municipioPkSelect = new MunicipiosPK();
+		municipioSelect.setMunicipiosPK(municipioPkSelect);
 	}
-
-	public void guardarEstado() {
-		if (this.estadoSelect.getEstadosPK().getEstadoCve() == 0) {
-			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
-			estadoSelect.setEstadosPK(estadoPkSelect);
-			List<Estados> listaEstadosPais = estadosDao.buscarPorCriterios(estadoSelect);
-			int tamanioListaEstadosPais = listaEstadosPais.size() + 1;
-			estadoPkSelect.setEstadoCve(tamanioListaEstadosPais);
-			estadoSelect.setEstadosPK(estadoPkSelect);
-			if (estadosDao.guardar(estadoSelect) == null) {
-				this.listaEstados.add(this.estadoSelect);
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estado Agregado"));
+	
+	public void guardarMunicipio() {
+		if (this.municipioSelect.getMunicipiosPK().getMunicipioCve() == 0) {
+			municipioPkSelect.setEstadoCve(idEstado);
+			municipioPkSelect.setPaisCve(idPais);
+			List<Municipios> listaMunicipioEstadoPais = municipiosDao.buscarPorCriterios(municipioSelect);
+			int tamanioListaMunicipioEstadoPais = listaMunicipioEstadoPais.size() + 1;
+			municipioPkSelect.setMunicipioCve(tamanioListaMunicipioEstadoPais);
+			municipioSelect.setMunicipiosPK(municipioPkSelect);
+			if(municipiosDao.guardar(municipioSelect) == null) {
+				this.listaMunicipios.add(this.municipioSelect);
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Municipio Agregado"));
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						"Error", "Ocurrió un error al intentar guardar el Estado"));
+						"Error", "Ocurrió un error al intentar guardar el Municipio / Alcaldía"));
 			}
 		} else {
-			int idEstado = this.estadoSelect.getEstadosPK().getEstadoCve();
-			this.paisSelect = new Paises();
-			this.estadoPkSelect = new EstadosPK();
-			handleContrySelect();
-			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
-			estadoPkSelect.setEstadoCve(idEstado);
-			estadoSelect.setEstadosPK(estadoPkSelect);
-			if (estadosDao.actualizar(estadoSelect) == null) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estado Actualizado"));
+			if(municipiosDao.actualizar(municipioSelect) == null) {
+				this.listaMunicipios.add(this.municipioSelect);
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Municipio Actualizado"));
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						"Error", "Ocurrió un error al intentar actualizar el Estado"));
+						"Error", "Ocurrió un error al intentar actualizar el Municipio / Alcaldía"));
 			}
-		}
-		PrimeFaces.current().executeScript("PF('nuevoEstadoDialog').hide()");
+		} 
+		PrimeFaces.current().executeScript("PF('nuevoMunicipioDialog').hide()");
 		PrimeFaces.current().ajax().update("form");
-
 	}
 
-	public void eliminandoEstado() {
-		if (estadosDao.eliminar(estadoSelect) == null) {
+	public void eliminandoMunicipio() {
+		if (municipiosDao.eliminar(municipioSelect) == null) {
 			this.listaEstados.remove(this.estadoSelect);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estado Eliminado"));
 			PrimeFaces.current().ajax().update("form:messages", "form:dt-Estado");
@@ -121,7 +118,14 @@ public class MunicipiosBean implements Serializable {
 
 	public void handleContrySelect() {
 		if (this.idPais != -1) {
-			this.paisSelect.setPaisCve(idPais);
+			this.listaTmpEstados = new ArrayList<>();
+			for (Estados estados : listaEstados) {
+				if(estados.getEstadosPK().getPaisCve() == this.idPais) {
+					this.listaTmpEstados.add(estados);
+				}
+			}
+			listaEstados.clear();
+			listaEstados.addAll(listaTmpEstados);
 		}
 	}
 	
@@ -146,6 +150,14 @@ public class MunicipiosBean implements Serializable {
 
 	public void setListaEstados(List<Estados> listaEstados) {
 		this.listaEstados = listaEstados;
+	}
+
+	public List<Estados> getListaTmpEstados() {
+		return listaTmpEstados;
+	}
+
+	public void setListaTmpEstados(List<Estados> listaTmpEstados) {
+		this.listaTmpEstados = listaTmpEstados;
 	}
 
 	public List<Municipios> getListaMunicipios() {
@@ -251,6 +263,8 @@ public class MunicipiosBean implements Serializable {
 	public void setIdEstado(int idEstado) {
 		this.idEstado = idEstado;
 	}
+
+	
 
 	
 }

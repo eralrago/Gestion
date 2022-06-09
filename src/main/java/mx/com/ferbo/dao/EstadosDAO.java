@@ -42,7 +42,7 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer>{
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
-			System.out.println("ERROR guardando Estado" + e.getMessage());
+			System.out.println("ERROR actualizando Estado" + e.getMessage());
 			return "ERROR";
 		}
 		return null;

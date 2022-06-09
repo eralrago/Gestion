@@ -27,25 +27,54 @@ public class MunicipiosDAO extends IBaseDAO<Municipios, Integer> {
 
 	@Override
 	public List<Municipios> buscarPorCriterios(Municipios e) {
-		// TODO Auto-generated method stub
+		List<Municipios> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		listado = em.createNamedQuery("Municipios.findByPaisCveEstadoCve", Municipios.class).setParameter("estadoCve", e.getMunicipiosPK().getEstadoCve()).setParameter("paisCve", e.getMunicipiosPK().getPaisCve()).getResultList();
+		return listado;
+	}
+
+	@Override
+	public String actualizar(Municipios municipios) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.merge(municipios);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR guardando Municipio" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String actualizar(Municipios e) {
-		// TODO Auto-generated method stub
+	public String guardar(Municipios municipios) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.persist(municipios);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR guardando Municipio" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String guardar(Municipios e) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String eliminar(Municipios e) {
-		// TODO Auto-generated method stub
+	public String eliminar(Municipios municipios) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.remove(em.merge(municipios));
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
