@@ -8,6 +8,7 @@ package mx.com.ferbo.model;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -36,6 +37,9 @@ import javax.validation.constraints.Size;
 public class Planta implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "planta")
+    private List<Posicion> posicionList;
+    
     @Id
     @Basic(optional = false)
     @NotNull

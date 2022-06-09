@@ -10,7 +10,11 @@ import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -26,8 +30,8 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Posicion.findAll", query = "SELECT p FROM Posicion p"),
     @NamedQuery(name = "Posicion.findByIdPosicion", query = "SELECT p FROM Posicion p WHERE p.idPosicion = :idPosicion"),
-    @NamedQuery(name = "Posicion.findByIdPlanta", query = "SELECT p FROM Posicion p WHERE p.idPlanta = :idPlanta"),
-    @NamedQuery(name = "Posicion.findByIdCamara", query = "SELECT p FROM Posicion p WHERE p.idCamara = :idCamara"),
+//    @NamedQuery(name = "Posicion.findByIdPlanta", query = "SELECT p FROM Posicion p WHERE p.idPlanta = :idPlanta"),
+//    @NamedQuery(name = "Posicion.findByIdCamara", query = "SELECT p FROM Posicion p WHERE p.idCamara = :idCamara"),
     @NamedQuery(name = "Posicion.findByCodPosicion", query = "SELECT p FROM Posicion p WHERE p.codPosicion = :codPosicion"),
     @NamedQuery(name = "Posicion.findByDescPosicion", query = "SELECT p FROM Posicion p WHERE p.descPosicion = :descPosicion"),
     @NamedQuery(name = "Posicion.findByTempIni", query = "SELECT p FROM Posicion p WHERE p.tempIni = :tempIni"),
@@ -37,18 +41,19 @@ public class Posicion implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_posicion")
     private Integer idPosicion;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_planta")
-    private int idPlanta;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_camara")
-    private int idCamara;
+    
+    @JoinColumn(name = "id_planta", referencedColumnName = "PLANTA_CVE")
+    @ManyToOne(optional = false)
+    private Planta planta;
+    
+    @JoinColumn(name = "id_camara", referencedColumnName = "CAMARA_CVE")
+    @ManyToOne(optional = false)
+    private Camara camara;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
@@ -80,82 +85,84 @@ public class Posicion implements Serializable {
         this.idPosicion = idPosicion;
     }
 
-    public Posicion(Integer idPosicion, int idPlanta, int idCamara, String codPosicion, String descPosicion, BigDecimal tempIni, BigDecimal tempFin, boolean habilitada) {
+    public Posicion(Integer idPosicion, Planta planta, Camara camara, String codPosicion, String descPosicion, BigDecimal tempIni, BigDecimal tempFin, boolean habilitada) {
         this.idPosicion = idPosicion;
-        this.idPlanta = idPlanta;
-        this.idCamara = idCamara;
+        this.planta = planta;
+        this.camara = camara;
         this.codPosicion = codPosicion;
         this.descPosicion = descPosicion;
         this.tempIni = tempIni;
         this.tempFin = tempFin;
         this.habilitada = habilitada;
     }
+
+    
 
     public Integer getIdPosicion() {
-        return idPosicion;
-    }
+		return idPosicion;
+	}
 
-    public void setIdPosicion(Integer idPosicion) {
-        this.idPosicion = idPosicion;
-    }
+	public void setIdPosicion(Integer idPosicion) {
+		this.idPosicion = idPosicion;
+	}
 
-    public int getIdPlanta() {
-        return idPlanta;
-    }
+	public Planta getPlanta() {
+		return planta;
+	}
 
-    public void setIdPlanta(int idPlanta) {
-        this.idPlanta = idPlanta;
-    }
+	public void setPlanta(Planta planta) {
+		this.planta = planta;
+	}
 
-    public int getIdCamara() {
-        return idCamara;
-    }
+	public Camara getCamara() {
+		return camara;
+	}
 
-    public void setIdCamara(int idCamara) {
-        this.idCamara = idCamara;
-    }
+	public void setCamara(Camara camara) {
+		this.camara = camara;
+	}
 
-    public String getCodPosicion() {
-        return codPosicion;
-    }
+	public String getCodPosicion() {
+		return codPosicion;
+	}
 
-    public void setCodPosicion(String codPosicion) {
-        this.codPosicion = codPosicion;
-    }
+	public void setCodPosicion(String codPosicion) {
+		this.codPosicion = codPosicion;
+	}
 
-    public String getDescPosicion() {
-        return descPosicion;
-    }
+	public String getDescPosicion() {
+		return descPosicion;
+	}
 
-    public void setDescPosicion(String descPosicion) {
-        this.descPosicion = descPosicion;
-    }
+	public void setDescPosicion(String descPosicion) {
+		this.descPosicion = descPosicion;
+	}
 
-    public BigDecimal getTempIni() {
-        return tempIni;
-    }
+	public BigDecimal getTempIni() {
+		return tempIni;
+	}
 
-    public void setTempIni(BigDecimal tempIni) {
-        this.tempIni = tempIni;
-    }
+	public void setTempIni(BigDecimal tempIni) {
+		this.tempIni = tempIni;
+	}
 
-    public BigDecimal getTempFin() {
-        return tempFin;
-    }
+	public BigDecimal getTempFin() {
+		return tempFin;
+	}
 
-    public void setTempFin(BigDecimal tempFin) {
-        this.tempFin = tempFin;
-    }
+	public void setTempFin(BigDecimal tempFin) {
+		this.tempFin = tempFin;
+	}
 
-    public boolean getHabilitada() {
-        return habilitada;
-    }
+	public boolean getHabilitada() {
+		return habilitada;
+	}
 
-    public void setHabilitada(boolean habilitada) {
-        this.habilitada = habilitada;
-    }
+	public void setHabilitada(boolean habilitada) {
+		this.habilitada = habilitada;
+	}
 
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (idPosicion != null ? idPosicion.hashCode() : 0);
