@@ -87,7 +87,7 @@ public class DomiciliosDAO extends IBaseDAO<Domicilios, Integer> {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.createNativeQuery("DELETE FROM domicilios WHERE (dom_cve = :domCve)")
+			em.createNativeQuery("DELETE FROM DOMICILIOS WHERE (dom_cve = :domCve)")
 					.setParameter("domCve", dom.getDomCve()).executeUpdate();
 			em.getTransaction().commit();
 			em.close();

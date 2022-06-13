@@ -7,7 +7,6 @@ import javax.persistence.TypedQuery;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.Ciudades;
-import mx.com.ferbo.model.Estados;
 import mx.com.ferbo.util.EntityManagerUtil;
 
 public class CiudadesDAO extends IBaseDAO<Ciudades, Integer> {
@@ -64,4 +63,9 @@ public class CiudadesDAO extends IBaseDAO<Ciudades, Integer> {
 		return null;
 	}
 
+	public List<Ciudades> buscaPorId(Integer id) {
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		return em.createNamedQuery("Ciudades.findByCiudadCve", Ciudades.class)
+				.setParameter("ciudadCve", id).getResultList();
 	}
+}

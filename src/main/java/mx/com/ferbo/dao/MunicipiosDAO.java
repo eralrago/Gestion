@@ -64,4 +64,10 @@ public class MunicipiosDAO extends IBaseDAO<Municipios, Integer> {
 		return null;
 	}
 
+	public List<Municipios> buscaPorId(Integer id) {
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		return em.createNamedQuery("Municipios.findByMunicipioCve", Municipios.class)
+				.setParameter("municipioCve", id).getResultList();
 	}
+
+}

@@ -63,4 +63,10 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer> {
 		return null;
 	}
 
+	public List<Estados> buscaPorId(Integer id) {
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		return em.createNamedQuery("Estados.findByEstadoCve", Estados.class)
+				.setParameter("estadoCve", id).getResultList();
+	}
+
 }

@@ -54,4 +54,10 @@ public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 		return null;
 	}
 
+	public List<Paises> buscaPorId(Integer id) {
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		return em.createNamedQuery("Paises.findByPaisCve", Paises.class)
+				.setParameter("paisCve", id).getResultList();
 	}
+
+}
