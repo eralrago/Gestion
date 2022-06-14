@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.Cliente;
+import mx.com.ferbo.model.ClienteContacto;
+import mx.com.ferbo.model.MedioCnt;
 import mx.com.ferbo.util.EntityManagerUtil;
 
 public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
@@ -85,10 +87,35 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 		EntityManager em = null;
 		try {
 			em = EntityManagerUtil.getEntityManager();
-			em.getTransaction().begin();
-			em.remove(em.merge(cliente));
+			em.getTransaction().begin();			
+			
+			for (ClienteContacto ct : cliente.getClienteContactoList()) {
+				for (MedioCnt medio : ct.getIdContacto().getMedioCntList()) {
+//					em.remove(em.merge(medio));
+					em.createQuery("DELETE MedioCnt m WHERE m.idMedio =:idMedio")
+					.setParameter("idMedio", medio.getIdMedio()).executeUpdate();
+					if (medio.getIdTelefono() != null) {
+//						em.remove(em.merge(medio.getIdTelefono()));
+						em.createQuery("DELETE FROM Telefono t WHERE t.idTelefono = :idTel")
+						.setParameter("idTel", medio.getIdTelefono().getIdTelefono()).executeUpdate();
+					}
+					if (medio.getIdMail() != null) {
+//						em.remove(em.merge(medio.getIdMail()));
+						em.createQuery("DELETE FROM Mail m WHERE m.idMail = :idMail")
+						.setParameter("idMail", medio.getIdMail().getIdMail()).executeUpdate();
+					}
+				}
+//				em.remove(em.merge(ct));
+//				em.remove(em.merge(ct.getIdContacto()));
+				em.createQuery("DELETE FROM ClienteContacto ct WHERE ct.id = :clienteCon")
+				.setParameter("clienteCon", ct.getId()).executeUpdate();
+				em.createQuery("DELETE FROM Contacto con WHERE con.idContacto = :idCon")
+				.setParameter("idCon", ct.getIdContacto().getIdContacto()).executeUpdate();
+			}
+//			em.remove(em.merge(cliente));
+			em.createQuery("DELETE FROM Cliente cte WHERE cte.cteCve = :idCliente")
+			.setParameter("idCliente", cliente.getCteCve()).executeUpdate();
 			em.getTransaction().commit();
-			em.close();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
