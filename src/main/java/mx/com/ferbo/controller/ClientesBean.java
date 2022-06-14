@@ -227,6 +227,9 @@ public class ClientesBean implements Serializable {
 		if (medioContactoSelected.getIdMedio() == null) {
 			medioContactoSelected.setIdContacto(clienteContactoSelected.getIdContacto());
 			if (medioCntDAO.guardaMedioCnt(medioContactoSelected) == null) {
+				if(clienteContactoSelected.getIdContacto().getMedioCntList() == null) {
+					clienteContactoSelected.getIdContacto().setMedioCntList(new ArrayList<>());
+				}
 				clienteContactoSelected.getIdContacto().getMedioCntList().add(medioContactoSelected);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Medio de contacto Agregado"));
 			}else {
