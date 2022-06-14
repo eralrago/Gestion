@@ -33,8 +33,9 @@ public class ContactoDAO extends IBaseDAO<Contacto, Integer> {
 
 	@Override
 	public String actualizar(Contacto contacto) {
+		EntityManager em = null;		
 		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.merge(contacto);
 			em.getTransaction().commit();
@@ -42,6 +43,15 @@ public class ContactoDAO extends IBaseDAO<Contacto, Integer> {
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
+		}finally {
+			if(em.isOpen()) {
+				try {
+					em.close();
+				}catch (Exception e) {
+					System.out.println("ERROR" + e.getMessage());
+					return "ERROR";
+				}
+			}
 		}
 		return null;
 	}
@@ -53,8 +63,9 @@ public class ContactoDAO extends IBaseDAO<Contacto, Integer> {
 
 	@Override
 	public String eliminar(Contacto contacto) {
+		EntityManager em = null;
 		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.remove(em.merge(contacto));
 			em.getTransaction().commit();
@@ -62,6 +73,15 @@ public class ContactoDAO extends IBaseDAO<Contacto, Integer> {
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
+		}finally {
+			if(em.isOpen()) {
+				try {
+					em.close();
+				}catch (Exception e) {
+					System.out.println("ERROR" + e.getMessage());
+					return "ERROR";
+				}
+			}
 		}
 		return null;
 	}

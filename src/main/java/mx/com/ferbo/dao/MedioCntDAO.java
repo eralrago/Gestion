@@ -30,8 +30,9 @@ public class MedioCntDAO extends IBaseDAO<MedioCnt, Integer> {
 
 	@Override
 	public String actualizar(MedioCnt medio) {
+		EntityManager em = null;
 		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			if (medio.getTpMedio().equalsIgnoreCase("m")) {
 				if (medio.getIdMail().getIdMail() == null) {
@@ -53,6 +54,15 @@ public class MedioCntDAO extends IBaseDAO<MedioCnt, Integer> {
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
+		}finally {
+			if(em.isOpen()) {
+				try {
+					em.close();
+				} catch (Exception e) {
+					System.out.println("ERROR" + e.getMessage());
+					return "ERROR";
+				}
+			}
 		}
 		return null;
 	}
@@ -64,14 +74,23 @@ public class MedioCntDAO extends IBaseDAO<MedioCnt, Integer> {
 
 	@Override
 	public String eliminar(MedioCnt medio) {
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.remove(em.merge(medio));
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
+		}finally {
+			try {
+				if(em.isOpen()) {
+					em.close();
+				}
+			}catch (Exception e) {
+				System.out.println("ERROR" + e.getMessage());
+				return "ERROR";
+			}
 		}
 		return null;
 	}
@@ -83,8 +102,9 @@ public class MedioCntDAO extends IBaseDAO<MedioCnt, Integer> {
 	}
 	
 	public String guardaMedioCnt(MedioCnt medio) {
+		EntityManager em = null;
 		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			if(medio.getTpMedio().equalsIgnoreCase("m")) {
 				em.persist(medio.getIdMail());
@@ -98,6 +118,15 @@ public class MedioCntDAO extends IBaseDAO<MedioCnt, Integer> {
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
+		}finally {
+			if(em.isOpen()) {
+				try {
+					em.close();
+				} catch (Exception e) {
+					System.out.println("ERROR" + e.getMessage());
+					return "ERROR";
+				}
+			}
 		}
 		return null;
 	}

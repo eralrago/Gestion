@@ -32,8 +32,9 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 
 	@Override
 	public String actualizar(Cliente cliente) {
+		EntityManager em = null;
 		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.merge(cliente);
 			em.getTransaction().commit();
@@ -41,14 +42,24 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
+		}finally {
+			if(em.isOpen()) {
+				try {
+					em.close();
+				}catch (Exception e) {
+					System.out.println("ERROR" + e.getMessage());
+					return "ERROR";
+				}
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public String guardar(Cliente cliente) {
+		EntityManager em = null;
 		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.persist(cliente);
 			em.getTransaction().commit();
@@ -56,14 +67,24 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
+		}finally {
+			if(em.isOpen()) {
+				try {
+					em.close();
+				}catch (Exception e) {
+					System.out.println("ERROR" + e.getMessage());
+					return "ERROR";
+				}
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public String eliminar(Cliente cliente) {
+		EntityManager em = null;
 		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.remove(em.merge(cliente));
 			em.getTransaction().commit();
@@ -71,14 +92,24 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
+		}finally {
+			if(em.isOpen()) {
+				try {
+					em.close();
+				}catch (Exception e) {
+					System.out.println("ERROR" + e.getMessage());
+					return "ERROR";
+				}
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public String eliminarListado(List<Cliente> listado) {
+		EntityManager em = null;
 		try {
-			EntityManager em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			for (Cliente cliente : listado) {
 				em.remove(em.merge(cliente));
@@ -88,6 +119,15 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 		} catch (Exception e) {
 			System.out.println("ERROR" + e.getMessage());
 			return "ERROR";
+		}finally {
+			if(em.isOpen()) {
+				try {
+					em.close();
+				}catch (Exception e) {
+					System.out.println("ERROR" + e.getMessage());
+					return "ERROR";
+				}
+			}
 		}
 		return null;
 	}

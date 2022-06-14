@@ -1,7 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
-	
-	xmlns:jsf="http://xmlns.jcp.org/jsf">
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf">
 	<ui:define name="title">Clientes</ui:define>
 
 	<ui:define name="content">
@@ -56,8 +54,7 @@
 								<h:outputText value="#{cliente.codUnico}" />
 							</p:column>
 							<p:column width="22%">
-								<p:commandButton icon="pi pi-pencil" value="Modificar" styleClass="edit-button ui-button-warning" oncomplete="PF('dialogCliente').show();" process="@this"
-									update=":form:dialogCliente">
+								<p:commandButton icon="pi pi-pencil" value="Modificar" styleClass="edit-button" oncomplete="PF('dialogCliente').show();" process="@this" update=":form:dialogCliente">
 									<f:setPropertyActionListener value="#{cliente}" target="#{clientesBean.clienteSelected}" />
 								</p:commandButton>
 								<p:commandButton class="ui-button-danger" icon="pi pi-trash" value="Eliminar" process="@this" oncomplete="PF('deleteClienteDialog').show()">
@@ -67,12 +64,12 @@
 
 							<p:rowExpansion>
 								<div class="orders-subtable">
-									<p:dataTable var="contacto" value="#{cliente.clienteContactoList}" reflow="true" rowKey="#{contaco.idContacto.idContacto}">
+									<p:dataTable id="dtContactos" var="contacto" value="#{cliente.clienteContactoList}" reflow="true" rowKey="#{contaco.idContacto.idContacto}">
 										<f:facet name="header">
 											<div class="products-table-header">
 												<span style="font-weight: bold">Contactos para: #{cliente.cteNombre}</span> <span class="filter-container ui-input-icon-left"> </span> <span
 													class="filter-container ui-input-icon-left"> <p:commandButton value="Agregar" icon="pi pi-plus" styleClass="ui-button-success" style="margin-right: .5rem"
-														actionListener="#{clientesBean.nuevoContacto(cliente)}" process="@this" oncomplete="PF('dialogAddContacto').show();" />
+														actionListener="#{clientesBean.nuevoContacto(cliente)}" process="@this" oncomplete="PF('dialogAddContacto').show();" resetValues="true" update="form:pnlContacto" />
 												</span>
 											</div>
 										</f:facet>
@@ -88,8 +85,8 @@
 										</p:column>
 
 										<p:column width="10%" style="text-align:right;">
-											<p:commandButton icon="pi pi-pencil" styleClass="ui-button-warning p-mr-2 p-mb-2" process="@this" actionListener="#{clientesBean.consultaContactos(contacto.idContacto)}"
-												resetValues="true" update="form:pnlEditContacto">
+											<p:commandButton icon="pi pi-pencil" styleClass=" p-mr-2 p-mb-2" process="@this" actionListener="#{clientesBean.consultaContactos(contacto)}" resetValues="true"
+												update="form:pnlEditContacto">
 											</p:commandButton>
 											<p:commandButton icon="pi pi-trash" styleClass="ui-button-danger p-mr-2 p-mb-2" process="@this" oncomplete="PF('deleteContactoDialog').show();">
 												<f:setPropertyActionListener value="#{contacto}" target="#{clientesBean.clienteContactoSelected}" />
@@ -139,20 +136,49 @@
 							</f:facet>
 						</p:dialog>
 
-						<p:dialog id="dialogAddContacto" widgetVar="dialogAddContacto" header="Agregar contacto" showEffect="fade" modal="true" responsive="true" dynamic="true" cache="false">
+						<p:dialog id="dialogAddContacto" widgetVar="dialogAddContacto" header="Agregar contacto" showEffect="fade" modal="true" responsive="true" resizable="false" cache="false">
 							<p:outputPanel id="pnlContacto" class="ui-fluid">
 								<p:outputPanel>
 									<div class="p-field">
 										<p:outputLabel>Nombre</p:outputLabel>
-										<p:inputText value="#{clientesBean.contactoSelected.nbNombre}" required="true" requiredMessage="Campo requerido" />
+										<p:inputText value="#{clientesBean.clienteContactoSelected.idContacto.nbNombre}" required="true" requiredMessage="Campo requerido" />
 									</div>
 									<div class="p-field">
 										<p:outputLabel>Primer apellido</p:outputLabel>
-										<p:inputText value="#{clientesBean.contactoSelected.nbApellido1}" required="true" requiredMessage="Campo requerido" />
+										<p:inputText value="#{clientesBean.clienteContactoSelected.idContacto.nbApellido1}" required="true" requiredMessage="Campo requerido" />
 									</div>
 									<div class="p-field">
 										<p:outputLabel>Segundo apellido</p:outputLabel>
-										<p:inputText value="#{clientesBean.contactoSelected.nbApellido2}" required="true" requiredMessage="Campo requerido" />
+										<p:inputText value="#{clientesBean.clienteContactoSelected.idContacto.nbApellido2}" required="true" requiredMessage="Campo requerido" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Usuario</p:outputLabel>
+										<p:inputText value="#{clientesBean.clienteContactoSelected.nbUsuario}" required="true" requiredMessage="Campo requerido" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Contraseña</p:outputLabel>
+										<p:panelGrid id="pgPass" columns="2" style="width:100%" styleClass="border-none">
+											<p:password id="toggle" value="#{clientesBean.clienteContactoSelected.nbPassword}" toggleMask="true" redisplay="true" />
+											<p:commandButton icon="icon-varita" actionListener="#{clientesBean.generaPassword()}" styleClass="edit-button" process="@this" update="pgPass" />
+										</p:panelGrid>
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Estatus usuario</p:outputLabel>
+										<p:selectOneMenu id="soEstatusUsuario" value="#{clientesBean.clienteContactoSelected.stUsuario}">
+											<f:selectItem itemLabel="--Seleccione--" />
+											<f:selectItem itemLabel="Activo" itemValue="A" />
+											<f:selectItem itemLabel="Inactivo" itemValue="B" />
+											<f:selectItem itemLabel="Bloqueado" itemValue="L" />
+											<p:ajax process="@this soEstatusUsuario"/>
+										</p:selectOneMenu>
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Estatus</p:outputLabel>
+										<p:selectOneMenu id="soEstatus" value="#{clientesBean.clienteContactoSelected.stHabilitado}">
+											<f:selectItem itemLabel="Activo" itemValue="true" />
+											<f:selectItem itemLabel="Inactivo" itemValue="false" />
+											<p:ajax process="@this soEstatus"/>
+										</p:selectOneMenu>
 									</div>
 								</p:outputPanel>
 							</p:outputPanel>
@@ -166,26 +192,72 @@
 							style="max-width:80em !important;">
 							<p:outputPanel id="pnlEditContacto" class="ui-fluid">
 								<p:outputPanel>
-									<div class="p-field">
-										<p:outputLabel>Nombre</p:outputLabel>
-										<p:inputText value="#{clientesBean.contactoSelected.nbNombre}" required="true" requiredMessage="Campo requerido" />
+
+									<div class="p-grid">
+										<div class="p-col-12 p-md-6 p-lg-4">
+											<div class="p-field">
+												<p:outputLabel>Nombre</p:outputLabel>
+												<p:inputText value="#{clientesBean.clienteContactoSelected.idContacto.nbNombre}" required="true" requiredMessage="Campo requerido" />
+											</div>
+										</div>
+										<div class="p-col-12 p-md-6 p-lg-4">
+											<div class="p-field">
+												<p:outputLabel>Primer apellido</p:outputLabel>
+												<p:inputText value="#{clientesBean.clienteContactoSelected.idContacto.nbApellido1}" required="true" requiredMessage="Campo requerido" />
+											</div>
+										</div>
+										<div class="p-col-12 p-md-6 p-lg-4">
+											<div class="p-field">
+												<p:outputLabel>Segundo apellido</p:outputLabel>
+												<p:inputText value="#{clientesBean.clienteContactoSelected.idContacto.nbApellido2}" required="true" requiredMessage="Campo requerido" />
+											</div>
+										</div>
+
+										<div class="p-col-12 p-md-4 p-lg-4">
+											<div class="p-field">
+												<p:outputLabel>Usuario</p:outputLabel>
+												<p:inputText value="#{clientesBean.clienteContactoSelected.nbUsuario}" required="true" requiredMessage="Campo requerido" />
+											</div>
+										</div>
+										<div class="p-col-12 p-md-4 p-lg-4">
+											<div id="pgPassEdit" class="p-field">
+												<p:outputLabel>Contraseña</p:outputLabel>
+												<p:panelGrid id="pgPassEdit" columns="2" style="width:100%" styleClass="border-none">
+													<p:password value="#{clientesBean.clienteContactoSelected.nbPassword}" toggleMask="true" redisplay="true" />
+													<p:commandButton icon="icon-varita" actionListener="#{clientesBean.generaPassword()}" styleClass="edit-button" process="@this" update="pgPassEdit" />
+												</p:panelGrid>
+											</div>
+										</div>
 									</div>
-									<div class="p-field">
-										<p:outputLabel>Primer apellido</p:outputLabel>
-										<p:inputText value="#{clientesBean.contactoSelected.nbApellido1}" required="true" requiredMessage="Campo requerido" />
-									</div>
-									<div class="p-field">
-										<p:outputLabel>Segundo apellido</p:outputLabel>
-										<p:inputText value="#{clientesBean.contactoSelected.nbApellido2}" required="true" requiredMessage="Campo requerido" />
+									<div class="p-grid">
+										<div class="p-col-12 p-md-6 p-lg-4">
+											<div class="p-field">
+												<p:outputLabel>Estatus usuario</p:outputLabel>
+												<p:selectOneMenu value="#{clientesBean.clienteContactoSelected.stUsuario}">
+													<f:selectItem itemLabel="--Seleccione--" />
+													<f:selectItem itemLabel="Activo" itemValue="A" />
+													<f:selectItem itemLabel="Inactivo" itemValue="I" />
+													<f:selectItem itemLabel="Bloqueado" itemValue="L" />
+												</p:selectOneMenu>
+											</div>
+										</div>
+										<div class="p-col-12 p-md-6 p-lg-4">
+											<div class="p-field">
+												<p:outputLabel>Estatus</p:outputLabel>
+												<p:selectOneMenu value="#{clientesBean.clienteContactoSelected.stHabilitado}">
+													<f:selectItem itemLabel="Activo" itemValue="true" />
+													<f:selectItem itemLabel="Inactivo" itemValue="false" />
+												</p:selectOneMenu>
+											</div>
+										</div>
 									</div>
 
-									<p:dataTable lazy="true" value="#{clientesBean.contactoSelected.medioCntList}" var="medio" rowKey="#{medio.idMedio}">
+									<p:dataTable lazy="true" value="#{clientesBean.clienteContactoSelected.idContacto.medioCntList}" var="medio" rowKey="#{medio.idMedio}">
 										<f:facet name="header">
 											<div class="products-table-header">
 												<span style="font-weight: bold"></span> <span class="filter-container ui-input-icon-left"> </span> <span class="filter-container ui-input-icon-left"> <p:commandButton
 														actionListener="#{clientesBean.nuevoMedio()}" value="Agregar medio" icon="pi pi-plus" styleClass="ui-button-success" style="margin-right: .5rem" process="@this"
-														resetValues="true"
-														oncomplete="PF('dialogMedioContacto').show()" />
+														resetValues="true" update="form:pnlAddMedio" oncomplete="PF('dialogMedioContacto').show()" />
 												</span>
 											</div>
 										</f:facet>
@@ -230,52 +302,58 @@
 									<div class="p-field">
 										<p:outputLabel>Tipo de medio</p:outputLabel>
 										<p:selectOneMenu id="tpMedio" value="#{clientesBean.medioContactoSelected.tpMedio}">
-											<p:ajax process="@this tpMedio" update="pnlAddMedio"/>
-											<f:selectItem itemLabel="--Seleccione--"/>
-											<f:selectItem itemLabel="Teléfono" itemValue="t"/>
-											<f:selectItem itemLabel="Mail" itemValue="m"/>
+											<p:ajax process="@this tpMedio" update="pnlAddMedio" />
+											<f:selectItem itemLabel="--Seleccione--" />
+											<f:selectItem itemLabel="Teléfono" itemValue="t" />
+											<f:selectItem itemLabel="Mail" itemValue="m" />
+										</p:selectOneMenu>
+									</div>
+									<div class="p-field">
+										<p:outputLabel>Estatus</p:outputLabel>
+										<p:selectOneMenu id="soEstatusMedio" value="#{clientesBean.medioContactoSelected.stMedio}" required="true" requiredMessage="Campo requerido">
+											<f:selectItem itemLabel="Activo" itemValue="true" />
+											<f:selectItem itemLabel="Inactivo" itemValue="false" />
+											<p:ajax process="@this soEstatusMedio"/>
 										</p:selectOneMenu>
 									</div>
 									<div class="p-field" jsf:rendered="#{clientesBean.medioContactoSelected.tpMedio eq 'm'}">
 										<p:outputLabel>Tipo de mail</p:outputLabel>
 										<p:selectOneMenu value="#{clientesBean.medioContactoSelected.idMail.tpMail}" converter="entityConverter">
-											<f:selectItem itemLabel="--Seleccione--"/>
+											<f:selectItem itemLabel="--Seleccione--" />
 											<f:selectItems value="#{clientesBean.lstTipoMail}" var="mail" itemLabel="#{mail.nbTipo}" itemValue="#{mail}" />
-										</p:selectOneMenu>										
+										</p:selectOneMenu>
 									</div>
 									<div class="p-field" jsf:rendered="#{clientesBean.medioContactoSelected.tpMedio eq 't'}">
 										<p:outputLabel>Tipo de teléfono</p:outputLabel>
 										<p:selectOneMenu value="#{clientesBean.medioContactoSelected.idTelefono.tpTelefono}" converter="entityConverter">
-											<f:selectItem itemLabel="--Seleccione--"/>
-											<f:selectItems value="#{clientesBean.lstTipoTelefono}" var="telefono" itemLabel="#{telefono.nbTelefono}" itemValue="#{telefono}"/>
-										</p:selectOneMenu>									
+											<f:selectItem itemLabel="--Seleccione--" />
+											<f:selectItems value="#{clientesBean.lstTipoTelefono}" var="telefono" itemLabel="#{telefono.nbTelefono}" itemValue="#{telefono}" />
+										</p:selectOneMenu>
 									</div>
 									<div class="p-field" jsf:rendered="#{clientesBean.medioContactoSelected.tpMedio eq 't'}">
-										<p:outputLabel>Descripcion</p:outputLabel>
+										<p:outputLabel>Descripción</p:outputLabel>
 										<p:inputText value="#{clientesBean.medioContactoSelected.idTelefono.nbTelefono}" required="true" requiredMessage="Campo requerido" />
 									</div>
 									<div class="p-field" jsf:rendered="#{clientesBean.medioContactoSelected.tpMedio eq 't'}">
-										<p:outputLabel>Estatus</p:outputLabel>
-										<p:selectOneMenu value="#{clientesBean.medioContactoSelected.idTelefono.stPrincipal}" required="true" requiredMessage="Campo requerido">
-											<f:selectItem itemLabel="Activo" itemValue="1"/>
-											<f:selectItem itemLabel="Inactivo" itemValue="0"/>
-										</p:selectOneMenu>
+										<p:panelGrid columns="2" style="width:100%" styleClass="border-none">
+											<p:outputLabel>Principal</p:outputLabel>
+											<p:toggleSwitch value="#{clientesBean.medioContactoSelected.idTelefono.stPrincipal}" />
+										</p:panelGrid>
 									</div>
 									<div class="p-field" jsf:rendered="#{clientesBean.medioContactoSelected.tpMedio eq 'm'}">
-										<p:outputLabel>Descripcion</p:outputLabel>
+										<p:outputLabel>Descripción</p:outputLabel>
 										<p:inputText value="#{clientesBean.medioContactoSelected.idMail.nbMail}" required="true" requiredMessage="Campo requerido" />
 									</div>
 									<div class="p-field" jsf:rendered="#{clientesBean.medioContactoSelected.tpMedio eq 'm'}">
-										<p:outputLabel>Estatus</p:outputLabel>
-										<p:selectOneMenu value="#{clientesBean.medioContactoSelected.idMail.stPrincipal}" required="true" requiredMessage="Campo requerido">
-											<f:selectItem itemLabel="Activo" itemValue="1"/>
-											<f:selectItem itemLabel="Inactivo" itemValue="0"/>
-										</p:selectOneMenu>
+										<p:panelGrid columns="2" style="width:100%" styleClass="border-none">
+											<p:outputLabel>Principal</p:outputLabel>
+											<p:toggleSwitch value="#{clientesBean.medioContactoSelected.idMail.stPrincipal}" />
+										</p:panelGrid>
 									</div>
 								</p:outputPanel>
 							</p:outputPanel>
 							<f:facet name="footer">
-								<p:commandButton value="Guardar" icon="pi pi-check" process="@this pnlAddMedio" actionListener="#{clientesBean.guardaMedioContacto()}" update="pnlAddMedio"/>
+								<p:commandButton value="Guardar" icon="pi pi-check" process="@this pnlAddMedio" actionListener="#{clientesBean.guardaMedioContacto()}" update="pnlAddMedio" />
 								<p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogMedioContacto').hide()" class="ui-button-secondary" />
 							</f:facet>
 						</p:dialog>
@@ -294,14 +372,33 @@
 							<p:commandButton value="Sí" icon="pi pi-check" process="@this" actionListener="#{clientesBean.eliminarClienteContacto()}" oncomplete="PF('deleteContactoDialog').hide()" />
 							<p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('deleteContactoDialog').hide()" />
 						</p:confirmDialog>
-						
+
 						<p:confirmDialog widgetVar="deleteMedioContactoDialog" showEffect="fade" width="400" message="Desea eliminar el medio de contacto?" header="Eliminar" severity="warn">
-							<p:commandButton value="Sí" icon="pi pi-check" process="@this" actionListener="#{clientesBean.eliminarMedioContacto()}"  oncomplete="PF('deleteMedioContactoDialog').hide()" />
+							<p:commandButton value="Sí" icon="pi pi-check" process="@this" actionListener="#{clientesBean.eliminarMedioContacto()}" oncomplete="PF('deleteMedioContactoDialog').hide()" />
 							<p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('deleteMedioContactoDialog').hide()" />
 						</p:confirmDialog>
 					</div>
 				</div>
 			</div>
+			<style>
+body .ui-panelgrid .ui-panelgrid-cell {
+	border: none !important;
+	padding: 0px;
+}
+
+.ui-fluid .ui-password {
+	width: 90% !important;
+	display: inline-block !important;
+}
+
+body .ui-input-icon-right>i:last-of-type {
+	right: 1rem;
+}
+
+body .ui-input-icon-right>.ui-inputfield {
+	width: 100%;
+}
+</style>
 		</h:form>
 	</ui:define>
 </ui:composition>

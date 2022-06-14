@@ -27,6 +27,7 @@ import mx.com.ferbo.model.MedioCnt;
 import mx.com.ferbo.model.Telefono;
 import mx.com.ferbo.model.TipoMail;
 import mx.com.ferbo.model.TipoTelefono;
+import mx.com.ferbo.util.SecurityUtil;
 
 @Named
 @ViewScoped
@@ -42,7 +43,7 @@ public class ClientesBean implements Serializable {
 
 	private Cliente clienteSelected;
 	private ClienteContacto clienteContactoSelected;
-	private Contacto contactoSelected;
+//	private Contacto contactoSelected;
 	private MedioCnt medioContactoSelected;
 
 	private ClienteDAO clienteDAO;
@@ -51,6 +52,8 @@ public class ClientesBean implements Serializable {
 	private TipoMailDAO tipoMailDAO;
 	private TipoTelefonoDAO tipoTelefonoDAO;
 	private MedioCntDAO medioCntDAO;
+	
+	SecurityUtil util;
 
 	public ClientesBean() {
 		lstClienteContactoSelected = new ArrayList<>();
@@ -62,7 +65,10 @@ public class ClientesBean implements Serializable {
 		tipoTelefonoDAO = new TipoTelefonoDAO();
 		medioCntDAO = new MedioCntDAO();
 		nuevoCliente();
-		contactoSelected = new Contacto();
+//		contactoSelected = new Contacto();
+		clienteContactoSelected = new ClienteContacto();
+		medioContactoSelected = new MedioCnt();
+		util = new SecurityUtil();
 	}
 
 	@PostConstruct
@@ -103,8 +109,10 @@ public class ClientesBean implements Serializable {
 	 * Método para inicializar objeto tipo Contacto
 	 */
 	public void nuevoContacto(Cliente clienteSel) {
-		contactoSelected = new Contacto();
+//		contactoSelected = new Contacto();
 		clienteSelected = clienteSel;
+		clienteContactoSelected = new ClienteContacto();
+		clienteContactoSelected.setIdCliente(clienteSelected);
 		medioContactoSelected = new MedioCnt();
 	}
 
@@ -163,9 +171,9 @@ public class ClientesBean implements Serializable {
 	}
 
 	public void guardarContacto() {
-		if (contactoSelected.getIdContacto() == null) {
-			if (contactoDAO.guardarClienteContacto(contactoSelected, clienteSelected) == null) {
-				consultaClientes();
+		if (clienteContactoSelected.getId() == null) {
+			if (clienteContactoDAO.guardar(clienteContactoSelected) == null) {
+				clienteSelected.getClienteContactoList().add(clienteContactoSelected);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contacto Agregado"));
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -173,7 +181,7 @@ public class ClientesBean implements Serializable {
 			}
 			PrimeFaces.current().executeScript("PF('dialogAddContacto').hide()");
 		} else {
-			if (contactoDAO.actualizar(contactoSelected) == null) {
+			if (clienteContactoDAO.actualizar(clienteContactoSelected) == null) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contacto Actualizado"));
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -181,24 +189,23 @@ public class ClientesBean implements Serializable {
 			}
 			PrimeFaces.current().executeScript("PF('dialogEditContacto').hide()");
 		}
-		contactoSelected = null;
-		clienteSelected = null;
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes");
 	}
 
 	public void eliminarClienteContacto() {
 		if (clienteContactoDAO.eliminar(clienteContactoSelected) == null) {
-			consultaClientes();
+			clienteSelected.getClienteContactoList().remove(clienteContactoSelected);
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					"Ocurrió un error al intentar eliminar el Contacto"));
 		}
-		PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes");
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-clientes", "form:dt-clientes:dtContactos");
 
 	}
 
-	public void consultaContactos(Contacto contacto) {
-		contactoSelected = contacto;
+	public void consultaContactos(ClienteContacto clienteContacto) {
+//		contactoSelected = contacto;
+		clienteContactoSelected = clienteContacto;
 		PrimeFaces.current().ajax().update("form:dialogEditContacto", "form:pnlEditContacto");
 		PrimeFaces.current().executeScript("PF('dialogEditContacto').show();");
 
@@ -218,9 +225,9 @@ public class ClientesBean implements Serializable {
 
 	public void guardaMedioContacto() {
 		if (medioContactoSelected.getIdMedio() == null) {
-			medioContactoSelected.setIdContacto(contactoSelected);
+			medioContactoSelected.setIdContacto(clienteContactoSelected.getIdContacto());
 			if (medioCntDAO.guardaMedioCnt(medioContactoSelected) == null) {
-				contactoSelected.getMedioCntList().add(medioContactoSelected);
+				clienteContactoSelected.getIdContacto().getMedioCntList().add(medioContactoSelected);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Medio de contacto Agregado"));
 			}else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -242,7 +249,7 @@ public class ClientesBean implements Serializable {
 	
 	public void eliminarMedioContacto() {
 		if(medioCntDAO.eliminar(medioContactoSelected) == null) {
-			contactoSelected.getMedioCntList().remove(medioContactoSelected);
+			clienteContactoSelected.getIdContacto().getMedioCntList().remove(medioContactoSelected);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Medio de contacto Eliminado"));
 			
 		}else {
@@ -250,6 +257,10 @@ public class ClientesBean implements Serializable {
 					"Error", "Ocurrió un error al intentar eliminar el medio de contacto"));
 		}
 		PrimeFaces.current().ajax().update("form:messages", "form:pnlEditContacto");
+	}
+	
+	public void generaPassword() {
+		clienteContactoSelected.setNbPassword(util.getRandomString());
 	}
 
 	/**
@@ -293,14 +304,6 @@ public class ClientesBean implements Serializable {
 
 	public void setClienteContactoSelected(ClienteContacto clienteContactoSelected) {
 		this.clienteContactoSelected = clienteContactoSelected;
-	}
-
-	public Contacto getContactoSelected() {
-		return contactoSelected;
-	}
-
-	public void setContactoSelected(Contacto contactoSelected) {
-		this.contactoSelected = contactoSelected;
 	}
 
 	public List<TipoMail> getLstTipoMail() {

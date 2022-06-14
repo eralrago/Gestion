@@ -81,6 +81,8 @@ public class ClienteContacto implements Serializable {
     private Contacto idContacto;
 
     public ClienteContacto() {
+    	idCliente = new Cliente();
+    	idContacto = new Contacto();
     }
 
     public ClienteContacto(Integer id) {
