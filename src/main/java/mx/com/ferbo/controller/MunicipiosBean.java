@@ -16,6 +16,7 @@ import org.primefaces.PrimeFaces;
 import mx.com.ferbo.dao.EstadosDAO;
 import mx.com.ferbo.dao.MunicipiosDAO;
 import mx.com.ferbo.dao.PaisesDAO;
+
 import mx.com.ferbo.model.Estados;
 import mx.com.ferbo.model.EstadosPK;
 import mx.com.ferbo.model.Municipios;
@@ -35,7 +36,6 @@ public class MunicipiosBean implements Serializable {
 
 	private List<Municipios> listaMunicipiosSelect;
 
-	private Paises pais;
 	private Paises paisSelect;
 	private EstadosPK estadoPkSelect;
 	private Estados estadoSelect;
@@ -77,8 +77,8 @@ public class MunicipiosBean implements Serializable {
 	
 	public void guardarMunicipio() {
 		if (this.municipioSelect.getMunicipiosPK().getMunicipioCve() == 0) {
-			municipioPkSelect.setEstadoCve(idEstado);
-			municipioPkSelect.setPaisCve(idPais);
+//			municipioPkSelect.setEstadoCve(idEstado);
+//			municipioPkSelect.setPaisCve(idPais);
 			List<Municipios> listaMunicipioEstadoPais = municipiosDao.buscarPorCriterios(municipioSelect);
 			int tamanioListaMunicipioEstadoPais = listaMunicipioEstadoPais.size() + 1;
 			municipioPkSelect.setMunicipioCve(tamanioListaMunicipioEstadoPais);
@@ -107,7 +107,7 @@ public class MunicipiosBean implements Serializable {
 		if (municipiosDao.eliminar(municipioSelect) == null) {
 			this.listaEstados.remove(this.estadoSelect);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estado Eliminado"));
-			PrimeFaces.current().ajax().update("form:messages", "form:dt-Estado");
+			PrimeFaces.current().ajax().update("form:messages", "form:dt-Municipios");
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					"Ocurrió un error al intentar eliminar el Estado"));
@@ -174,14 +174,6 @@ public class MunicipiosBean implements Serializable {
 
 	public void setListaMunicipiosSelect(List<Municipios> listaMunicipiosSelect) {
 		this.listaMunicipiosSelect = listaMunicipiosSelect;
-	}
-
-	public Paises getPais() {
-		return pais;
-	}
-
-	public void setPais(Paises pais) {
-		this.pais = pais;
 	}
 
 	public Paises getPaisSelect() {
@@ -263,8 +255,5 @@ public class MunicipiosBean implements Serializable {
 	public void setIdEstado(int idEstado) {
 		this.idEstado = idEstado;
 	}
-
-	
-
 	
 }
