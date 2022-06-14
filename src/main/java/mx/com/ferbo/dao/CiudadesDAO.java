@@ -30,8 +30,9 @@ public class CiudadesDAO extends IBaseDAO<Ciudades, Integer> {
 		// TODO Auto-generated method stub
 		EntityManager em = EntityManagerUtil.getEntityManager();
 		if (e.getMunicipios().getMunicipiosPK().getMunicipioCve() > 0) {
-			TypedQuery<Ciudades> consEstados = em.createNamedQuery("Ciudades.findByMunicipioCve", Ciudades.class);
-			consEstados.setParameter("municipioCve", e.getMunicipios().getMunicipiosPK().getMunicipioCve());
+			TypedQuery<Ciudades> consEstados = em.createNamedQuery("Ciudades.findByTodo", Ciudades.class);
+			consEstados.setParameter("municipioCve", e.getMunicipios().getMunicipiosPK().getMunicipioCve())
+					.setParameter("estadoCve", e.getMunicipios().getEstados().getEstadosPK().getEstadoCve());
 			List<Ciudades> listado = consEstados.getResultList();
 			return listado;
 		} else {
@@ -65,7 +66,7 @@ public class CiudadesDAO extends IBaseDAO<Ciudades, Integer> {
 
 	public List<Ciudades> buscaPorId(Integer id) {
 		EntityManager em = EntityManagerUtil.getEntityManager();
-		return em.createNamedQuery("Ciudades.findByCiudadCve", Ciudades.class)
-				.setParameter("ciudadCve", id).getResultList();
+		return em.createNamedQuery("Ciudades.findByCiudadCve", Ciudades.class).setParameter("ciudadCve", id)
+				.getResultList();
 	}
 }

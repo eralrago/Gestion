@@ -292,9 +292,7 @@ public class DomiciliosBean implements Serializable {
 	public void filtraListadoAsentamientoHumano() {
 		Domicilios domicilioAux = new Domicilios();
 		domicilioAux.setCiudades(ciudadSelected);
-		// CiudadesPK ciudadesPKAux = new CiudadesPK();
-		// ciudadesPKAux.setCiudadCve(domicilioNuevo.getCiudades().getCiudadesPK().getCiudadCve());
-		// domicilioNuevo.getCiudades().setCiudadesPK();
+
 		System.out.println("Ciudades Seleccionada:" + domicilioAux.toString());
 
 		lstAsentamientoHumanoFiltered.clear();
@@ -302,11 +300,18 @@ public class DomiciliosBean implements Serializable {
 		AsentamientoHumanoPK coloniaPKAux = new AsentamientoHumanoPK();
 		coloniaAux.setAsentamientoHumanoPK(coloniaPKAux);
 		coloniaAux.getAsentamientoHumanoPK().setCiudadCve(ciudadSelected.getCiudadesPK().getCiudadCve());
-		// lstAsentamientoHumano = asentamientoHumanoDAO.buscarPorCriterios(coloniaAux);
+
 		lstAsentamientoHumano = asentamientoHumanoDAO.buscaPorDomicilio(domicilioAux);
 		lstAsentamientoHumanoFiltered = lstAsentamientoHumano;
 		System.out.println("Colonia Filtrados:" + lstAsentamientoHumanoFiltered.toString());
 		if (clienteDomicilioSelected.getDomicilios() != null) {
+			for(int i =0; i<lstAsentamientoHumanoFiltered.size();i++) {
+				if(lstAsentamientoHumanoFiltered.get(i).getAsentamientoHumanoPK().getAsentamientoCve()==clienteDomicilioSelected.getDomicilios().getDomicilioColonia()) {
+					Collections.swap(lstAsentamientoHumanoFiltered, 0,
+							lstAsentamientoHumanoFiltered.get(i).getAsentamientoHumanoPK().getAsentamientoCve());
+					i = lstAsentamientoHumanoFiltered.size();
+				}
+			}
 			Collections.swap(lstAsentamientoHumanoFiltered, 0,
 					clienteDomicilioSelected.getDomicilios().getDomicilioColonia());
 		}
