@@ -84,8 +84,6 @@
 									</span>
 								</div>
 							</f:facet>
-							<p:ajax event="rowSelect"
-								listener="#{domiciliosBean.seleccionaDomicilio}" />
 							<p:column headerText="Estado">
 								<h:outputText
 									value="#{pClienteDomicilios.domicilios.ciudades.municipios.estados.estadoDesc}" />
@@ -118,7 +116,7 @@
 								<p:commandButton icon="pi pi-pencil" process="@this"
 									styleClass="edit-button ui-button-primary"
 									oncomplete="PF('clienteDireccionesActDialog').show()"
-									update="form:panel-actClienteDireccion" actionListener="#{domiciliosBean.filtraListado()}">
+									update="form:panel-actClienteDireccion">
 									<f:setPropertyActionListener value="#{pClienteDomicilios}"
 										target="#{domiciliosBean.clienteDomicilioSelected}" />
 								</p:commandButton>
@@ -202,14 +200,13 @@
 												<f:selectItems
 													value="#{domiciliosBean.lstAsentamientoHumanoFiltered}"
 													var="colonia" itemLabel="#{colonia.asentamientoDs}" />
-												<p:ajax
-													listener="#{domiciliosBean.actualizaCodigoPostal()}" />
+												<p:ajax listener="#{domiciliosBean.actualizaCodigoPostal()}" update="codigoAdd"/>
 											</p:selectOneMenu>
 										</div>
 
 										<div class="p-field p-col">
-											<p:outputLabel>Código Postal</p:outputLabel>
-											<p:inputText
+											<p:outputLabel for="codigoAdd">Código Postal</p:outputLabel>
+											<p:inputText id="codigoAdd"
 												value="#{domiciliosBean.asentamientoHumanoSelected.cp}"
 												disabled="true" />
 										</div>
@@ -258,21 +255,25 @@
 							</f:facet>
 						</p:dialog>
 
+
+
 						<p:dialog header="Actualizar Dirección" showEffect="fade"
 							modal="true" widgetVar="clienteDireccionesActDialog"
-							responsive="true" id="actDireccionCliente">
+							responsive="true">
 							<p:outputPanel id="panel-actClienteDireccion" class="ui-fluid">
 								<p:outputPanel>
 									<div class="p-formgrid p-grid">
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="País" />
-											<p:selectOneMenu id="paísAct"
+											<p:outputLabel for="paisAct" value="País" />
+											<p:selectOneMenu id="paisAct"
 												value="#{domiciliosBean.paisSelected}"
 												converter="entityConverter" required="true"
 												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
 												<f:selectItems value="#{domiciliosBean.lstPaises}"
-													var="pais" itemLabel="#{pais.paisDesc}"/>
-												<p:ajax listener="#{domiciliosBean.filtraListadoEstados()}" update="estadoAct"/>
+													var="pais" itemLabel="#{pais.paisDesc}" />
+												<p:ajax listener="#{domiciliosBean.filtraListadoEstados()}"
+													update="estadoAct" />
 											</p:selectOneMenu>
 										</div>
 										<div class="p-field p-col">
@@ -281,10 +282,12 @@
 												value="#{domiciliosBean.estadoSelected}"
 												converter="entityConverter" required="true"
 												requiredMessage="Campo requerido">
+												<f:selectItem itemLabel="--Selecciona--" />
 												<f:selectItems value="#{domiciliosBean.lstEstadosFiltered}"
-													var="estado" itemLabel="#{estado.estadoDesc}"/>
+													var="estado" itemLabel="#{estado.estadoDesc}" />
 												<p:ajax
-													listener="#{domiciliosBean.filtraListadoMunicipios()}" update="municipioAct"/>
+													listener="#{domiciliosBean.filtraListadoMunicipios()}"
+													update="municipioAct" />
 											</p:selectOneMenu>
 										</div>
 									</div>
@@ -293,26 +296,27 @@
 											<p:outputLabel for="@next" value="Municipios" />
 											<p:selectOneMenu value="#{domiciliosBean.municipioSelected}"
 												converter="entityConverter" required="true"
-												requiredMessage="Campo requerido"
-												id="municipioAct">
+												requiredMessage="Campo requerido" id="municipioAct">
+												<f:selectItem itemLabel="--Selecciona--" />
 												<f:selectItems
 													value="#{domiciliosBean.lstMunicipiosFiltered}"
 													var="municipio" itemLabel="#{municipio.municipioDs}" />
-												<p:ajax listener="#{domiciliosBean.filtraListadoCiudades()}" update="ciudadAct"/>
+												<p:ajax listener="#{domiciliosBean.filtraListadoCiudades()}"
+													update="ciudadAct" />
 											</p:selectOneMenu>
 										</div>
 										<div class="p-field p-col">
 											<p:outputLabel for="@next" value="Ciudad" />
 											<p:selectOneMenu value="#{domiciliosBean.ciudadSelected}"
-											id="ciudadAct"
-												filter="true" filterMatchMode="contains"
+												id="ciudadAct" filter="true" filterMatchMode="contains"
 												converter="entityConverter" required="true"
 												requiredMessage="Campo requerido">
 												<f:selectItem itemLabel="--Selecciona--" />
 												<f:selectItems value="#{domiciliosBean.lstCiudadesFiltered}"
 													var="ciudad" itemLabel="#{ciudad.ciudadDs}" />
 												<p:ajax
-													listener="#{domiciliosBean.filtraListadoAsentamientoHumano()}" update="coloniaAct"/>
+													listener="#{domiciliosBean.filtraListadoAsentamientoHumano()}"
+													update="coloniaAct" />
 											</p:selectOneMenu>
 										</div>
 										<div class="p-field p-col">
@@ -326,46 +330,50 @@
 												<f:selectItems
 													value="#{domiciliosBean.lstAsentamientoHumanoFiltered}"
 													var="colonia" itemLabel="#{colonia.asentamientoDs}" />
+												<p:ajax
+													listener="#{domiciliosBean.filtraListadoAsentamientoHumano()}"
+													update="codigoAct" />
 											</p:selectOneMenu>
 										</div>
 
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="Código Postal" />
+											<p:outputLabel for="codigoAct" value="Código Postal" />
 											<p:inputText id="codigoAct"
-												value="#{domiciliosBean.clienteDomicilioSelected.domicilios.domicilioCp}" disabled = "true"/>
+												value="#{domiciliosBean.clienteDomicilioSelected.domicilios.domicilioCp}"
+												disabled="true" />
 										</div>
 									</div>
 									<div class="p-formgrid p-grid">
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="Calle" />
-											<p:inputText onchange="domiciliosBean.actualizaCalle()"
+											<p:outputLabel for="actCalle" value="Calle" />
+											<p:inputText id="actCalle"
 												value="#{domiciliosBean.clienteDomicilioSelected.domicilios.domicilioCalle}" />
 										</div>
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="Número Exterior" />
-											<p:inputText
+											<p:outputLabel for="actNumExt" value="Número Exterior" />
+											<p:inputText id="actNumExt"
 												value="#{domiciliosBean.clienteDomicilioSelected.domicilios.domicilioNumExt}" />
 										</div>
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="Número Interior" />
-											<p:inputText
+											<p:outputLabel for="actNumInt" value="Número Interior" />
+											<p:inputText id="actNumInt"
 												value="#{domiciliosBean.clienteDomicilioSelected.domicilios.domicilioNumInt}" />
 										</div>
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="Teléfono 1" />
-											<p:inputText
+											<p:outputLabel for="actTel1" value="Teléfono 1" />
+											<p:inputText maxlength="10" id="actTel1"
 												value="#{domiciliosBean.clienteDomicilioSelected.domicilios.domicilioTel1}" />
 										</div>
 									</div>
 									<div class="p-formgrid p-grid">
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="Teléfono 2" />
-											<p:inputText
+											<p:outputLabel for="actTel2" value="Teléfono 2" />
+											<p:inputText maxlength="10"  id="actTel2"
 												value="#{domiciliosBean.clienteDomicilioSelected.domicilios.domicilioTel2}" />
 										</div>
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="Fax" />
-											<p:inputText
+											<p:outputLabel for="actFax" value="Fax" />
+											<p:inputText id="actFax" maxlength="10"
 												value="#{domiciliosBean.clienteDomicilioSelected.domicilios.domicilioFax}" />
 										</div>
 									</div>
@@ -384,6 +392,7 @@
 									resetValues="true" />
 							</f:facet>
 						</p:dialog>
+
 						<p:confirmDialog widgetVar="deleteClienteDireccionesDialog"
 							showEffect="fade" width="400"
 							message="¿Desea eliminar esta dirección?" header="Eliminar"

@@ -3,6 +3,7 @@ package mx.com.ferbo.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EventListener;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,8 @@ import mx.com.ferbo.model.UnidadDeManejo;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.AjaxBehaviorListener;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -230,6 +233,9 @@ public class DomiciliosBean implements Serializable {
 				.collect(Collectors.toList());
 		System.out.println("Paises Filtrados:" + lstPaisesFiltered.toString());
 		System.out.println("Paises Filtrados:" + lstPaisesFiltered.get(150).toString());
+		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion", "form:panel-actClienteDireccion");
+
+
 	}
 
 	/**
@@ -262,7 +268,7 @@ public class DomiciliosBean implements Serializable {
 		lstMunicipios = municipiosDAO.buscarPorCriterios(municipioAux);
 		lstMunicipiosFiltered = lstMunicipios;
 		System.out.println("Municipios Filtrados:" + lstMunicipiosFiltered.toString());
-	
+		
 		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion", "form:panel-actClienteDireccion");
 
 	}
@@ -281,7 +287,6 @@ public class DomiciliosBean implements Serializable {
 		System.out.println("Ciudades Filtrados:" + lstCiudadesFiltered.toString());
 
 		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion", "form:panel-actClienteDireccion");
-
 
 	}
 
@@ -304,17 +309,8 @@ public class DomiciliosBean implements Serializable {
 		lstAsentamientoHumano = asentamientoHumanoDAO.buscaPorDomicilio(domicilioAux);
 		lstAsentamientoHumanoFiltered = lstAsentamientoHumano;
 		System.out.println("Colonia Filtrados:" + lstAsentamientoHumanoFiltered.toString());
-		if (clienteDomicilioSelected.getDomicilios() != null) {
-			for(int i =0; i<lstAsentamientoHumanoFiltered.size();i++) {
-				if(lstAsentamientoHumanoFiltered.get(i).getAsentamientoHumanoPK().getAsentamientoCve()==clienteDomicilioSelected.getDomicilios().getDomicilioColonia()) {
-					Collections.swap(lstAsentamientoHumanoFiltered, 0,
-							lstAsentamientoHumanoFiltered.get(i).getAsentamientoHumanoPK().getAsentamientoCve());
-					i = lstAsentamientoHumanoFiltered.size();
-				}
-			}
-			Collections.swap(lstAsentamientoHumanoFiltered, 0,
-					clienteDomicilioSelected.getDomicilios().getDomicilioColonia());
-		}
+		actualizaCodigoPostal();
+
 		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion", "form:panel-actClienteDireccion");
 
 	}
@@ -324,7 +320,10 @@ public class DomiciliosBean implements Serializable {
 	 */
 
 	public void actualizaCodigoPostal() {
-		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion", "form:panel-actClienteDireccion");
+		if(clienteDomicilioSelected.getDomicilios()!=null) {
+		clienteDomicilioSelected.getDomicilios().setDomicilioCp(asentamientoHumanoSelected.getCp());
+		}
+		PrimeFaces.current().ajax().update("form:panel-addClienteDireccion", "form:panel-actClienteDireccion","form:actCodigo");
 
 	}
 
@@ -401,12 +400,12 @@ public class DomiciliosBean implements Serializable {
 		domicilioNuevo.setCiudades(ciudadSelected);
 		domicilioNuevo.setDomicilioCp(asentamientoHumanoSelected.getCp());
 		domicilioNuevo.setDomicilioColonia(asentamientoHumanoSelected.getAsentamientoHumanoPK().getAsentamientoCve());
-		domicilioNuevo.setDomicilioCalle(domicilioNvoCalle);
-		domicilioNuevo.setDomicilioFax(domicilioNvoFax);
-		domicilioNuevo.setDomicilioNumExt(domicilioNvoNumExt);
-		domicilioNuevo.setDomicilioNumInt(domicilioNvoNumInt);
-		domicilioNuevo.setDomicilioTel1(domicilioNvoTel1);
-		domicilioNuevo.setDomicilioTel2(domicilioNvoTel2);
+		domicilioNuevo.setDomicilioCalle(clienteDomicilioSelected.getDomicilios().getDomicilioCalle());
+		domicilioNuevo.setDomicilioFax(clienteDomicilioSelected.getDomicilios().getDomicilioFax());
+		domicilioNuevo.setDomicilioNumExt(clienteDomicilioSelected.getDomicilios().getDomicilioNumExt());
+		domicilioNuevo.setDomicilioNumInt(clienteDomicilioSelected.getDomicilios().getDomicilioNumInt());
+		domicilioNuevo.setDomicilioTel1(clienteDomicilioSelected.getDomicilios().getDomicilioTel1());
+		domicilioNuevo.setDomicilioTel2(clienteDomicilioSelected.getDomicilios().getDomicilioTel2());
 		domicilioNuevo.setDomicilioTipoCve(tipoDomicilioSelected);
 		domicilioNuevo.setDomCve(clienteDomicilioSelected.getDomicilios().getDomCve());
 
@@ -443,6 +442,17 @@ public class DomiciliosBean implements Serializable {
 					"Ocurrió un error al intentar eliminar el domicilio"));
 		}
 		PrimeFaces.current().ajax().update("form:messages");
+	}
+	
+	/**
+	 * Método para pintar campos de actualización
+	 */
+	public void pintaActualiza() {
+		this.filtraListadoEstados();
+		this.filtraListadoMunicipios();
+		this.filtraListadoCiudades();
+		this.filtraListadoAsentamientoHumano();
+		this.actualizaCodigoPostal();
 	}
 
 	/**
