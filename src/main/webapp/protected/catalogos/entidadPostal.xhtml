@@ -4,7 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-	<ui:define name="title">Tipo de Asentamiento</ui:define>
+	<ui:define name="title">Entidad Postal</ui:define>
 
 	<ui:define name="content">
 		<h:form id="form">
@@ -14,15 +14,15 @@
 				<p:menuitem value="Catálogos" />
 				<p:menuitem value="Domicilios" />
 				<p:menuitem value="Cambios" />
-				<p:menuitem value="Tipo de Asentamiento" outcome="/protected/catalogos/tipoAsentamiento" />
+				<p:menuitem value="Entidad Postal" outcome="/protected/catalogos/entidadPostal" />
 			</p:breadCrumb>
 			<div class="p-grid button-demo">
 				<div class="p-col-12">
 					<div class="card">
 						<p:commandButton value="Agregar" icon="pi pi-plus"
-							actionListener="#{tipoAsentamientoBean.nuevoTipoAsentamiento}"
-							update="manage-settlementType-content-new form:manage-settlementType-content-new"
-							oncomplete="PF('nuevoTipoAsentamientoDialog').show()"
+							actionListener="#{entidadPostalBean.nuevoEntidadPostal}"
+							update="manage-postalEntity-content-new form:manage-postalEntity-content-new"
+							oncomplete="PF('nuevoEntidadPostalDialog').show()"
 							styleClass="p-mr-2 p-mb-2" process="@this" />
 					</div>
 				</div>
@@ -32,16 +32,16 @@
 				<div class="p-col-12">
 					<div class="card">
 						<p:growl id="messages" showDetail="true" />
-						<p:dataTable id="dt-TipoAsentamiento" widgetVar="dtTipoAsentamiento" var="tipoAsentamiento"
-							value="#{tipoAsentamientoBean.listaTipoAsentamiento}" reflow="true"
-							rowKey="#{tipoAsentamiento.tipoasntmntoDs}" paginator="true" rows="10"
+						<p:dataTable id="dt-EntidadPostal" widgetVar="dtEntidadPostal" var="entidadPostal"
+							value="#{entidadPostalBean.listaEntidadPostal}" reflow="true"
+							rowKey="#{entidadPostal.entidadpostalDs}" paginator="true" rows="10"
 							paginatorPosition="bottom" rowSelectMode="add">
 							<f:facet name="header">
 								<div class="customers-table-header">
-									<span style="font-weight: bold">Tipo de Asentamiento</span> <span
+									<span style="font-weight: bold">Entidad Postal</span> <span
 										class="ui-input-icon-left filter-container"> <i
 										class="pi pi-search" /> <p:inputText id="globalFilter"
-											onkeyup="PF('dtTipoAsentamiento').filter()" placeholder="Búsqueda" />
+											onkeyup="PF('dtEntidadPostal').filter()" placeholder="Búsqueda" />
 									</span>
 								</div>
 							</f:facet>
@@ -58,64 +58,59 @@
 
 							<p:column selectionMode="multiple" />
 
-							<p:column headerText="Tipo de Asentamiento" sortBy="#{tipoAsentamiento.tipoasntmntoDs}"
-								filterBy="#{tipoAsentamiento.tipoasntmntoDs}" style="text-align:center">
+							<p:column headerText="Entidad Postal" sortBy="#{entidadPostal.entidadpostalDs}"
+								filterBy="#{entidadPostal.entidadpostalDs}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{tipoAsentamiento.tipoasntmntoDs}" />
+									value="#{entidadPostal.entidadpostalDs}" />
 							</p:column>
 							<p:column headerText="Acción" style="text-align:center">
 								<p:commandButton icon="pi pi-pencil"
-									update=":form:manage-settlementType-content-new" value="Modificar"
-									oncomplete="PF('nuevoTipoAsentamientoDialog').show()"
+									update=":form:manage-postalEntity-content-new" value="Modificar"
+									oncomplete="PF('nuevoEntidadPostalDialog').show()"
 									styleClass="p-mr-2 p-mb-2" process="@this">
-									<f:setPropertyActionListener value="#{tipoAsentamiento}"
-										target="#{tipoAsentamientoBean.tipoAsentamientoSelect}" />
+									<f:setPropertyActionListener value="#{entidadPostal}"
+										target="#{entidadPostalBean.entidadPostalSelect}" />
 								</p:commandButton>
 								<p:commandButton value="Eliminar" styleClass="p-mr-2 p-mb-2"
 									icon="pi pi-trash" process="@this"
-									oncomplete="PF('deleteTipoAsentamientoDialog').show()">
-									<f:setPropertyActionListener value="#{tipoAsentamiento}"
-										target="#{tipoAsentamientoBean.tipoAsentamientoSelect}" />
+									oncomplete="PF('deleteEntidadPostalDialog').show()">
+									<f:setPropertyActionListener value="#{entidadPostal}"
+										target="#{entidadPostalBean.entidadPostalSelect}" />
 								</p:commandButton>
 							</p:column>
 						</p:dataTable>
 					</div>
 				</div>
 			</div>
-			<p:dialog header="Agregar/Editar un Tipo de Asentamiento" showEffect="fade"
-				modal="true" widgetVar="nuevoTipoAsentamientoDialog" responsive="true">
-				<p:outputPanel id="manage-settlementType-content-new" class="ui-fluid">
-					<p:outputPanel rendered="#{not empty tipoAsentamientoBean.tipoAsentamientoSelect}">
+			<p:dialog header="Agregar/Editar una Entidad Postal" showEffect="fade"
+				modal="true" widgetVar="nuevoEntidadPostalDialog" responsive="true">
+				<p:outputPanel id="manage-postalEntity-content-new" class="ui-fluid">
+					<p:outputPanel rendered="#{not empty entidadPostalBean.entidadPostalSelect}">
 						<div class="p-field">
-							<p:outputLabel for="tipoAsentamiento-new" value="Tipo de Asentamiento" />
-							<p:inputText id="tipoAsentamiento-new"
-								value="#{tipoAsentamientoBean.tipoAsentamientoSelect.tipoasntmntoDs}" required="true" />
-						</div>
-						<div class="p-field">
-							<p:outputLabel for="abreviacion-new" value="Abreviación" />
-							<p:inputText id="abreviacion-new"
-								value="#{tipoAsentamientoBean.tipoAsentamientoSelect.tipoasntmntoDsCorta}" required="true" />
+							<p:outputLabel for="entidadPostal-new" value="Entidad Postal" />
+							<p:inputText id="entidadPostal-new"
+								value="#{entidadPostalBean.entidadPostalSelect.entidadpostalDs}" required="true" />
 						</div>
 					</p:outputPanel>
 				</p:outputPanel>
 				<f:facet name="footer">
 					<p:commandButton value="Guardar" icon="pi pi-plus"
-						actionListener="#{tipoAsentamientoBean.guardarTipoAsentamiento()}"
-						update=":form:manage-settlementType-content-new"
+						actionListener="#{entidadPostalBean.guardarEntidadPostal()}"
+						update=":form:manage-postalEntity-content-new"
 						styleClass="p-mr-2 p-mb-2" />
 					<p:commandButton value="Cancelar" icon="pi pi-times"
-						onclick="PF('nuevoTipoAsentamientoDialog').hide()" class="ui-button-secondary" />
+						onclick="PF('nuevoEntidadPostalDialog').hide()" class="ui-button-secondary" />
 				</f:facet>
 			</p:dialog>
-			<p:confirmDialog widgetVar="deleteTipoAsentamientoDialog" showEffect="fade"
-				width="400" message="Desea eliminar el Tipo de Asentamiento?" header="Eliminar"
+			<p:confirmDialog widgetVar="deleteEntidadPostalDialog" showEffect="fade"
+				width="400" message="Desea eliminar la Entidad Postal?" header="Eliminar"
 				severity="warn">
 				<p:commandButton value="Sí" icon="pi pi-check"
-					actionListener="#{tipoAsentamientoBean.eliminandoTipoAsentamiento()}" process="@this"
-					oncomplete="PF('deleteTipoAsentamientoDialog').hide()" />
+					actionListener="#{entidadPostalBean.eliminandoEntidadPostal()}" process="@this"
+					oncomplete="PF('deleteEntidadPostalDialog').hide()" />
 				<p:commandButton value="No" type="button"
 					styleClass="ui-button-secondary" icon="pi pi-times"
-					onclick="PF('deleteTipoAsentamientoDialog').hide()" />
+					onclick="PF('deleteEntidadPostalDialog').hide()" />
 			</p:confirmDialog>
 			<p:confirmDialog global="true" showEffect="fade" width="400"
 				header="Eliminar">
