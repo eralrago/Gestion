@@ -119,8 +119,8 @@
 									<div class="p-field">
 										<p:outputLabel for="chkHabilitado" value="Habilitado" />
 										<p:selectOneMenu id="chkHabilitado" value="#{clientesBean.clienteSelected.habilitado}">
-											<f:selectItem itemLabel="Sí" itemValue="1" />
-											<f:selectItem itemLabel="No" itemValue="0" />
+											<f:selectItem itemLabel="Sí" itemValue="true" />
+											<f:selectItem itemLabel="No" itemValue="false" />
 										</p:selectOneMenu>
 									</div>
 									<div class="p-field">
@@ -167,7 +167,7 @@
 										<p:selectOneMenu id="soEstatusUsuario" value="#{clientesBean.clienteContactoSelected.stUsuario}">
 											<f:selectItem itemLabel="--Seleccione--" />
 											<f:selectItem itemLabel="Activo" itemValue="A" />
-											<f:selectItem itemLabel="Inactivo" itemValue="B" />
+											<f:selectItem itemLabel="Baja" itemValue="B" />
 											<f:selectItem itemLabel="Bloqueado" itemValue="L" />
 											<p:ajax process="@this soEstatusUsuario"/>
 										</p:selectOneMenu>

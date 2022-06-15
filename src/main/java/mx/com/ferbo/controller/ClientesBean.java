@@ -173,6 +173,7 @@ public class ClientesBean implements Serializable {
 	public void guardarContacto() {
 		if (clienteContactoSelected.getId() == null) {
 			if (clienteContactoDAO.guardar(clienteContactoSelected) == null) {
+				clienteContactoSelected.setNbPassword(util.getSHA512(clienteContactoSelected.getNbPassword()));
 				clienteSelected.getClienteContactoList().add(clienteContactoSelected);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contacto Agregado"));
 			} else {
