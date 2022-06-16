@@ -448,11 +448,44 @@ public class DomiciliosBean implements Serializable {
 	 * Método para pintar campos de actualización
 	 */
 	public void pintaActualiza() {
-		this.filtraListadoEstados();
-		this.filtraListadoMunicipios();
-		this.filtraListadoCiudades();
-		this.filtraListadoAsentamientoHumano();
-		this.actualizaCodigoPostal();
+		if(clienteDomicilioSelected != null && clienteDomicilioSelected.getDomicilios()!=null) {
+			AsentamientoHumano coloniaAux = new AsentamientoHumano();
+			coloniaAux.setCp(clienteDomicilioSelected.getDomicilios().getDomicilioCp());
+			List<AsentamientoHumano> lstColAux = this.asentamientoHumanoDAO.buscaPorCP(coloniaAux.getCp());
+			for(AsentamientoHumano as:lstColAux) {
+				if(as.getAsentamientoHumanoPK().getAsentamientoCve()==clienteDomicilioSelected.getDomicilios().getDomicilioColonia()) {
+					asentamientoHumanoSelected = as;
+					break;
+				}
+			}
+		}
+		this.actualizaPais();
+		this.actualizaEstado();
+		this.actualizaMunicipio();
+		this.actualizaCiudad();	
+		
+		PrimeFaces.current().ajax().update("form:actDireccionCliente");
+
+	}
+
+	public void actualizaCiudad() {
+		ciudadSelected = ciudadesDAO.buscaPorAsentamiento(asentamientoHumanoSelected).get(0);
+		PrimeFaces.current().ajax().update("form:coloniaAct");
+	}
+	
+	public void actualizaMunicipio() {
+		municipioSelected = municipiosDAO.buscaPorAsentamiento(asentamientoHumanoSelected).get(0);
+		PrimeFaces.current().ajax().update("form:ciudadAct");
+	}
+	
+	public void actualizaEstado(){
+		estadoSelected = estadosDAO.buscaPorAsentamiento(asentamientoHumanoSelected).get(0);
+		PrimeFaces.current().ajax().update("form:municipioAct");
+	}
+	
+	public void actualizaPais() {
+		paisSelected = paisesDAO.buscarPorId(asentamientoHumanoSelected.getAsentamientoHumanoPK().getPaisCve());
+		PrimeFaces.current().ajax().update("form:estadoAct");
 	}
 
 	/**

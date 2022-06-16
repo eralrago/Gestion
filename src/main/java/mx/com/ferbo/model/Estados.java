@@ -32,7 +32,9 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Estados.findByPaisCve", query = "SELECT e FROM Estados e WHERE e.estadosPK.paisCve = :paisCve"),
     @NamedQuery(name = "Estados.findByEstadoCve", query = "SELECT e FROM Estados e WHERE e.estadosPK.estadoCve = :estadoCve"),
     @NamedQuery(name = "Estados.findByEstadoDsCorta", query = "SELECT e FROM Estados e WHERE e.estadoDsCorta = :estadoDsCorta"),
-    @NamedQuery(name = "Estados.findByEstadoDesc", query = "SELECT e FROM Estados e WHERE e.estadoDesc = :estadoDesc")})
+    @NamedQuery(name = "Estados.findByEstadoDesc", query = "SELECT e FROM Estados e WHERE e.estadoDesc = :estadoDesc"),
+    @NamedQuery(name = "Estados.findByCriterios", query = "SELECT e FROM Estados e WHERE e.estadosPK.paisCve = :paisCve AND e.estadosPK.estadoCve = :estadoCve")})
+
 public class Estados implements Serializable {
 
     private static final long serialVersionUID = 1L;

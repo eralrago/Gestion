@@ -159,6 +159,7 @@
 													var="estado" itemLabel="#{estado.estadoDesc}" />
 												<p:ajax
 													listener="#{domiciliosBean.filtraListadoMunicipios()}" />
+
 											</p:selectOneMenu>
 										</div>
 									</div>
@@ -200,7 +201,8 @@
 												<f:selectItems
 													value="#{domiciliosBean.lstAsentamientoHumanoFiltered}"
 													var="colonia" itemLabel="#{colonia.asentamientoDs}" />
-												<p:ajax listener="#{domiciliosBean.actualizaCodigoPostal()}" update="codigoAdd"/>
+												<p:ajax listener="#{domiciliosBean.actualizaCodigoPostal()}"
+													update="codigoAdd" />
 											</p:selectOneMenu>
 										</div>
 
@@ -274,10 +276,12 @@
 													var="pais" itemLabel="#{pais.paisDesc}" />
 												<p:ajax listener="#{domiciliosBean.filtraListadoEstados()}"
 													update="estadoAct" />
+												<p:ajax event="blur"
+													listener="#{domiciliosBean.pintaActualiza()}"/>
 											</p:selectOneMenu>
 										</div>
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="Estados" />
+											<p:outputLabel for="estadoAct" value="Estados" />
 											<p:selectOneMenu id="estadoAct"
 												value="#{domiciliosBean.estadoSelected}"
 												converter="entityConverter" required="true"
@@ -293,7 +297,7 @@
 									</div>
 									<div class="p-formgrid p-grid">
 										<div class="p-field p-col">
-											<p:outputLabel for="@next" value="Municipios" />
+											<p:outputLabel for="municipioAct" value="Municipios" />
 											<p:selectOneMenu value="#{domiciliosBean.municipioSelected}"
 												converter="entityConverter" required="true"
 												requiredMessage="Campo requerido" id="municipioAct">
@@ -368,7 +372,7 @@
 									<div class="p-formgrid p-grid">
 										<div class="p-field p-col">
 											<p:outputLabel for="actTel2" value="Teléfono 2" />
-											<p:inputText maxlength="10"  id="actTel2"
+											<p:inputText maxlength="10" id="actTel2"
 												value="#{domiciliosBean.clienteDomicilioSelected.domicilios.domicilioTel2}" />
 										</div>
 										<div class="p-field p-col">

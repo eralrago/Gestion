@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
+import mx.com.ferbo.model.AsentamientoHumano;
 import mx.com.ferbo.model.Estados;
 import mx.com.ferbo.model.Municipios;
 import mx.com.ferbo.util.EntityManagerUtil;
@@ -68,6 +69,15 @@ public class MunicipiosDAO extends IBaseDAO<Municipios, Integer> {
 		EntityManager em = EntityManagerUtil.getEntityManager();
 		return em.createNamedQuery("Municipios.findByMunicipioCve", Municipios.class)
 				.setParameter("municipioCve", id).getResultList();
+	}
+	
+	public List<Municipios> buscaPorAsentamiento(AsentamientoHumano as) {
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		return em.createNamedQuery("Municipios.findByTodo", Municipios.class)
+				.setParameter("municipioCve", as.getAsentamientoHumanoPK().getMunicipioCve())
+				.setParameter("estadoCve", as.getAsentamientoHumanoPK().getEstadoCve())
+				.setParameter("paisCve", as.getAsentamientoHumanoPK().getPaisCve())
+				.getResultList();
 	}
 
 }

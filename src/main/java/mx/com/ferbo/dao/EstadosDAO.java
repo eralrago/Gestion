@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
+import mx.com.ferbo.model.AsentamientoHumano;
 import mx.com.ferbo.model.Estados;
 import mx.com.ferbo.util.EntityManagerUtil;
 
@@ -67,6 +68,13 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer> {
 		EntityManager em = EntityManagerUtil.getEntityManager();
 		return em.createNamedQuery("Estados.findByEstadoCve", Estados.class)
 				.setParameter("estadoCve", id).getResultList();
+	}
+	
+	public List<Estados> buscaPorAsentamiento(AsentamientoHumano as) {
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		return em.createNamedQuery("Estados.findByCriterios", Estados.class)
+				.setParameter("paisCve", as.getAsentamientoHumanoPK().getPaisCve())
+				.setParameter("estadoCve", as.getAsentamientoHumanoPK().getEstadoCve()).getResultList();
 	}
 
 }

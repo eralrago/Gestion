@@ -34,7 +34,10 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Ciudades.findByMunicipioCve", query = "SELECT c FROM Ciudades c WHERE c.ciudadesPK.municipioCve = :municipioCve"),
     @NamedQuery(name = "Ciudades.findByCiudadCve", query = "SELECT c FROM Ciudades c WHERE c.ciudadesPK.ciudadCve = :ciudadCve"),
     @NamedQuery(name = "Ciudades.findByCiudadDs", query = "SELECT c FROM Ciudades c WHERE c.ciudadDs = :ciudadDs"),
-	@NamedQuery(name = "Ciudades.findByTodo", query = "SELECT c FROM Ciudades c WHERE c.ciudadesPK.municipioCve = :municipioCve AND c.ciudadesPK.estadoCve = :estadoCve")})
+	@NamedQuery(name = "Ciudades.findByTodo", query = "SELECT c FROM Ciudades c WHERE c.ciudadesPK.municipioCve = :municipioCve AND c.ciudadesPK.estadoCve = :estadoCve AND c.ciudadesPK.ciudadCve = :ciudadCve"),
+	@NamedQuery(name = "Ciudades.findByEstadoMunicipioCve", query = "SELECT c FROM Ciudades c WHERE c.ciudadesPK.municipioCve = :municipioCve AND c.ciudadesPK.estadoCve = :estadoCve")})
+
+    
 
 public class Ciudades implements Serializable {
 

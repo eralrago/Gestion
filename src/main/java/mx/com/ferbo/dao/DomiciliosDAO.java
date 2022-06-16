@@ -37,7 +37,7 @@ public class DomiciliosDAO extends IBaseDAO<Domicilios, Integer> {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
 			em.createNativeQuery(
-					"update gestion.domicilios set ciudad_cve = :ciudadCve, estado_cve = :estadoCve, municipio_cve = :municipioCve, pais_cve = :paisCve,"
+					"update DOMICILIOS set ciudad_cve = :ciudadCve, estado_cve = :estadoCve, municipio_cve = :municipioCve, pais_cve = :paisCve,"
 							+ "domicilio_calle= :domicilioCalle, domicilio_colonia=:domicilioColonia, domicilio_cp=:domicilioCp, domicilio_fax=:domicilioFax"
 							+ ", domicilio_num_ext = :domicilioNumExt , domicilio_num_int = :domicilioNumInt , domicilio_tel1 = :domicilioTel1,"
 							+ "domicilio_tel2= :domicilioTel2, domicilio_tipo_cve = :domicilioTipoCve where dom_cve = :domCve")
