@@ -5,70 +5,66 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
-import mx.com.ferbo.model.Estados;
-import mx.com.ferbo.model.Paises;
+import mx.com.ferbo.model.AsentamientoHumano;
 import mx.com.ferbo.util.EntityManagerUtil;
 
-public class EstadosDAO extends IBaseDAO<Estados, Integer>{
+public class AsentamientoHumandoDAO extends IBaseDAO<AsentamientoHumano, Integer> {
 
 	@Override
-	public Estados buscarPorId(Integer id) {
+	public AsentamientoHumano buscarPorId(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Estados> buscarTodos() {
-		List<Estados> listado = null;
+	public List<AsentamientoHumano> buscarTodos() {
+		List<AsentamientoHumano> listado = null;
 		EntityManager em = EntityManagerUtil.getEntityManager();
-		listado = em.createNamedQuery("Estados.findAll", Estados.class).getResultList();
+		listado = em.createNamedQuery("AsentamientoHumano.findAll", AsentamientoHumano.class).getResultList();
 		return listado;
 	}
 
 	@Override
-	public List<Estados> buscarPorCriterios(Estados e) {
-		List<Estados> listado = null;
-		EntityManager em = EntityManagerUtil.getEntityManager();
-		listado = em.createNamedQuery("Estados.findByPaisCve", Estados.class).setParameter("paisCve", e.getPaises().getPaisCve()).getResultList();
-		return listado;
+	public List<AsentamientoHumano> buscarPorCriterios(AsentamientoHumano e) {		
+		return null;
 	}
 
 	@Override
-	public String actualizar(Estados estados) {
+	public String actualizar(AsentamientoHumano asentamientoHumano) {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.merge(estados);
+			em.merge(asentamientoHumano);
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
-			System.out.println("ERROR actualizando Estado" + e.getMessage());
+			System.out.println("ERROR guardando Asentamiento Humano" + e.getMessage());
 			return "ERROR";
 		}
 		return null;
 	}
 
 	@Override
-	public String guardar(Estados estados) {
+	public String guardar(AsentamientoHumano asentamientoHumano) {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.persist(estados);
+			em.persist(asentamientoHumano);
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
-			System.out.println("ERROR guardando Estado" + e.getMessage());
+			System.out.println("ERROR guardando Asentamiento Humano" + e.getMessage());
 			return "ERROR";
 		}
 		return null;
 	}
 
 	@Override
-	public String eliminar(Estados estados) {
+	public String eliminar(AsentamientoHumano AsentamientoHumano) {
 		try {
 			EntityManager em = EntityManagerUtil.getEntityManager();
 			em.getTransaction().begin();
-			em.remove(em.merge(estados));
+			em.remove(em.merge(AsentamientoHumano));
 			em.getTransaction().commit();
 			em.close();
 		} catch (Exception e) {
@@ -79,7 +75,7 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer>{
 	}
 
 	@Override
-	public String eliminarListado(List<Estados> listado) {
+	public String eliminarListado(List<AsentamientoHumano> listado) {
 		// TODO Auto-generated method stub
 		return null;
 	}
