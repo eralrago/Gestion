@@ -51,7 +51,8 @@ button.ui-button {
 													<f:selectItems value="#{posicionCamaraBean.plantas}"
 														var="plantas" itemLabel="#{plantas.plantaDs}"
 														itemValue="#{plantas}" />
-													<p:ajax listener="#{posicionCamaraBean.filtraListado()}" update="form:busqueda" />
+													<p:ajax listener="#{posicionCamaraBean.filtraListado()}"
+														update="form:busqueda" />
 												</p:selectOneMenu>
 
 											</div>
@@ -96,7 +97,8 @@ button.ui-button {
 						<p:dataTable id="dt-posiciones" widgetVar="dtposiciones"
 							value="#{posicionCamaraBean.listaPosiciones}" var="posiciones"
 							reflow="true" lazy="true" paginator="true" rows="10"
-							rowSelectMode="add" paginatorPosition="bottom">
+							selection="#{posicionCamaraBean.checkHabilitado}"
+							rowSelectMode="single" paginatorPosition="bottom">
 
 							<f:facet name="header">
 								<div class="posicionCamara-table-header"></div>
@@ -121,12 +123,17 @@ button.ui-button {
 								<h:outputText value="#{posiciones.tempFin}" />
 							</p:column>
 							<p:column headerText="Status">
-								<p:selectBooleanCheckbox value="#{posiciones.habilitada ? true: false}">
-								<p:ajax listener="#{posicionCamaraBean.checkHabilitada()}" />
+								<p:selectBooleanCheckbox value="#{posiciones.habilitada}">
 								</p:selectBooleanCheckbox>
-								
 							</p:column>
-
+							<p:column headerText="habilitar">
+								<p:commandButton value="Actualizar" icon="pi pi-check"
+									actionListener="#{posicionCamaraBean.check()}"
+									process="@this">
+									<f:setPropertyActionListener value="#{posiciones.habilitada}"
+									target="#{posicionCamaraBean.checkHabilitado}" />
+									</p:commandButton>
+							</p:column>
 						</p:dataTable>
 					</div>
 				</div>
@@ -143,11 +150,12 @@ button.ui-button {
 						<p:outputLabel for="@next" value="PLANTA: " />
 						<p:selectOneMenu id="plantaAgregar" converter="entityConverter"
 							value="#{posicionCamaraBean.nuevaPosicion.planta}">
-							<f:selectItem
-								itemLabel=""/>
+							<f:selectItem itemLabel="" />
 							<f:selectItems value="#{posicionCamaraBean.plantas}"
-								var="plantas" itemLabel="#{plantas.plantaDs}" itemValue="#{plantas}"/>
-								<p:ajax listener="#{posicionCamaraBean.filtrarAgregar()}" update="frm-agrega"/>
+								var="plantas" itemLabel="#{plantas.plantaDs}"
+								itemValue="#{plantas}" />
+							<p:ajax listener="#{posicionCamaraBean.filtrarAgregar()}"
+								update="frm-agrega" />
 						</p:selectOneMenu>
 					</div>
 					<div class="p-field">
@@ -155,7 +163,8 @@ button.ui-button {
 						<p:selectOneMenu id="camaraAgregar" converter="entityConverter"
 							value="#{posicionCamaraBean.nuevaPosicion.camara}">
 							<f:selectItem itemLabel="" />
-							<f:selectItems value="#{posicionCamaraBean.camaraPorPlantaAgregar}"
+							<f:selectItems
+								value="#{posicionCamaraBean.camaraPorPlantaAgregar}"
 								var="camaraPlanta" itemLabel="#{camaraPlanta.camaraDs}"
 								itemValue="#{camaraPlanta}" />
 						</p:selectOneMenu>
@@ -187,7 +196,8 @@ button.ui-button {
 					</div>
 					<div class="p-field">
 						<p:outputLabel for="@next">habilitado:</p:outputLabel>
-						<p:selectBooleanCheckbox value="#{posicionCamaraBean.nuevaPosicion.habilitada}"></p:selectBooleanCheckbox>
+						<p:selectBooleanCheckbox
+							value="#{posicionCamaraBean.nuevaPosicion.habilitada}"></p:selectBooleanCheckbox>
 					</div>
 
 
@@ -195,8 +205,8 @@ button.ui-button {
 
 				<f:facet name="footer">
 					<p:commandButton value="Agregar" icon="pi pi-check"
-						actionListener="#{posicionCamaraBean.save()}" update="dt-posiciones"
-						process="frm-agrega @this" />
+						actionListener="#{posicionCamaraBean.save()}"
+						update="dt-posiciones" process="frm-agrega @this" />
 					<p:commandButton value="Cancelar" icon="pi pi-times"
 						class="ui-button-secondary" oncomplete="PF('dg-agrega').hide()" />
 				</f:facet>

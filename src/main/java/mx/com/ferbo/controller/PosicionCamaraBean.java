@@ -39,6 +39,15 @@ public class PosicionCamaraBean implements Serializable {
 	private List<Camara> camaraPorPlanta;
 	private List<Camara> camaraPorPlantaAgregar;
 	private List<Posicion> listaPosiciones;
+	private Posicion checkHabilitado;
+
+	public Posicion getCheckHabilitado() {
+		return checkHabilitado;
+	}
+
+	public void setCheckHabilitado(Posicion checkHabilitado) {
+		this.checkHabilitado = checkHabilitado;
+	}
 
 	private Posicion nuevaPosicion;
 
@@ -52,6 +61,7 @@ public class PosicionCamaraBean implements Serializable {
 		camaraPorPlanta = new ArrayList<Camara>();
 		camaraPorPlantaAgregar = new ArrayList<Camara>();
 		listaPosiciones = posiciones;
+		checkHabilitado = new Posicion();
 	}
 
 	public void filtraListado() {
@@ -128,8 +138,32 @@ public class PosicionCamaraBean implements Serializable {
 		//PrimeFaces.current().ajax().update("form:busqueda");
 	}
 	
-	public void checkHabilitada() {
+	public void check() {
+		System.out.println(checkHabilitado.getHabilitada());
+		System.out.println("------------------------------------------------------------------------------");
+		if(checkHabilitado.getHabilitada() == true) {
+			checkHabilitado.setHabilitada(false);
+			System.out.println(checkHabilitado.getHabilitada() + "cambio a falso");
+		}else {
+			checkHabilitado.setHabilitada(true);
+			System.out.println(checkHabilitado.getHabilitada() + "cambio a true");
+		}
 		
+		String message = result.actualizar(checkHabilitado);
+		if (message == null) {
+			posiciones.clear();
+			posiciones = result.findAll();
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "se habilito ", null));
+			PrimeFaces.current().ajax().update("form:messages", "form:dtposiciones");
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo habilitar ", message));
+			PrimeFaces.current().ajax().update("form:messages");
+		}
+		this.checkHabilitado = new Posicion();
+		this.checkHabilitado.setPlanta(new Planta());
+		this.checkHabilitado.setCamara(new Camara());
 	}
 	
 	

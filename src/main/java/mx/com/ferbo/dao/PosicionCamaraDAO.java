@@ -80,9 +80,22 @@ public class PosicionCamaraDAO extends IBaseDAO<Posicion, Integer>{
 		return null;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public String actualizar(Posicion e) {
-		// TODO Auto-generated method stub
+		System.out.println(e + "ACTUALIZAR+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		try {
+			EntityManager entity = EntityManagerUtil.getEntityManager();
+			entity.getTransaction().begin();
+			Query actualizar = entity.createNativeQuery(" UPDATE posicion SET habilitada  = :habil WHERE id_posicion = :pos ") ;
+			actualizar.setParameter("habil", (e.getHabilitada() == true) ? 1 : 0);
+			actualizar.setParameter("pos", e.getIdPosicion());
+			actualizar.executeUpdate();
+			entity.getTransaction().commit();
+			entity.close();
+		} catch (Exception e2) {
+			return e2.getMessage();
+		}
 		return null;
 	}
 
