@@ -27,25 +27,30 @@ public class CiudadesDAO extends IBaseDAO<Ciudades, Integer> {
 		return listado;
 	}
 
-	@Override
-	public List<Ciudades> buscarPorCriterios(Ciudades e) {
-		List<Ciudades> listado = null;
-		EntityManager em = EntityManagerUtil.getEntityManager();
-		listado = em.createNamedQuery("Ciudades.findByPaisCveEstadoCveMunicipioCve", Ciudades.class).setParameter("paisCve", e.getCiudadesPK().getPaisCve()).setParameter("estadoCve", e.getCiudadesPK().getEstadoCve()).setParameter("municipioCve", e.getCiudadesPK().getMunicipioCve())
-		.getResultList();
-		return listado;
-	}
+//	@Override
+//	public List<Ciudades> buscarPorCriterios(Ciudades e) {
+//		List<Ciudades> listado = null;
+//		EntityManager em = EntityManagerUtil.getEntityManager();
+//		listado = em.createNamedQuery("Ciudades.findByPaisCveEstadoCveMunicipioCve", Ciudades.class).setParameter("paisCve", e.getCiudadesPK().getPaisCve()).setParameter("estadoCve", e.getCiudadesPK().getEstadoCve()).setParameter("municipioCve", e.getCiudadesPK().getMunicipioCve())
+//		.getResultList();
+//		return listado;
+//	}
 
 	@Override
 	public List<Ciudades> buscarPorCriterios(Ciudades e) {
 		// TODO Auto-generated method stub
+		List<Ciudades> listado = null;
 		EntityManager em = EntityManagerUtil.getEntityManager();
 		if (e.getMunicipios().getMunicipiosPK().getMunicipioCve() > 0) {
 			TypedQuery<Ciudades> consEstados = em.createNamedQuery("Ciudades.findByEstadoMunicipioCve", Ciudades.class);
 			consEstados.setParameter("municipioCve", e.getMunicipios().getMunicipiosPK().getMunicipioCve())
 					.setParameter("estadoCve", e.getMunicipios().getEstados().getEstadosPK().getEstadoCve());
-			List<Ciudades> listado = consEstados.getResultList();
+			listado = consEstados.getResultList();
 			return listado;
+		} else if (e.getCiudadesPK().getPaisCve() != -1 && e.getCiudadesPK().getEstadoCve() != -1 && e.getCiudadesPK().getMunicipioCve() != -1){
+			listado = em.createNamedQuery("Ciudades.findByPaisCveEstadoCveMunicipioCve", Ciudades.class).setParameter("paisCve", e.getCiudadesPK().getPaisCve()).setParameter("estadoCve", e.getCiudadesPK().getEstadoCve()).setParameter("municipioCve", e.getCiudadesPK().getMunicipioCve())
+					.getResultList();
+					return listado;
 		} else {
 			return null;
 		}

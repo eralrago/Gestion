@@ -27,13 +27,13 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer>{
 		return listado;
 	}
 
-	@Override
-	public List<Estados> buscarPorCriterios(Estados e) {
-		List<Estados> listado = null;
-		EntityManager em = EntityManagerUtil.getEntityManager();
-		listado = em.createNamedQuery("Estados.findByPaisCve", Estados.class).setParameter("paisCve", e.getPaises().getPaisCve()).getResultList();
-		return listado;
-	}
+//	@Override
+//	public List<Estados> buscarPorCriterios(Estados e) {
+//		List<Estados> listado = null;
+//		EntityManager em = EntityManagerUtil.getEntityManager();
+//		listado = em.createNamedQuery("Estados.findByPaisCve", Estados.class).setParameter("paisCve", e.getPaises().getPaisCve()).getResultList();
+//		return listado;
+//	}
 	@Override
 	public List<Estados> buscarPorCriterios(Estados e) {
 		// TODO Auto-generated method stub
@@ -45,7 +45,7 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer>{
 			return listado;
 		} else {
 			return null;
-		}
+		} 
 	}
 
 	@Override
