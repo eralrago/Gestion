@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
-import mx.com.ferbo.model.Cliente;
 import mx.com.ferbo.model.Paises;
 import mx.com.ferbo.util.EntityManagerUtil;
 
@@ -80,6 +79,12 @@ public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 	public String eliminarListado(List<Paises> listado) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public List<Paises> buscaPorId(Integer id) {
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		return em.createNamedQuery("Paises.findByPaisCve", Paises.class)
+				.setParameter("paisCve", id).getResultList();
 	}
 
 }

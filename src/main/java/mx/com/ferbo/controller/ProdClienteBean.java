@@ -155,7 +155,7 @@ public class ProdClienteBean implements Serializable {
 					"Ocurrió un error al intentar eliminar el Producto"));
 			PrimeFaces.current().ajax().update("form:messages");
 		}
-		
+
 	}
 
 	/**

@@ -15,7 +15,7 @@
 					outcome="/protected/catalogos/prodCliente" />
 			</p:breadCrumb>
 
-			<div class="p-grid crud-demo">
+			<div class="p-grid productosClientes">
 				<div class="p-col-12">
 					<div class="card">
 						<p:growl id="messages" showDetail="true" />
@@ -83,7 +83,7 @@
 									<f:setPropertyActionListener value="#{pProducto}"
 										target="#{prodClienteBean.prodClienteSelected}" />
 								</p:commandButton>
-								<p:commandButton class="ui-button-secondary" icon="pi pi-trash"
+								<p:commandButton class="ui-button-danger" icon="pi pi-trash"
 									value="Eliminar" process="@this"
 									oncomplete="PF('deleteProductoClienteDialog').show()">
 									<f:setPropertyActionListener value="#{pProducto}"
