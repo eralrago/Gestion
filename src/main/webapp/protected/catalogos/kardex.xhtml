@@ -19,20 +19,25 @@
 						<p:growl id="messages" showDetail="true" />
 						<div class="p-col-12">
 							<div class="card">
-								<span class="ui-float-label"> <p:inputText id="folio" />
-									<p:outputLabel for="@previous" value="Folio"
+								<span class="ui-float-label"> 
+								<p:outputLabel
+										for="@next" value="Folio"
 										styleClass="ui-float-label p-mr-2 p-mb-2" />
-										<p:button value="Buscar"
-									styleClass="ui-button-raised p-mr-2 p-mb-2" />
-								<p:button value="Limpiar"
-									styleClass="ui-button-raised p-mr-2 p-mb-2" />
-								</span>																
+										<p:inputText id="folio" value="#{kardexBean.constanciaDepositoSelected}"/> 
+										<p:commandButton id="buscarFolio"
+										icon="pi pi-search" process="@this folio"
+										styleClass="edit-button ui-button-primary" value="Buscar"
+										update="dt-entradasKardex" /> 
+										<p:ajax listener="#{kardexBeam.seleccionaFolio()}" event="click"/>
+										<p:commandButton
+										value="Limpiar" styleClass="edit-button ui-button-secondary" />
+								</span>
 							</div>
 
-							<p:dataTable var="dt-entradasKardex"
+							<p:dataTable var="pEntradas" id="dt-entradasKardex"
 								value="#{dataTableDemoView.products1}" paginator="true"
 								rows="10" paginatorPosition="bottom" rowKey="#{product.id}">
-								<p:headerRow field="Nombre">
+								<p:headerRow field="name">
 									<p:column colspan="6">
 										<div class="p-d-inline-flex p-ai-center"
 											style="vertical-align: middle">
