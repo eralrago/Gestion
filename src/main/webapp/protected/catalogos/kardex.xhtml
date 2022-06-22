@@ -20,63 +20,104 @@
 						<div class="p-col-12">
 							<div class="card">
 								<span class="ui-float-label"> <p:inputText id="folio" />
-									<p:outputLabel for="@previous" value="Folio" />
-								</span>
+									<p:outputLabel for="@previous" value="Folio"
+										styleClass="ui-float-label p-mr-2 p-mb-2" />
+										<p:button value="Buscar"
+									styleClass="ui-button-raised p-mr-2 p-mb-2" />
+								<p:button value="Limpiar"
+									styleClass="ui-button-raised p-mr-2 p-mb-2" />
+								</span>																
 							</div>
-							<p:dataTable var="product" value="#{dataTableDemoView.products1}"
-								paginator="true" rows="10" paginatorPosition="bottom"
-								rowKey="#{product.id}">
 
-								<p:ajax event="rowToggle" listener="#{crudDemoView.onRowToggle}" />
-
-								<p:column style="width:2rem">
+							<p:dataTable var="dt-entradasKardex"
+								value="#{dataTableDemoView.products1}" paginator="true"
+								rows="10" paginatorPosition="bottom" rowKey="#{product.id}">
+								<p:headerRow field="Nombre">
+									<p:column colspan="6">
+										<div class="p-d-inline-flex p-ai-center"
+											style="vertical-align: middle">
+											<h:outputText styleClass="p-ml-2" value="000001" />
+											<h:outputText styleClass="p-ml-2"
+												value="Almacenadora Mercader Alpezzi" />
+										</div>
+									</p:column>
+								</p:headerRow>
+								<p:column style="width:2rem" width="5">
 									<p:rowToggler />
 								</p:column>
 
-								<p:column headerText="Name" sortBy="#{product.name}">
-									<h:outputText value="#{product.name}" />
+								<p:column headerText="Fecha" width="40">
+									<h:outputText value="21-06-2022" />
 								</p:column>
 
-								<p:column headerText="Image">
-									<p:graphicImage name="demo/images/product/#{product.image}"
-										styleClass="p-shadow-2" width="100" />
+								<p:column headerText="Entrada" width="40">
+									<h:outputText value="F-Entrada1" />
 								</p:column>
 
-								<p:column headerText="Price" sortBy="#{product.price}">
-									<h:outputText value="$#{product.price}" />
+								<p:column headerText="Producto" width="120">
+									<h:outputText value="Harvest pride C Recto 7/16 13.610 KG" />
 								</p:column>
 
-								<p:column headerText="Category" sortBy="#{product.category}">
-									<h:outputText value="#{product.category}" />
+								<p:column headerText="Piezas Entrada" width="20">
+									<h:outputText value="40" />
 								</p:column>
 
-								<p:column headerText="Producto">
-									<p:rating value="#{product.rating}" readonly="true" />
+								<p:column headerText="Unidad" width="30">
+									<h:outputText value="Cajas" />
 								</p:column>
 
+								<p:column headerText="Kilos Entrada" width="30">
+									<h:outputText value="40" />
+								</p:column>
 
+								<p:column headerText="Planta" width="30">
+									<h:outputText value="1" />
+								</p:column>
+
+								<p:column headerText="Cámara" width="50">
+									<h:outputText value="156" />
+								</p:column>
 
 								<p:rowExpansion>
-									<div class="orders-subtable">
-
-										<p:dataTable var="order" value="#{product.orders}"
-											reflow="true" rowKey="#{order.id}">
-											<p:column headerText="Id" sortBy="#{order.id}">
-												<h:outputText value="#{order.id}" />
+									<div class="st-Salidas">
+										<p:dataTable var="dt-salidasKardex"
+											value="#{dataTableDemoView.products1}" paginator="true"
+											rows="10" paginatorPosition="bottom" rowKey="#{product.id}">
+											<p:column headerText="Fecha" width="30">
+												<h:outputText value="22-06-2022" />
+											</p:column>
+											<p:column headerText="Entrada" width="40">
+												<h:outputText value="F-Entrada1" />
 											</p:column>
 
-											<p:column headerText="Customer" sortBy="#{order.customer}">
-												<h:outputText value="#{order.customer}" />
+											<p:column headerText="Salida" width="30">
+												<h:outputText value="F-Salida1" />
 											</p:column>
-
-											<p:column headerText="Date" sortBy="#{order.date}">
-												<h:outputText value="#{order.date}" />
+											<p:column headerText="Producto" width="150">
+												<h:outputText value="Harvest pride C Recto 7/16 13.610 KG" />
 											</p:column>
-
+											<p:column headerText="Piezas Salida" width="30">
+												<h:outputText value="10" />
+											</p:column>
+											<p:column headerText="Unidad" width="30">
+												<h:outputText value="Cajas" />
+											</p:column>
+											<p:column headerText="Kilos Salida" width="30">
+												<h:outputText value="10" />
+											</p:column>
 										</p:dataTable>
+									</div>
+									<div class="card">
+										<div class="ui-fluid p-formgrid p-grid">
+											<div class="p-field p-col-12 p-md-6">
+												<p:outputLabel for="cdTotales" value="Totales" />
+												<h:outputText id="cdTotales" value="40" />
+											</div>
+										</div>
 									</div>
 								</p:rowExpansion>
 							</p:dataTable>
+
 
 						</div>
 					</div>
