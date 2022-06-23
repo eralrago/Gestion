@@ -25,6 +25,20 @@
 							oncomplete="PF('nuevoEstadoDialog').show()"
 							styleClass="p-mr-2 p-mb-2" process="@this" />
 					</div>
+					<div class="card">
+						<p:outputLabel for="states-som" value="Paises:" />
+							<p:selectOneMenu id="states-som" autoWidth="false"
+								value="#{estadosBean.idPais}">
+								<f:selectItem itemLabel="Selecione Pais" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems var="selectedStatesOne"
+									value="#{estadosBean.listaPaises}"
+									itemLabel="#{selectedStatesOne.paisDesc}"
+									itemValue="#{selectedStatesOne.paisCve}" />
+									<p:ajax listener="#{estadosBean.handleContrySelect()}" update="dt-Estados"/>
+							</p:selectOneMenu>
+							
+					</div>
 				</div>
 			</div>
 
@@ -57,7 +71,7 @@
 							<!-- 								update=":form:delete-Estados-button" /> -->
 
 							<p:column selectionMode="multiple" />
-							<p:column headerText="Estado" sortBy="#{estados.paises.paisDesc}"
+							<p:column headerText="Pais" sortBy="#{estados.paises.paisDesc}"
 								filterBy="#{estados.paises.paisDesc}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
 									value="#{estados.paises.paisDesc}" />
@@ -91,12 +105,18 @@
 				<p:outputPanel id="manage-state-content-new" class="ui-fluid">
 					<p:outputPanel rendered="#{not empty estadosBean.estadoSelect}">
 						<div class="p-field">
-						<p:outputLabel for="states" value="Paises:"/>
-						<p:selectOneMenu id="states" autoWidth="false" value="#{estadosBean.idPais}">
-							<f:selectItem itemLabel="Selecione Pais" itemValue="" noSelectionOption="true"/>
-							<f:selectItems var="selectedStates"  value="#{estadosBean.listaPaises}" itemLabel="#{selectedStates.paisDesc}" itemValue="#{selectedStates.paisCve}"/>
-							<p:ajax listener="#{estadosBean.handleContrySelect}" process="@this"/>
-						</p:selectOneMenu>
+							<p:outputLabel for="states" value="Paises:" />
+							<p:selectOneMenu id="states" autoWidth="false"
+								value="#{estadosBean.idPais}">
+								<f:selectItem itemLabel="Selecione Pais" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems var="selectedStates"
+									value="#{estadosBean.listaPaises}"
+									itemLabel="#{selectedStates.paisDesc}"
+									itemValue="#{selectedStates.paisCve}" />
+								<p:ajax listener="#{estadosBean.handleContrySelect}"
+									process="@this" />
+							</p:selectOneMenu>
 						</div>
 						<div class="p-field">
 							<p:outputLabel for="Estado-new" value="Estado" />
@@ -114,8 +134,7 @@
 				<f:facet name="footer">
 					<p:commandButton value="Guardar" icon="pi pi-plus"
 						actionListener="#{estadosBean.guardarEstado()}"
-						update=":form:manage-state-content-new"
-						styleClass="p-mr-2 p-mb-2" />
+						update=":form:manage-state-content-new" styleClass="p-mr-2 p-mb-2" />
 					<p:commandButton value="Cancelar" icon="pi pi-times"
 						onclick="PF('nuevoEstadoDialog').hide()"
 						class="ui-button-secondary" />

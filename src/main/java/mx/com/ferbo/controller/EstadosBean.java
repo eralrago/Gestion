@@ -50,12 +50,14 @@ public class EstadosBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		listaPaises = paisesDao.buscarTodos();
-		listaEstados = estadosDao.buscarTodos();
-
+//		listaEstados = estadosDao.buscarTodos();
+		this.paisSelect = new Paises();
+		this.estadoSelect = new Estados();
+		this.estadoPkSelect = new EstadosPK();
 	}
 
 	public void nuevoEstado() {
-		this.paisSelect = new Paises();
+//		this.paisSelect = new Paises();
 		this.estadoSelect = new Estados();
 		this.estadoPkSelect = new EstadosPK();
 		estadoSelect.setEstadosPK(estadoPkSelect);
@@ -112,6 +114,9 @@ public class EstadosBean implements Serializable {
 	public void handleContrySelect() {
 		if (this.idPais != -1) {
 			this.paisSelect.setPaisCve(idPais);
+			estadoSelect.setPaises(paisSelect);
+			listaEstados = estadosDao.buscarPorCriteriosEstados(estadoSelect);
+//			PrimeFaces.current().ajax().update("form:dtEstados");
 		}
 	}
 
