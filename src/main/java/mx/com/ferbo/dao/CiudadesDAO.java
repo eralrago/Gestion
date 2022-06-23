@@ -27,14 +27,13 @@ public class CiudadesDAO extends IBaseDAO<Ciudades, Integer> {
 		return listado;
 	}
 
-//	@Override
-//	public List<Ciudades> buscarPorCriterios(Ciudades e) {
-//		List<Ciudades> listado = null;
-//		EntityManager em = EntityManagerUtil.getEntityManager();
-//		listado = em.createNamedQuery("Ciudades.findByPaisCveEstadoCveMunicipioCve", Ciudades.class).setParameter("paisCve", e.getCiudadesPK().getPaisCve()).setParameter("estadoCve", e.getCiudadesPK().getEstadoCve()).setParameter("municipioCve", e.getCiudadesPK().getMunicipioCve())
-//		.getResultList();
-//		return listado;
-//	}
+	public List<Ciudades> buscarPorCriteriosCiudades(Ciudades e) {
+		List<Ciudades> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		listado = em.createNamedQuery("Ciudades.findByPaisCveEstadoCveMunicipioCve", Ciudades.class).setParameter("paisCve", e.getCiudadesPK().getPaisCve()).setParameter("estadoCve", e.getCiudadesPK().getEstadoCve()).setParameter("municipioCve", e.getCiudadesPK().getMunicipioCve())
+		.getResultList();
+		return listado;
+	}
 
 	@Override
 	public List<Ciudades> buscarPorCriterios(Ciudades e) {

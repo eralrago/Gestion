@@ -25,6 +25,44 @@
 							oncomplete="PF('nuevaCiudadDialog').show()"
 							styleClass="p-mr-2 p-mb-2" process="@this" />
 					</div>
+					<div class="card">
+						<p:outputLabel for="countries-som" value="Paises:" />
+						<p:selectOneMenu id="countries-som" autoWidth="false"
+							value="#{ciudadesBean.idPais}">
+							<f:selectItem itemLabel="Selecione Pais" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedCountriesOne"
+								value="#{ciudadesBean.listaPaises}"
+								itemLabel="#{selectedCountriesOne.paisDesc}"
+								itemValue="#{selectedCountriesOne.paisCve}" />
+							<p:ajax listener="#{ciudadesBean.handleContrySelect()}"
+								update="states-som" />
+						</p:selectOneMenu>
+						<p:outputLabel for="states-som" value="Estados:" />
+						<p:selectOneMenu id="states-som" autoWidth="false"
+							value="#{ciudadesBean.idEstado}">
+							<f:selectItem itemLabel="Selecione Estado" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedStatesOne"
+								value="#{ciudadesBean.listaEstados}"
+								itemLabel="#{selectedStatesOne.estadoDesc}"
+								itemValue="#{selectedStatesOne.estadosPK.estadoCve}" />
+							<p:ajax listener="#{ciudadesBean.handleStateSelect()}"
+								update="municipalities-som" />
+						</p:selectOneMenu>
+						<p:outputLabel for="municipalities-som" value="Municipios:" />
+						<p:selectOneMenu id="municipalities-som" autoWidth="false"
+							value="#{ciudadesBean.idMunicipio}">
+							<f:selectItem itemLabel="Selecione Municipio" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedMunicipalitiesOne"
+								value="#{ciudadesBean.listaMunicipios}"
+								itemLabel="#{selectedMunicipalitiesOne.municipioDs}"
+								itemValue="#{selectedMunicipalitiesOne.municipiosPK.municipioCve}" />
+							<p:ajax listener="#{ciudadesBean.handleMunicipalitySelect()}"
+								update="dt-Ciudades" />
+						</p:selectOneMenu>
+					</div>
 				</div>
 			</div>
 
@@ -109,11 +147,11 @@
 						</p:selectOneMenu>
 						</div>
 						<div class="p-field">
-						<p:outputLabel for="states" value="Estado:"/>
-						<p:selectOneMenu id="states" autoWidth="false" value="#{ciudadesBean.idEstado}">
+						<p:outputLabel for="municipalities" value="Estado:"/>
+						<p:selectOneMenu id="municipalities" autoWidth="false" value="#{ciudadesBean.idEstado}">
 							<f:selectItem itemLabel="Selecione Estado" itemValue="" noSelectionOption="true"/>
-							<f:selectItems var="selectedStates"  value="#{ciudadesBean.listaEstados}" itemLabel="#{selectedStates.estadoDesc}" itemValue="#{selectedStates.estadosPK.estadoCve}"/>
-							<p:ajax listener="#{ciudadesBean.handleStateSelect}" process="@this" update=":form:manage-city-content-new"/>
+							<f:selectItems var="selectedmunicipalities"  value="#{ciudadesBean.listaEstados}" itemLabel="#{selectedmunicipalities.estadoDesc}" itemValue="#{selectedmunicipalities.estadosPK.estadoCve}"/>
+							<p:ajax listener="#{ciudadesBean.handlemunicipalitieselect}" process="@this" update=":form:manage-city-content-new"/>
 						</p:selectOneMenu>
 						</div>
 						<div class="p-field">

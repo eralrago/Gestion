@@ -61,7 +61,7 @@ public class MunicipiosBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		listaPaises = paisesDao.buscarTodos();
-		listaEstados = estadosDao.buscarTodos();
+//		listaEstados = estadosDao.buscarTodos();
 //		listaMunicipios = municipiosDao.buscarTodos();
 		this.paisSelect = new Paises();
 		this.estadoSelect = new Estados();
