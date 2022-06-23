@@ -26,15 +26,15 @@
 							styleClass="p-mr-2 p-mb-2" process="@this" />
 					</div>
 					<div class="card">
-						<p:outputLabel for="states-som" value="Paises:" />
-							<p:selectOneMenu id="states-som" autoWidth="false"
+						<p:outputLabel for="countries-som" value="Paises:" />
+							<p:selectOneMenu id="countries-som" autoWidth="false"
 								value="#{estadosBean.idPais}">
 								<f:selectItem itemLabel="Selecione Pais" itemValue=""
 									noSelectionOption="true" />
-								<f:selectItems var="selectedStatesOne"
+								<f:selectItems var="selectedCountriesOne"
 									value="#{estadosBean.listaPaises}"
-									itemLabel="#{selectedStatesOne.paisDesc}"
-									itemValue="#{selectedStatesOne.paisCve}" />
+									itemLabel="#{selectedCountriesOne.paisDesc}"
+									itemValue="#{selectedCountriesOne.paisCve}" />
 									<p:ajax listener="#{estadosBean.handleContrySelect()}" update="dt-Estados"/>
 							</p:selectOneMenu>
 							

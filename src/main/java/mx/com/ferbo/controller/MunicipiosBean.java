@@ -62,7 +62,12 @@ public class MunicipiosBean implements Serializable {
 	public void init() {
 		listaPaises = paisesDao.buscarTodos();
 		listaEstados = estadosDao.buscarTodos();
-		listaMunicipios = municipiosDao.buscarTodos();
+//		listaMunicipios = municipiosDao.buscarTodos();
+		this.paisSelect = new Paises();
+		this.estadoSelect = new Estados();
+		this.estadoPkSelect = new EstadosPK();
+		this.municipioSelect = new Municipios();
+		this.municipioPkSelect = new MunicipiosPK();
 	}
 
 	public void nuevoMunicipio() {
@@ -118,21 +123,19 @@ public class MunicipiosBean implements Serializable {
 
 	public void handleContrySelect() {
 		if (this.idPais != -1) {
-			this.listaTmpEstados = new ArrayList<>();
-			for (Estados estados : listaEstados) {
-				if(estados.getEstadosPK().getPaisCve() == this.idPais) {
-					this.listaTmpEstados.add(estados);
-				}
-			}
-			listaEstados.clear();
-			listaEstados.addAll(listaTmpEstados);
+			this.paisSelect.setPaisCve(idPais);
+			estadoSelect.setPaises(paisSelect);
+			listaEstados = estadosDao.buscarPorCriteriosEstados(estadoSelect);
+//			PrimeFaces.current().ajax().update("form:dtEstados");
 		}
 	}
 	
 	public void handleStateSelect() {
 		if (this.idEstado != -1) {
-			this.estadoPkSelect.setEstadoCve(idEstado);
-			this.estadoSelect.setEstadosPK(estadoPkSelect);
+			this.municipioPkSelect.setPaisCve(idPais);
+			this.municipioPkSelect.setEstadoCve(idEstado);
+			this.municipioSelect.setMunicipiosPK(municipioPkSelect);
+			listaMunicipios = municipiosDao.buscarPorCriteriosMunicipios(municipioSelect);
 		}
 	}
 

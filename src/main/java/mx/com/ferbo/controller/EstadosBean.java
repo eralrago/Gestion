@@ -67,7 +67,7 @@ public class EstadosBean implements Serializable {
 		if (this.estadoSelect.getEstadosPK().getEstadoCve() == 0) {
 			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
 			estadoSelect.setEstadosPK(estadoPkSelect);
-			List<Estados> listaEstadosPais = estadosDao.buscarPorCriterios(estadoSelect);
+			List<Estados> listaEstadosPais = estadosDao.buscarPorCriteriosEstados(estadoSelect);
 			int tamanioListaEstadosPais = listaEstadosPais.size() + 1;
 			estadoPkSelect.setEstadoCve(tamanioListaEstadosPais);
 			estadoSelect.setEstadosPK(estadoPkSelect);

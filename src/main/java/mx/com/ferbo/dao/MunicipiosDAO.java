@@ -27,13 +27,12 @@ public class MunicipiosDAO extends IBaseDAO<Municipios, Integer> {
 		return listado;
 	}
 
-//	@Override
-//	public List<Municipios> buscarPorCriterios(Municipios e) {
-//		List<Municipios> listado = null;
-//		EntityManager em = EntityManagerUtil.getEntityManager();
-//		listado = em.createNamedQuery("Municipios.findByPaisCveEstadoCve", Municipios.class).setParameter("estadoCve", e.getMunicipiosPK().getEstadoCve()).setParameter("paisCve", e.getMunicipiosPK().getPaisCve()).getResultList();
-//		return listado;
-//	}
+	public List<Municipios> buscarPorCriteriosMunicipios(Municipios e) {
+		List<Municipios> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		listado = em.createNamedQuery("Municipios.findByPaisCveEstadoCve", Municipios.class).setParameter("estadoCve", e.getMunicipiosPK().getEstadoCve()).setParameter("paisCve", e.getMunicipiosPK().getPaisCve()).getResultList();
+		return listado;
+	}
 
 	@Override
 	public List<Municipios> buscarPorCriterios(Municipios e) {
