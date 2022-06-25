@@ -222,8 +222,8 @@ public class AsentamientoHumanoBean implements Serializable {
 			this.asentamientoHumanoPKSelect.setEntidadpostalCve(idEntidadPostal);
 			this.asentamientoHumanoPKSelect.setTipoasntmntoCve(idTipoAsentamiento);
 			this.asentamientoHumanoSelect.setAsentamientoHumanoPK(asentamientoHumanoPKSelect);
-			this.asentamientoHumanoSelect.getTipoAsentamiento().setTipoasntmntoCve(idTipoAsentamiento);
-			this.asentamientoHumanoSelect.getEntidadPostal().setEntidadpostalCve(idEntidadPostal);
+//			this.asentamientoHumanoSelect.getTipoAsentamiento().setTipoasntmntoCve(idTipoAsentamiento);
+//			this.asentamientoHumanoSelect.getEntidadPostal().setEntidadpostalCve(idEntidadPostal);
 			listaAsentamientoHumano = asentamientoHumandoDao.buscarPorCriterios(asentamientoHumanoSelect);
 		}
 	}
