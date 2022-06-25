@@ -99,9 +99,6 @@ public class CiudadesBean implements Serializable {
 	
 	public void guardarCiudad() {
 		if (this.ciudadSelect.getCiudadesPK().getCiudadCve() == 0) {
-//			ciudadPKSelect.setMunicipioCve(idMunicipio);
-//			ciudadPKSelect.setEstadoCve(idEstado);
-//			ciudadPKSelect.setPaisCve(idPais);
 			List<Ciudades> listaCiudadMunicipioEstadoPais = ciudadesDao.buscarPorCriterios(ciudadSelect);
 			int tamanioListaCiudadMunicipioEstadoPais = listaCiudadMunicipioEstadoPais.size() + 1;
 			ciudadPKSelect.setCiudadCve(tamanioListaCiudadMunicipioEstadoPais);

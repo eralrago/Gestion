@@ -8,7 +8,6 @@ import javax.persistence.TypedQuery;
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.AsentamientoHumano;
 import mx.com.ferbo.model.Estados;
-import mx.com.ferbo.model.Paises;
 import mx.com.ferbo.util.EntityManagerUtil;
 
 public class EstadosDAO extends IBaseDAO<Estados, Integer>{

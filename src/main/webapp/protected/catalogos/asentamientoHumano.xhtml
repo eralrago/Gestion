@@ -25,6 +25,56 @@
 							oncomplete="PF('nuevoAsentemientoHumanoDialog').show()"
 							styleClass="p-mr-2 p-mb-2" process="@this" />
 					</div>
+					<div class="card">
+						<p:outputLabel for="countries-som" value="Paises:" />
+						<p:selectOneMenu id="countries-som" autoWidth="false"
+							value="#{asentamientoHumanoBean.idPais}">
+							<f:selectItem itemLabel="Selecione Pais" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedCountriesOne"
+								value="#{asentamientoHumanoBean.listaPaises}"
+								itemLabel="#{selectedCountriesOne.paisDesc}"
+								itemValue="#{selectedCountriesOne.paisCve}" />
+							<p:ajax listener="#{asentamientoHumanoBean.handleContrySelect()}"
+								update="states-som" />
+						</p:selectOneMenu>
+						<p:outputLabel for="states-som" value="Estados:" />
+						<p:selectOneMenu id="states-som" autoWidth="false"
+							value="#{asentamientoHumanoBean.idEstado}">
+							<f:selectItem itemLabel="Selecione Estado" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedStatesOne"
+								value="#{asentamientoHumanoBean.listaEstados}"
+								itemLabel="#{selectedStatesOne.estadoDesc}"
+								itemValue="#{selectedStatesOne.estadosPK.estadoCve}" />
+							<p:ajax listener="#{asentamientoHumanoBean.handleStateSelect()}"
+								update="municipalities-som" />
+						</p:selectOneMenu>
+						<p:outputLabel for="municipalities-som" value="Municipios:" />
+						<p:selectOneMenu id="municipalities-som" autoWidth="false"
+							value="#{asentamientoHumanoBean.idMunicipio}">
+							<f:selectItem itemLabel="Selecione Municipio" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedMunicipalitiesOne"
+								value="#{asentamientoHumanoBean.listaMunicipios}"
+								itemLabel="#{selectedMunicipalitiesOne.municipioDs}"
+								itemValue="#{selectedMunicipalitiesOne.municipiosPK.municipioCve}" />
+							<p:ajax listener="#{asentamientoHumanoBean.handleMunicipalitySelect()}"
+								update="cities-som" />
+						</p:selectOneMenu>
+						<p:outputLabel for="cities-som" value="Ciudades:" />
+						<p:selectOneMenu id="cities-som" autoWidth="false"
+							value="#{asentamientoHumanoBean.idCiudad}">
+							<f:selectItem itemLabel="Selecione Ciudad" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedCitiesOne"
+								value="#{asentamientoHumanoBean.listaCiudades}"
+								itemLabel="#{selectedCitiesOne.ciudadDs}"
+								itemValue="#{selectedCitiesOne.ciudadesPK.ciudadCve}" />
+							<p:ajax listener="#{asentamientoHumanoBean.handleCitySelect()}"
+								update="dt-AsentamientoHumano" />
+						</p:selectOneMenu>
+					</div>
 				</div>
 			</div>
 
@@ -56,46 +106,46 @@
 							<!-- 							<p:ajax event="toggleSelect" -->
 							<!-- 								update=":form:delete-Ciudads-button" /> -->
 
-							<p:column selectionMode="multiple" />
+							<!-- <p:column selectionMode="multiple" />
 							<p:column headerText="Pais" sortBy="#{asentamientoHumano.asentamientoHumanoPK.paisCve}"
 								filterBy="#{asentamientoHumano.asentamientoHumanoPK.paisCve}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .2rem; margin-right: .2rem"
 									value="#{asentamientoHumano.asentamientoHumanoPK.paisCve}" />
 							</p:column>
 							<p:column headerText="Estado" sortBy="#{asentamientoHumano.asentamientoHumanoPK.estadoCve}"
-								filterBy="#{ciudades.municipios.estados.estadoDesc}" style="text-align:center">
+								filterBy="#{asentamientoHumano.asentamientoHumanoPK.estadoCve}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{ciudades.municipios.estados.estadoDesc}" />
+									value="#{asentamientoHumano.asentamientoHumanoPK.estadoCve}" />
 							</p:column>
 							<p:column headerText="Municipio" sortBy="#{asentamientoHumano.asentamientoHumanoPK.municipioCve}"
-								filterBy="#{ciudades.municipios.municipioDs}" style="text-align:center">
+								filterBy="#{asentamientoHumano.asentamientoHumanoPK.municipioCve}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{ciudades.municipios.municipioDs}" />
+									value="#{asentamientoHumano.asentamientoHumanoPK.municipioCve}" />
 							</p:column>
-							<p:column headerText="Ciudad" sortBy="#{ciudades.ciudadDs}"
-								filterBy="#{ciudades.ciudadDs}" style="text-align:center">
+							<p:column headerText="Ciudad" sortBy="#{asentamientoHumano.asentamientoHumanoPK.ciudadCve}"
+								filterBy="#{asentamientoHumano.asentamientoHumanoPK.ciudadCve}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{ciudades.ciudadDs}" />
+									value="#{asentamientoHumano.asentamientoHumanoPK.ciudadCve}" />
+							</p:column> -->
+							<p:column headerText="Tipo de Asentamiento" sortBy="#{asentamientoHumano.tipoAsentamiento.tipoasntmntoDs}"
+								filterBy="#{asentamientoHumano.tipoAsentamiento.tipoasntmntoDs}" style="text-align:center">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{asentamientoHumano.tipoAsentamiento.tipoasntmntoDs}" />
 							</p:column>
-							<p:column headerText="Tipo de Asentamiento" sortBy="#{ciudades.ciudadDs}"
-								filterBy="#{ciudades.ciudadDs}" style="text-align:center">
+							<p:column headerText="Entidad Postal" sortBy="#{asentamientoHumano.entidadPostal.entidadpostalDs}"
+								filterBy="#{asentamientoHumano.entidadPostal.entidadpostalDs}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{ciudades.ciudadDs}" />
+									value="#{asentamientoHumano.entidadPostal.entidadpostalDs}" />
 							</p:column>
-							<p:column headerText="Entidad Postal" sortBy="#{ciudades.ciudadDs}"
-								filterBy="#{ciudades.ciudadDs}" style="text-align:center">
+							<p:column headerText="Colonia" sortBy="#{asentamientoHumano.asentamientoDs}"
+								filterBy="#{asentamientoHumano.asentamientoDs}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{ciudades.ciudadDs}" />
+									value="#{asentamientoHumano.asentamientoDs}" />
 							</p:column>
-							<p:column headerText="Colonia" sortBy="#{ciudades.ciudadDs}"
-								filterBy="#{ciudades.ciudadDs}" style="text-align:center">
+							<p:column headerText="Código Postal" sortBy="#{asentamientoHumano.cp}"
+								filterBy="#{asentamientoHumano.cp}" style="text-align:center">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{ciudades.ciudadDs}" />
-							</p:column>
-							<p:column headerText="Código Postal" sortBy="#{ciudades.ciudadDs}"
-								filterBy="#{ciudades.ciudadDs}" style="text-align:center">
-								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{ciudades.ciudadDs}" />
+									value="#{asentamientoHumano.cp}" />
 							</p:column>
 							<p:column headerText="Acción" style="text-align:center">
 								<p:commandButton icon="pi pi-pencil"
@@ -107,7 +157,7 @@
 								</p:commandButton>
 								<p:commandButton value="Eliminar" styleClass="p-mr-2 p-mb-2"
 									icon="pi pi-trash" process="@this"
-									oncomplete="PF('deleteCiudadDialog').show()">
+									oncomplete="PF('deleteAsentamientoHumanoDialog').show()">
 									<f:setPropertyActionListener value="#{ciudades}"
 										target="#{asentamientoHumanoBean.ciudadSelect}" />
 								</p:commandButton>
@@ -119,7 +169,7 @@
 			<p:dialog header="Agregar/Editar un Ciudad" showEffect="fade"
 				modal="true" widgetVar="nuevoAsentemientoHumanoDialog" responsive="true">
 				<p:outputPanel id="manage-cologne-content-new" class="ui-fluid">
-					<p:outputPanel rendered="#{not empty asentamientoHumanoBean.ciudadSelect}">
+					<p:outputPanel rendered="#{not empty asentamientoHumanoBean.asentamientoHumanoSelect}">
 						<div class="p-field">
 						<p:outputLabel for="towns" value="Paises:"/>
 						<p:selectOneMenu id="towns" autoWidth="false" value="#{asentamientoHumanoBean.idPais}">
@@ -145,15 +195,56 @@
 						</p:selectOneMenu>
 						</div>
 						<div class="p-field">
-							<p:outputLabel for="Ciudad-new" value="Ciudad" />
-							<p:inputText id="Ciudad-new"
-								value="#{asentamientoHumanoBean.ciudadSelect.ciudadDs}" required="true" />
+							<p:outputLabel for="cities" value="Ciudades:" />
+						<p:selectOneMenu id="cities" autoWidth="false"
+							value="#{asentamientoHumanoBean.idCiudad}">
+							<f:selectItem itemLabel="Selecione Ciudad" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedCitiesOne"
+								value="#{asentamientoHumanoBean.listaCiudades}"
+								itemLabel="#{selectedCitiesOne.ciudadDs}"
+								itemValue="#{selectedCitiesOne.ciudadesPK.ciudadCve}" />
+						</p:selectOneMenu>
+						</div>
+						<div class="p-field">
+							<p:outputLabel for="settlementType" value="Tipo de Asentamiento:" />
+						<p:selectOneMenu id="settlementType" autoWidth="false"
+							value="#{asentamientoHumanoBean.idTipoAsentamiento}">
+							<f:selectItem itemLabel="Selecione Tipo de Asentamiento" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedSettlementTypeOne"
+								value="#{asentamientoHumanoBean.listaTipoAsentamiento}"
+								itemLabel="#{selectedSettlementTypeOne.tipoasntmntoDs}"
+								itemValue="#{selectedSettlementTypeOne.tipoasntmntoCve}" />
+						</p:selectOneMenu>
+						</div>
+						<div class="p-field">
+							<p:outputLabel for="postalEntity" value="Entidad Postal:" />
+						<p:selectOneMenu id="postalEntity" autoWidth="false"
+							value="#{asentamientoHumanoBean.idEntidadPostal}">
+							<f:selectItem itemLabel="Selecione Entidad Postal" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedPostalEntityOne"
+								value="#{asentamientoHumanoBean.listaEntidadPostal}"
+								itemLabel="#{selectedPostalEntityOne.entidadpostalDs}"
+								itemValue="#{selectedPostalEntityOne.entidadpostalCve}" />
+						</p:selectOneMenu>
+						</div>
+						<div class="p-field">
+							<p:outputLabel for="colonia-new" value="Colonia:" />
+							<p:inputText id="colonia-new"
+								value="#{asentamientoHumanoBean.asentamientoHumanoSelect.asentamientoDs}" required="true" />
+						</div>
+						<div class="p-field">
+							<p:outputLabel for="cp-new" value="Código Postal" />
+							<p:inputText id="cp-new"
+								value="#{asentamientoHumanoBean.asentamientoHumanoSelect.cp}" required="true" />
 						</div>
 					</p:outputPanel>
 				</p:outputPanel>
 				<f:facet name="footer">
 					<p:commandButton value="Guardar" icon="pi pi-plus"
-						actionListener="#{asentamientoHumanoBean.guardarCiudad()}"
+						actionListener="#{asentamientoHumanoBean.guardarAsentamientoHumano()}"
 						update=":form:manage-cologne-content-new"
 						styleClass="p-mr-2 p-mb-2" />
 					<p:commandButton value="Cancelar" icon="pi pi-times"
@@ -161,15 +252,15 @@
 						class="ui-button-secondary" />
 				</f:facet>
 			</p:dialog>
-			<p:confirmDialog widgetVar="deleteCiudadDialog" showEffect="fade"
-				width="400" message="Desea eliminar el Ciudad?" header="Eliminar"
+			<p:confirmDialog widgetVar="deleteAsentamientoHumanoDialog" showEffect="fade"
+				width="400" message="Desea eliminar la Colonia?" header="Eliminar"
 				severity="warn">
 				<p:commandButton value="Sí" icon="pi pi-check"
-					actionListener="#{asentamientoHumanoBean.eliminandoCiudad()}" process="@this"
+					actionListener="#{asentamientoHumanoBean.eliminandoAsentamientoHumano()}" process="@this"
 					oncomplete="PF('deleteCiudadDialog').hide()" />
 				<p:commandButton value="No" type="button"
 					styleClass="ui-button-secondary" icon="pi pi-times"
-					onclick="PF('deleteCiudadDialog').hide()" />
+					onclick="PF('deleteAsentamientoHumanoDialog').hide()" />
 			</p:confirmDialog>
 			<p:confirmDialog global="true" showEffect="fade" width="400"
 				header="Eliminar">
