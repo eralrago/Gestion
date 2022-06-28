@@ -51,7 +51,7 @@ public class PaisesBean implements Serializable {
 	
 	public void guardarPais() {
 		if (this.paisSelect.getPaisCve() == null) {
-			int tamanioListaPaises = listaPaises.size();
+			int tamanioListaPaises = listaPaises.size()+1;
 			paisSelect.setPaisCve(tamanioListaPaises);
 			if (paisesDao.guardar(paisSelect) == null) {
 				this.listaPaises.add(this.paisSelect);
