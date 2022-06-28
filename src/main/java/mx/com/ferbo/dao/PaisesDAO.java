@@ -2,9 +2,11 @@ package mx.com.ferbo.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import mx.com.ferbo.commons.dao.IBaseDAO;
-import mx.com.ferbo.model.Cliente;
 import mx.com.ferbo.model.Paises;
+import mx.com.ferbo.util.EntityManagerUtil;
 
 public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 
@@ -16,12 +18,10 @@ public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 
 	@Override
 	public List<Paises> buscarTodos() {
-		//TODO ESTEBAN. de manera temporal se inhabilitó esta parte de código para facilitar la compilación de las ramas,
-		//ya que la línea em.createNamedQuery(...) no tiene definido el objeto em.
-		//List<Paises> listado = null;
-		//listado = em.createNamedQuery("Paises.findAll", Paises.class).getResultList();
-		//return listado;
-		return null;
+		List<Paises> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		listado = em.createNamedQuery("Paises.findAll", Paises.class).getResultList();
+		return listado;
 	}
 
 	@Override
@@ -31,20 +31,47 @@ public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 	}
 
 	@Override
-	public String actualizar(Paises e) {
-		// TODO Auto-generated method stub
+	public String actualizar(Paises paises) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.merge(paises);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR actualizando Países" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String guardar(Paises e) {
-		// TODO Auto-generated method stub
+	public String guardar(Paises paises) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.persist(paises);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR guardando Países" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String eliminar(Paises e) {
-		// TODO Auto-generated method stub
+	public String eliminar(Paises paises) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.remove(em.merge(paises));
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
@@ -52,6 +79,12 @@ public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 	public String eliminarListado(List<Paises> listado) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public List<Paises> buscaPorId(Integer id) {
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		return em.createNamedQuery("Paises.findByPaisCve", Paises.class)
+				.setParameter("paisCve", id).getResultList();
 	}
 
 }

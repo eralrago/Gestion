@@ -24,6 +24,10 @@ import javax.validation.constraints.Size;
 @Table(name = "asentamiento_humano")
 @NamedQueries({
     @NamedQuery(name = "AsentamientoHumano.findAll", query = "SELECT a FROM AsentamientoHumano a"),
+//    @NamedQuery(name = "AsentamientoHumano.findAllTodos", query = "SELECT p, m, c, a FROM paises p INNER JOIN estados e ON p.pais_cve = e.pais_cve "
+//    															+ "INNER JOIN municipios m ON p.pais_cve = m.pais_cve AND e.estado_cve = m.estado_cve\r\n"
+//    															+ "INNER JOIN ciudades c ON p.pais_cve = c.pais_cve AND e.estado_cve = c.estado_cve AND m.municipio_cve = c.municipio_cve\r\n"
+//    															+ "INNER JOIN asentamiento_humano a ON p.pais_cve = a.pais_cve AND e.estado_cve = a.estado_cve AND m.municipio_cve = a.municipio_cve AND c.ciudad_cve = a.ciudad_cve"),
     @NamedQuery(name = "AsentamientoHumano.findByPaisCve", query = "SELECT a FROM AsentamientoHumano a WHERE a.asentamientoHumanoPK.paisCve = :paisCve"),
     @NamedQuery(name = "AsentamientoHumano.findByEstadoCve", query = "SELECT a FROM AsentamientoHumano a WHERE a.asentamientoHumanoPK.estadoCve = :estadoCve"),
     @NamedQuery(name = "AsentamientoHumano.findByMunicipioCve", query = "SELECT a FROM AsentamientoHumano a WHERE a.asentamientoHumanoPK.municipioCve = :municipioCve"),
@@ -33,6 +37,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "AsentamientoHumano.findByAsentamientoCve", query = "SELECT a FROM AsentamientoHumano a WHERE a.asentamientoHumanoPK.asentamientoCve = :asentamientoCve"),
     @NamedQuery(name = "AsentamientoHumano.findByAsentamientoDs", query = "SELECT a FROM AsentamientoHumano a WHERE a.asentamientoDs = :asentamientoDs"),
     @NamedQuery(name = "AsentamientoHumano.findByCp", query = "SELECT a FROM AsentamientoHumano a WHERE a.cp = :cp")})
+	@NamedQuery(name = "AsentamientoHumano.findByDomicilio", query = "SELECT a FROM AsentamientoHumano a WHERE a.asentamientoHumanoPK.paisCve = :paisCve and a.asentamientoHumanoPK.estadoCve = :estadoCve and a.asentamientoHumanoPK.municipioCve = :municipioCve and a.asentamientoHumanoPK.ciudadCve = :ciudadCve")
+
 public class AsentamientoHumano implements Serializable {
 
     private static final long serialVersionUID = 1L;

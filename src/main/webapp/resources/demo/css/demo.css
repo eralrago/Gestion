@@ -723,3 +723,13 @@ pre[class*=language-].line-numbers > code {
   padding-right: 0.8em;
   text-align: right;
 }
+
+
+.icon-varita{
+	background-image: url(/gestion/resources/omega-layout/images/ic_varita.png) !important;
+	width: 25px !important;
+    height: 25px !important;
+    top: 0.8rem !important;
+    left: 0.7rem !important;
+	background-size: cover;
+}

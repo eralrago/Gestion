@@ -31,6 +31,16 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
+			<name>org.springframework.ide.eclipse.boot.validation.springbootbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.hibernate.eclipse.console.hibernateBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
@@ -46,6 +56,8 @@
 		<nature>org.jboss.tools.cdi.core.cdinature</nature>
 		<nature>org.jboss.tools.jsf.jsfnature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
+		<nature>org.hibernate.eclipse.console.hibernateNature</nature>
+		<nature>org.jboss.tools.jsf.jsfnature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
@@ -59,4 +71,3 @@
 		</filter>
 	</filteredResources>
 </projectDescription>
-

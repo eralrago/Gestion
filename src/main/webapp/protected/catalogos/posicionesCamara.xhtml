@@ -128,11 +128,10 @@ button.ui-button {
 							</p:column>
 							<p:column headerText="habilitar">
 								<p:commandButton value="Actualizar" icon="pi pi-check"
-									actionListener="#{posicionCamaraBean.check()}"
-									process="@this">
+									actionListener="#{posicionCamaraBean.check()}" process="@this">
 									<f:setPropertyActionListener value="#{posiciones.habilitada}"
-									target="#{posicionCamaraBean.checkHabilitado}" />
-									</p:commandButton>
+										target="#{posicionCamaraBean.checkHabilitado}" />
+								</p:commandButton>
 							</p:column>
 						</p:dataTable>
 					</div>
