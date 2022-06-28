@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Mantenimiento</ui:define>
+
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Facturación" />
+				<p:menuitem value="Facturación" />
+				<p:menuitem value="Mantenimiento"
+					outcome="/protected/catalogos/facMantenimiento" />
+			</p:breadCrumb>
+
+			<div class="p-col-12">
+				<div class="card">
+
+					<p:growl id="messages" showDetail="true" />
+
+					<p:toolbar styleClass="p-mb-4">
+						<p:toolbarGroup>
+							<p:outputLabel value="De:" styleClass="p-mr-2" />
+							<p:datePicker value="" monthNavigator="true" yearNavigator="true"
+								showWeek="true" required="true" />
+							<p:outputLabel value="A:" styleClass="p-ml-6 p-mr-2" />
+							<p:datePicker value="#{facMantenimentoBean.hasta}" locale="de"
+								monthNavigator="true" yearNavigator="true" showWeek="true"
+								required="true" maxdate="#{facMantenimentoBean.hasta}" />
+							<p:outputLabel for="@next" value="Clientes:"
+								styleClass="p-ml-6 p-mr-2" />
+							<p:selectOneMenu value="#{facMantenimentoBean.clienteSelect}"
+								converter="entityConverter" filter="true"
+								filterMatchMode="startsWith">
+								<f:selectItem itemLabel="--Selecciona--" />
+								<f:selectItems value="#{facMantenimentoBean.listClientes}"
+									var="client" itemLabel="#{client.cteNombre}"
+									itemValue="#{client}" />
+								<p:ajax />
+							</p:selectOneMenu>
+							<p:commandButton value="Consultar"
+								styleClass="ui-button-secondary p-ml-6" icon="pi pi-search"
+								actionListener="#{facMantenimentoBean.findFacture()}"
+								update="dtSerieFac" process="@this" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:dataTable id="dtSerieFac" widgetVar="dtSerieFac" var="lista"
+						value="#{facMantenimentoBean.listFac}" rowKey="#{lista.id}"
+						reflow="true" selection="#{facMantenimentoBean.seleccion}"
+						rowSelectMode="single" paginator="true" rows="10"
+						paginatorPosition="bottom">
+
+						<f:facet name="header">
+							<div class="products-table-header">
+								<span style="font-weight: bold">Facturas</span>
+							</div>
+						</f:facet>
+
+						<p:column headerText="Factura" width="5%">
+							<h:outputText value="#{lista.numero}" />
+						</p:column>
+						<p:column headerText="Fecha">
+							<h:outputText value="#{lista.fecha}" />
+						</p:column>
+						<p:column headerText="Subtotal">
+							<h:outputText value="#{lista.subtotal}" />
+						</p:column>
+						<p:column headerText="IVA">
+							<h:outputText value="#{lista.iva}" />
+						</p:column>
+						<p:column headerText="Total">
+							<h:outputText value="#{lista.total}" />
+						</p:column>
+						<p:column headerText="Accion">
+							<p:commandButton value="Cancelar" icon="pi pi-times"
+								class="ui-button-danger" update="form:frm-cancel"
+								process="@this" oncomplete="PF('dg-delete').show()">
+								<f:setPropertyActionListener value="#{lista}"
+									target="#{facMantenimentoBean.seleccion}" />
+							</p:commandButton>
+
+						</p:column>
+					</p:dataTable>
+
+					<p:dialog header="Cancelar Factura" widgetVar="dg-delete"
+						modal="true" showEffect="fade" responsive="true">
+						<p:outputPanel id="frm-cancel" class="ui-fluid">
+							<div class="p-field">
+								<p:outputLabel>¿Desea cancelar la factura?</p:outputLabel>
+							</div>
+							<div class="p-field">
+								<p:outputLabel value="Motivo de la cancelación:" />
+								<p:inputTextarea
+									value="#{facMantenimentoBean.seleccion.observacion}"
+									required="true" />
+							</div>
+						</p:outputPanel>
+
+						<f:facet name="footer">
+							<p:commandButton value="Sí" icon="pi pi-check"
+								actionListener="#{facMantenimentoBean.cancelFacture()}"
+								update="frm-cancel" process="frm-cancel @this" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-button-secondary" icon="pi pi-times"
+								onclick="PF('dg-delete').hide()" />
+						</f:facet>
+					</p:dialog>
+
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

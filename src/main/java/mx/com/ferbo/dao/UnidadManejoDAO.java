@@ -2,8 +2,11 @@ package mx.com.ferbo.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.UnidadDeManejo;
+import mx.com.ferbo.util.EntityManagerUtil;
 
 public class UnidadManejoDAO extends IBaseDAO<UnidadDeManejo, Integer>{
 
@@ -16,6 +19,7 @@ public class UnidadManejoDAO extends IBaseDAO<UnidadDeManejo, Integer>{
 	@Override
 	public List<UnidadDeManejo> buscarTodos() {
 		List<UnidadDeManejo> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		listado = em.createNamedQuery("UnidadDeManejo.findAll", UnidadDeManejo.class).getResultList();
 		return listado;
 	}
