@@ -33,7 +33,11 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Municipios.findByPaisCve", query = "SELECT m FROM Municipios m WHERE m.municipiosPK.paisCve = :paisCve"),
     @NamedQuery(name = "Municipios.findByEstadoCve", query = "SELECT m FROM Municipios m WHERE m.municipiosPK.estadoCve = :estadoCve"),
     @NamedQuery(name = "Municipios.findByMunicipioCve", query = "SELECT m FROM Municipios m WHERE m.municipiosPK.municipioCve = :municipioCve"),
-    @NamedQuery(name = "Municipios.findByMunicipioDs", query = "SELECT m FROM Municipios m WHERE m.municipioDs = :municipioDs")})
+    @NamedQuery(name = "Municipios.findByMunicipioDs", query = "SELECT m FROM Municipios m WHERE m.municipioDs = :municipioDs"),
+	@NamedQuery(name = "Municipios.findByPaisCveEstadoCve", query = "SELECT m FROM Municipios m WHERE m.municipiosPK.paisCve = :paisCve AND m.municipiosPK.estadoCve = :estadoCve"),
+    //@NamedQuery(name = "Municipios.findByMunicipioDs", query = "SELECT m FROM Municipios m WHERE m.municipioDs = :municipioDs"),
+    @NamedQuery(name = "Municipios.findByTodo", query = "SELECT m FROM Municipios m WHERE m.municipiosPK.municipioCve = :municipioCve AND m.municipiosPK.estadoCve = :estadoCve AND m.municipiosPK.paisCve = :paisCve")})
+
 public class Municipios implements Serializable {
 
     private static final long serialVersionUID = 1L;

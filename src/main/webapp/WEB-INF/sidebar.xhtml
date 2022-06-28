@@ -113,8 +113,16 @@
                         <p:submenu id="frb_facturacion_sm1" label="Catálogos" icon="pi pi-fw pi-th-large">
                             <p:menuitem id="frb_facturacion_sm11" value="Banco" icon="pi pi-fw pi-money-bill" outcome="/protected/catalogos/bancos"/>
                             <p:submenu id="frb_facturacion_sm2" label="Domicilios" icon="pi pi-fw pi-building">
+                             <p:menuitem id="frb_facturacion_domicilioCliente" value="Domicilios por Cliente" icon="pi pi-fw pi-home" outcome="/protected/catalogos/domicilios"/>
+
 	                            <p:submenu id="frb_facturacion_sm21" label="Cambios" icon="pi pi-fw pi-pencil">
-	                            	<p:menuitem id="frb_facturacion_sm211" value="Localización" icon="pi pi-fw pi-globe" outcome="/protected/catalogos/localizacion"/>
+	                            	<p:menuitem id="frb_facturacion_sm211" value="País" icon="pi pi-fw pi-globe" outcome="/protected/catalogos/paises"/>
+	                            	<p:menuitem id="frb_facturacion_sm212" value="Estado" icon="pi pi-fw pi-globe" outcome="/protected/catalogos/estados"/>
+	                            	<p:menuitem id="frb_facturacion_sm213" value="Municipio / Alcadía" icon="pi pi-fw pi-globe" outcome="/protected/catalogos/municipios"/>
+	                            	<p:menuitem id="frb_facturacion_sm214" value="Ciudad" icon="pi pi-fw pi-globe" outcome="/protected/catalogos/ciudades"/>
+	                            	<p:menuitem id="frb_facturacion_sm215" value="Tipo de Asentamiento" icon="pi pi-fw pi-globe" outcome="/protected/catalogos/tipoAsentamiento"/>
+	                            	<p:menuitem id="frb_facturacion_sm216" value="Entidad Postal" icon="pi pi-fw pi-globe" outcome="/protected/catalogos/entidadPostal"/>
+	                            	<p:menuitem id="frb_facturacion_sm217" value="Colonia" icon="pi pi-fw pi-globe" outcome="/protected/catalogos/asentamientoHumano"/>
 	                            </p:submenu>
                             </p:submenu>
                             <p:menuitem id="frb_facturacion_sm15" value="Tipos de Pago" icon="pi pi-fw pi-credit-card" outcome="/protected/catalogos/tipoPago"/>
