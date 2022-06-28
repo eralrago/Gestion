@@ -16,9 +16,12 @@ public class PaisesDAO extends IBaseDAO<Paises, Integer> {
 
 	@Override
 	public List<Paises> buscarTodos() {
-		List<Paises> listado = null;
-		listado = em.createNamedQuery("Paises.findAll", Paises.class).getResultList();
-		return listado;
+		//TODO ESTEBAN. de manera temporal se inhabilitó esta parte de código para facilitar la compilación de las ramas,
+		//ya que la línea em.createNamedQuery(...) no tiene definido el objeto em.
+		//List<Paises> listado = null;
+		//listado = em.createNamedQuery("Paises.findAll", Paises.class).getResultList();
+		//return listado;
+		return null;
 	}
 
 	@Override
