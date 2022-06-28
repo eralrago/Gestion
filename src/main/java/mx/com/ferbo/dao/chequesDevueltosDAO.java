@@ -5,7 +5,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import mx.com.ferbo.util.EntityManagerUtil;
 import mx.com.ferbo.util.JPAEntity;
+import mx.com.ferbo.model.ChequeDevuelto;
+import mx.com.ferbo.model.Cliente;
+import mx.com.ferbo.model.Factura;
 import mx.com.ferbo.model.Planta;
 
 import mx.com.ferbo.util.JPAEntity;
@@ -16,18 +20,20 @@ public class chequesDevueltosDAO {
 	EntityManager entity = JPAEntity.getEntity().createEntityManager();
 	
 	@SuppressWarnings("unchecked")
-	public List<Posicion> findAll(){
-		List<Posicion> posiciones;
-		Query sql = entity.createNamedQuery("Posicion.findAll", Posicion.class);
-		posiciones = sql.getResultList();
-		System.out.println(posiciones + "*****************************************************");
-		return posiciones;
+	public List<ChequeDevuelto> findAll(){
+		List<ChequeDevuelto> cDevuelto;
+		Query sql = entity.createNamedQuery("ChequeDevuelto.findAll", ChequeDevuelto.class);
+		cDevuelto = sql.getResultList();
+		System.out.println(cDevuelto + "*****************************************************");
+		return cDevuelto;
 	}
 	
-	public List<Posicion> findIdPosicion() {
-		List<Posicion> idPosiciones = null;
-		Query sqlId = entity.createNamedQuery("Posicion.findByIdPosicion", Posicion.class);
-		return idPosiciones;
+	public List<Factura> findDacturas(Cliente c) {
+		EntityManager entity = EntityManagerUtil.getEntityManager();
+		@SuppressWarnings("unchecked")
+		List<Factura> list = entity.createQuery("SELECT f FROM Factura f WHERE f.cliente = :cliente")
+				.setParameter("cliente", c).getResultList();
+		return list;
 	}
 	
 	 

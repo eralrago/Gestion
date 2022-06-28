@@ -1,16 +1,13 @@
 package mx.com.ferbo.controller;
 
-import org.primefaces.PrimeFaces;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
-import mx.com.ferbo.dao.PosicionCamaraDAO;
-import mx.com.ferbo.model.Posicion;
+import mx.com.ferbo.dao.chequesDevueltosDAO;
+import mx.com.ferbo.model.ChequeDevuelto;
+import mx.com.ferbo.model.Cliente;
+import mx.com.ferbo.model.Factura;
 
 @Named
 @ViewScoped
@@ -18,80 +15,79 @@ public class ChequesDevueltosBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private PosicionCamaraDAO result;
-	private List<Posicion> posiciones;
-	private Posicion selectPosicion;
+	private chequesDevueltosDAO result;
+	private List<ChequeDevuelto> chequesDevueltos;
+	
+	private Cliente clienteSelect;
+	private List<Factura> listFac;
 	
 	
 
 
 	public ChequesDevueltosBean() {
-		result = new PosicionCamaraDAO();
-		this.posiciones = result.findAll();
+		result = new chequesDevueltosDAO();
+		this.chequesDevueltos = result.findAll();
+	}
+	
+	public void findFactura() {
+		listFac = result.findDacturas(clienteSelect);
 	}
 
 
-	public List<Posicion> getAll() {
+	public List<ChequeDevuelto> getAll() {
 		return result.findAll();
 	}
+	
+	public void statusFactura() {
+		
+	}
 
 
-	public PosicionCamaraDAO getResult() {
+	public chequesDevueltosDAO getResult() {
 		return result;
 	}
 
 
-	public void setResult(PosicionCamaraDAO result) {
+	public void setResult(chequesDevueltosDAO result) {
 		this.result = result;
 	}
 
 
-	public List<Posicion> getPosiciones() {
-		return posiciones;
+	public List<ChequeDevuelto> getChequesDevueltos() {
+		return chequesDevueltos;
 	}
 
 
-	public void setPosiciones(List<Posicion> posiciones) {
-		this.posiciones = posiciones;
+	public void setChequesDevueltos(List<ChequeDevuelto> chequesDevueltos) {
+		this.chequesDevueltos = chequesDevueltos;
 	}
 
 
-	public Posicion getSelectPosicion() {
-		return selectPosicion;
+	public Cliente getClienteSelect() {
+		return clienteSelect;
 	}
 
 
-	public void setSelectPosicion(Posicion selectPosicion) {
-		this.selectPosicion = selectPosicion;
+	public void setClienteSelect(Cliente clienteSelect) {
+		this.clienteSelect = clienteSelect;
 	}
 
+	public List<Factura> getListFac() {
+		return listFac;
+	}
 
+	public void setListFac(List<Factura> listFac) {
+		this.listFac = listFac;
+	}
 	
 	
 	
 	
+	
+	
 
-	/*public Planta getOne(int id) {
-		Planta p = new Planta();
-		p = result.findOne(id);
+	
 
-		System.out.println("---------------------------------");
-		System.out.println(p.getPlantaDs());
 
-		return p;
-	}
-
-	public void deleteOne(Planta p) {
-		result.delete(p);
-		principal.remove(p);
-		// return "/protected/catalogos/plantas.xhtml";
-	}
-
-	public List<Planta> getPrincipal() {
-		return principal;
-	}
-
-	public void setPrincipal(List<Planta> principal) {
-		this.principal = principal;
-	}*/
+	
 }
