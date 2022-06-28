@@ -26,9 +26,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "UNIDAD_DE_PRODUCTO")
 @NamedQueries({
-    @NamedQuery(name = "UnidadDeProducto.findAll", query = "SELECT u FROM UnidadDeProducto u"),
-    @NamedQuery(name = "UnidadDeProducto.findByUnidadDeProductoCve", query = "SELECT u FROM UnidadDeProducto u WHERE u.unidadDeProductoCve = :unidadDeProductoCve"),
-    @NamedQuery(name = "UnidadDeProducto.findByProductoCve", query = "SELECT u FROM UnidadDeProducto u WHERE u.productoCve = :productoCve")})
+        @NamedQuery(name = "UnidadDeProducto.findAll", query = "SELECT u FROM UnidadDeProducto u"),
+        @NamedQuery(name = "UnidadDeProducto.findByUnidadDeProductoCve", query = "SELECT u FROM UnidadDeProducto u WHERE u.unidadDeProductoCve = :unidadDeProductoCve"),
+        @NamedQuery(name = "UnidadDeProducto.findByProductoCve", query = "SELECT u FROM UnidadDeProducto u WHERE u.productoCve = :productoCve") })
 public class UnidadDeProducto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,13 +37,17 @@ public class UnidadDeProducto implements Serializable {
     @Basic(optional = false)
     @Column(name = "UNIDAD_DE_PRODUCTO_CVE")
     private Integer unidadDeProductoCve;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PRODUCTO_CVE")
-    private int productoCve;
+    // @Basic(optional = false)
+    // @NotNull
+    // @Column(name = "PRODUCTO_CVE")
+    // private int productoCve;
     @JoinColumn(name = "UNIDAD_DE_MANEJO_CVE", referencedColumnName = "UNIDAD_DE_MANEJO_CVE")
     @ManyToOne(optional = false)
     private UnidadDeManejo unidadDeManejoCve;
+
+    @JoinColumn(name = "PRODUCTO_CVE", referencedColumnName = "PRODUCTO_CVE")
+    @ManyToOne(optional = false)
+    private Producto productoCve;
 
     public UnidadDeProducto() {
     }
@@ -54,7 +58,8 @@ public class UnidadDeProducto implements Serializable {
 
     public UnidadDeProducto(Integer unidadDeProductoCve, int productoCve) {
         this.unidadDeProductoCve = unidadDeProductoCve;
-        this.productoCve = productoCve;
+        this.productoCve = new Producto();
+
     }
 
     public Integer getUnidadDeProductoCve() {
@@ -65,20 +70,20 @@ public class UnidadDeProducto implements Serializable {
         this.unidadDeProductoCve = unidadDeProductoCve;
     }
 
-    public int getProductoCve() {
-        return productoCve;
-    }
-
-    public void setProductoCve(int productoCve) {
-        this.productoCve = productoCve;
-    }
-
     public UnidadDeManejo getUnidadDeManejoCve() {
         return unidadDeManejoCve;
     }
 
     public void setUnidadDeManejoCve(UnidadDeManejo unidadDeManejoCve) {
         this.unidadDeManejoCve = unidadDeManejoCve;
+    }
+
+    public Producto getProductoCve() {
+        return productoCve;
+    }
+
+    public void setProductoCve(Producto productoCve) {
+        this.productoCve = productoCve;
     }
 
     @Override
@@ -95,7 +100,8 @@ public class UnidadDeProducto implements Serializable {
             return false;
         }
         UnidadDeProducto other = (UnidadDeProducto) object;
-        if ((this.unidadDeProductoCve == null && other.unidadDeProductoCve != null) || (this.unidadDeProductoCve != null && !this.unidadDeProductoCve.equals(other.unidadDeProductoCve))) {
+        if ((this.unidadDeProductoCve == null && other.unidadDeProductoCve != null)
+                || (this.unidadDeProductoCve != null && !this.unidadDeProductoCve.equals(other.unidadDeProductoCve))) {
             return false;
         }
         return true;
@@ -105,5 +111,5 @@ public class UnidadDeProducto implements Serializable {
     public String toString() {
         return "mx.com.ferbo.model.UnidadDeProducto[ unidadDeProductoCve=" + unidadDeProductoCve + " ]";
     }
-    
+
 }
