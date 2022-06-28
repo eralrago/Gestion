@@ -190,7 +190,6 @@ public class AsentamientoHumanoBean implements Serializable {
 			this.paisSelect.setPaisCve(idPais);
 			estadoSelect.setPaises(paisSelect);
 			listaEstados = estadosDao.buscarPorCriteriosEstados(estadoSelect);
-//			PrimeFaces.current().ajax().update("form:dtEstados");
 		}
 	}
 	
@@ -219,8 +218,12 @@ public class AsentamientoHumanoBean implements Serializable {
 			this.asentamientoHumanoPKSelect.setEstadoCve(idEstado);
 			this.asentamientoHumanoPKSelect.setMunicipioCve(idMunicipio);
 			this.asentamientoHumanoPKSelect.setCiudadCve(idCiudad);
-			this.asentamientoHumanoPKSelect.setEntidadpostalCve(idEntidadPostal);
-			this.asentamientoHumanoPKSelect.setTipoasntmntoCve(idTipoAsentamiento);
+			if (idEntidadPostal != 0) {
+				this.asentamientoHumanoPKSelect.setEntidadpostalCve(idEntidadPostal);
+			}
+			if (idTipoAsentamiento != 0) {
+				this.asentamientoHumanoPKSelect.setTipoasntmntoCve(idTipoAsentamiento);
+			}
 			this.asentamientoHumanoSelect.setAsentamientoHumanoPK(asentamientoHumanoPKSelect);
 //			this.asentamientoHumanoSelect.getTipoAsentamiento().setTipoasntmntoCve(idTipoAsentamiento);
 //			this.asentamientoHumanoSelect.getEntidadPostal().setEntidadpostalCve(idEntidadPostal);

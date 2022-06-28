@@ -61,8 +61,6 @@ public class MunicipiosBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		listaPaises = paisesDao.buscarTodos();
-//		listaEstados = estadosDao.buscarTodos();
-//		listaMunicipios = municipiosDao.buscarTodos();
 		this.paisSelect = new Paises();
 		this.estadoSelect = new Estados();
 		this.estadoPkSelect = new EstadosPK();
@@ -81,11 +79,16 @@ public class MunicipiosBean implements Serializable {
 	}
 	
 	public void guardarMunicipio() {
+		int tamanioListaMunicipioEstadoPais = 0;
 		if (this.municipioSelect.getMunicipiosPK().getMunicipioCve() == 0) {
-//			municipioPkSelect.setEstadoCve(idEstado);
-//			municipioPkSelect.setPaisCve(idPais);
-			List<Municipios> listaMunicipioEstadoPais = municipiosDao.buscarPorCriterios(municipioSelect);
-			int tamanioListaMunicipioEstadoPais = listaMunicipioEstadoPais.size() + 1;
+			municipioPkSelect.setPaisCve(idPais);
+			municipioPkSelect.setEstadoCve(idEstado);
+			List<Municipios> listaMunicipioEstadoPais = municipiosDao.buscarPorCriteriosMunicipios(municipioSelect);
+			if (municipioSelect.getMunicipiosPK().getEstadoCve() == 9) {
+				tamanioListaMunicipioEstadoPais = listaMunicipioEstadoPais.size() + 2;
+			} else {
+				tamanioListaMunicipioEstadoPais = listaMunicipioEstadoPais.size() + 1;
+			}
 			municipioPkSelect.setMunicipioCve(tamanioListaMunicipioEstadoPais);
 			municipioSelect.setMunicipiosPK(municipioPkSelect);
 			if(municipiosDao.guardar(municipioSelect) == null) {
@@ -110,15 +113,14 @@ public class MunicipiosBean implements Serializable {
 
 	public void eliminandoMunicipio() {
 		if (municipiosDao.eliminar(municipioSelect) == null) {
-			this.listaEstados.remove(this.estadoSelect);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estado Eliminado"));
-			PrimeFaces.current().ajax().update("form:messages", "form:dt-Municipios");
+			this.listaMunicipios.remove(this.municipioSelect);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Municipio Eliminado"));
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"Ocurrió un error al intentar eliminar el Estado"));
+					"Ocurrió un error al intentar eliminar el Municipio"));
 		}
-		PrimeFaces.current().executeScript("PF('deleteEstadoDialog').hide()");
-		PrimeFaces.current().ajax().update("form:messages");
+		PrimeFaces.current().executeScript("PF('deleteMunicipioDialog').hide()");
+		PrimeFaces.current().ajax().update("form");
 	}
 
 	public void handleContrySelect() {
@@ -126,7 +128,6 @@ public class MunicipiosBean implements Serializable {
 			this.paisSelect.setPaisCve(idPais);
 			estadoSelect.setPaises(paisSelect);
 			listaEstados = estadosDao.buscarPorCriteriosEstados(estadoSelect);
-//			PrimeFaces.current().ajax().update("form:dtEstados");
 		}
 	}
 	

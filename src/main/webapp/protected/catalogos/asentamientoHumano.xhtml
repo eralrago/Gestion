@@ -204,6 +204,7 @@
 								value="#{asentamientoHumanoBean.listaCiudades}"
 								itemLabel="#{selectedCitiesOne.ciudadDs}"
 								itemValue="#{selectedCitiesOne.ciudadesPK.ciudadCve}" />
+							<p:ajax listener="#{asentamientoHumanoBean.handleCitySelect}" process="@this"/>
 						</p:selectOneMenu>
 						</div>
 						<div class="p-field">

@@ -50,14 +50,13 @@ public class EstadosBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		listaPaises = paisesDao.buscarTodos();
-//		listaEstados = estadosDao.buscarTodos();
 		this.paisSelect = new Paises();
 		this.estadoSelect = new Estados();
 		this.estadoPkSelect = new EstadosPK();
 	}
 
 	public void nuevoEstado() {
-//		this.paisSelect = new Paises();
+		this.paisSelect = new Paises();
 		this.estadoSelect = new Estados();
 		this.estadoPkSelect = new EstadosPK();
 		estadoSelect.setEstadosPK(estadoPkSelect);
@@ -65,7 +64,6 @@ public class EstadosBean implements Serializable {
 
 	public void guardarEstado() {
 		if (this.estadoSelect.getEstadosPK().getEstadoCve() == 0) {
-//			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
 			estadoPkSelect.setPaisCve(idPais);
 			estadoSelect.setEstadosPK(estadoPkSelect);
 			List<Estados> listaEstadosPais = estadosDao.buscarPorCriteriosEstados(estadoSelect);
@@ -81,10 +79,7 @@ public class EstadosBean implements Serializable {
 			}
 		} else {
 			int idEstado = this.estadoSelect.getEstadosPK().getEstadoCve();
-//			this.paisSelect = new Paises();
 			this.estadoPkSelect = new EstadosPK();
-//			handleContrySelect();
-//			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
 			estadoPkSelect.setPaisCve(idPais);
 			estadoPkSelect.setEstadoCve(idEstado);
 			estadoSelect.setEstadosPK(estadoPkSelect);
@@ -97,20 +92,18 @@ public class EstadosBean implements Serializable {
 		}
 		PrimeFaces.current().executeScript("PF('nuevoEstadoDialog').hide()");
 		PrimeFaces.current().ajax().update("form");
-
 	}
 
 	public void eliminandoEstado() {
 		if (estadosDao.eliminar(estadoSelect) == null) {
 			this.listaEstados.remove(this.estadoSelect);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estado Eliminado"));
-			PrimeFaces.current().ajax().update("form:messages", "form:dt-Estado");
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					"Ocurrió un error al intentar eliminar el Estado"));
 		}
 		PrimeFaces.current().executeScript("PF('deleteEstadoDialog').hide()");
-		PrimeFaces.current().ajax().update("form:messages");
+		PrimeFaces.current().ajax().update("form");
 	}
 
 	public void handleContrySelect() {
@@ -118,7 +111,6 @@ public class EstadosBean implements Serializable {
 			this.paisSelect.setPaisCve(idPais);
 			estadoSelect.setPaises(paisSelect);
 			listaEstados = estadosDao.buscarPorCriteriosEstados(estadoSelect);
-//			PrimeFaces.current().ajax().update("form:dtEstados");
 		}
 	}
 
