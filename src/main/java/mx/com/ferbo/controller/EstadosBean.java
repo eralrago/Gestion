@@ -30,7 +30,7 @@ public class EstadosBean implements Serializable {
 
 	private List<Estados> listaEstadosSelect;
 
-	private Paises pais;
+//	private Paises pais;
 	private Paises paisSelect;
 	private EstadosPK estadoPkSelect;
 	private Estados estadoSelect;
@@ -65,7 +65,8 @@ public class EstadosBean implements Serializable {
 
 	public void guardarEstado() {
 		if (this.estadoSelect.getEstadosPK().getEstadoCve() == 0) {
-			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
+//			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
+			estadoPkSelect.setPaisCve(idPais);
 			estadoSelect.setEstadosPK(estadoPkSelect);
 			List<Estados> listaEstadosPais = estadosDao.buscarPorCriteriosEstados(estadoSelect);
 			int tamanioListaEstadosPais = listaEstadosPais.size() + 1;
@@ -80,10 +81,11 @@ public class EstadosBean implements Serializable {
 			}
 		} else {
 			int idEstado = this.estadoSelect.getEstadosPK().getEstadoCve();
-			this.paisSelect = new Paises();
+//			this.paisSelect = new Paises();
 			this.estadoPkSelect = new EstadosPK();
-			handleContrySelect();
-			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
+//			handleContrySelect();
+//			estadoPkSelect.setPaisCve(paisSelect.getPaisCve());
+			estadoPkSelect.setPaisCve(idPais);
 			estadoPkSelect.setEstadoCve(idEstado);
 			estadoSelect.setEstadosPK(estadoPkSelect);
 			if (estadosDao.actualizar(estadoSelect) == null) {
@@ -144,13 +146,13 @@ public class EstadosBean implements Serializable {
 		this.listaEstadosSelect = listaEstadosSelect;
 	}
 
-	public Paises getPais() {
-		return pais;
-	}
-
-	public void setPais(Paises pais) {
-		this.pais = pais;
-	}
+//	public Paises getPais() {
+//		return pais;
+//	}
+//
+//	public void setPais(Paises pais) {
+//		this.pais = pais;
+//	}
 
 	public Paises getPaisSelect() {
 		return paisSelect;
