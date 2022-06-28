@@ -37,8 +37,8 @@ public class Contacto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "id_contacto")
     private Integer idContacto;
     @Basic(optional = false)
@@ -58,6 +58,8 @@ public class Contacto implements Serializable {
     private String nbApellido2;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idContacto")
     private List<ClienteContacto> clienteContactoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idContacto")
+    private List<MedioCnt> medioCntList;
 
     public Contacto() {
     }
@@ -111,6 +113,14 @@ public class Contacto implements Serializable {
 
     public void setClienteContactoList(List<ClienteContacto> clienteContactoList) {
         this.clienteContactoList = clienteContactoList;
+    }
+    
+    public List<MedioCnt> getMedioCntList() {
+        return medioCntList;
+    }
+
+    public void setMedioCntList(List<MedioCnt> medioCntList) {
+        this.medioCntList = medioCntList;
     }
 
     @Override
