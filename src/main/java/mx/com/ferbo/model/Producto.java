@@ -8,6 +8,7 @@ package mx.com.ferbo.model;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,6 +55,8 @@ public class Producto implements Serializable {
     private int categoria;
     @OneToMany(mappedBy = "productoCve")
     private List<PartidaServicio> partidaServicioList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoCve")
+    private List<ProductoPorCliente> productoPorClienteList;
 
     public Producto() {
     }
@@ -107,8 +110,18 @@ public class Producto implements Serializable {
     public void setPartidaServicioList(List<PartidaServicio> partidaServicioList) {
         this.partidaServicioList = partidaServicioList;
     }
+    
+    
 
-    @Override
+    public List<ProductoPorCliente> getProductoPorClienteList() {
+		return productoPorClienteList;
+	}
+
+	public void setProductoPorClienteList(List<ProductoPorCliente> productoPorClienteList) {
+		this.productoPorClienteList = productoPorClienteList;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (productoCve != null ? productoCve.hashCode() : 0);

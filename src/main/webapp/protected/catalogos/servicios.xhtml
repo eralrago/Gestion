@@ -11,8 +11,9 @@
         <h:form id="form">
 			<p:breadCrumb>
 				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Inventarios" />
 				<p:menuitem value="Catálogos" />
-				<p:menuitem value="Servicios" />
+				<p:menuitem value="Servicios" outcome="/protected/catalogos/servicios"/>
 			</p:breadCrumb>
 			<div class="p-grid crud-demo">
                 <div class="p-col-12">
@@ -64,10 +65,10 @@
                                 <h:outputText value="#{servicio.servicioCod}" />
                             </p:column>
 
-							<p:column headerText="Tipo de cobro">
+							<p:column headerText="Tipo de cobro" sortBy="#{servicio.cobro.nombre}" filterBy="#{servicio.cobro.nombre}">
 								<h:outputText value="#{servicio.cobro.nombre}" />
 							</p:column>
-							<p:column exportable="false" width="15%" style="text-align:center">
+							<p:column exportable="false" width="20%" style="text-align:center">
                                 <p:commandButton icon="pi pi-pencil" update=":form:manage-servicio-content" value="Modificar" oncomplete="PF('manageServicioDialog').show()" 
                                     styleClass="edit-button ui-button-success" process="@this">
                                     <f:setPropertyActionListener value="#{servicio}" target="#{serviciosBean.selectedServicio}" />

@@ -2,7 +2,10 @@ package mx.com.ferbo.commons.dao;
 
 import java.util.List;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+
 import mx.com.ferbo.util.EntityManagerUtil;
+import mx.com.ferbo.util.JPAEntity;
 
 /**
  *

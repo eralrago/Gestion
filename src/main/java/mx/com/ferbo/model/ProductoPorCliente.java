@@ -37,24 +37,20 @@ public class ProductoPorCliente implements Serializable {
     @Basic(optional = false)
     @Column(name = "PROD_X_CTE_CVE")
     private Integer prodXCteCve;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PRODUCTO_CVE")
-    private int productoCve;
     @JoinColumn(name = "CTE_CVE", referencedColumnName = "CTE_CVE")
     @ManyToOne(optional = false)
     private Cliente cteCve;
+    @JoinColumn(name = "PRODUCTO_CVE", referencedColumnName = "PRODUCTO_CVE")
+    @ManyToOne(optional = false)
+    private Producto productoCve;
+    
+    
 
     public ProductoPorCliente() {
     }
 
     public ProductoPorCliente(Integer prodXCteCve) {
         this.prodXCteCve = prodXCteCve;
-    }
-
-    public ProductoPorCliente(Integer prodXCteCve, int productoCve) {
-        this.prodXCteCve = prodXCteCve;
-        this.productoCve = productoCve;
     }
 
     public Integer getProdXCteCve() {
@@ -65,14 +61,6 @@ public class ProductoPorCliente implements Serializable {
         this.prodXCteCve = prodXCteCve;
     }
 
-    public int getProductoCve() {
-        return productoCve;
-    }
-
-    public void setProductoCve(int productoCve) {
-        this.productoCve = productoCve;
-    }
-
     public Cliente getCteCve() {
         return cteCve;
     }
@@ -81,7 +69,16 @@ public class ProductoPorCliente implements Serializable {
         this.cteCve = cteCve;
     }
 
-    @Override
+    
+    public Producto getProductoCve() {
+		return productoCve;
+	}
+
+	public void setProductoCve(Producto productoCve) {
+		this.productoCve = productoCve;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (prodXCteCve != null ? prodXCteCve.hashCode() : 0);

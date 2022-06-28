@@ -6,12 +6,17 @@
 package mx.com.ferbo.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,7 +38,7 @@ public class Contacto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_contacto")
     private Integer idContacto;
     @Basic(optional = false)
@@ -51,6 +56,8 @@ public class Contacto implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "nb_apellido_2")
     private String nbApellido2;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idContacto")
+    private List<ClienteContacto> clienteContactoList;
 
     public Contacto() {
     }
@@ -96,6 +103,14 @@ public class Contacto implements Serializable {
 
     public void setNbApellido2(String nbApellido2) {
         this.nbApellido2 = nbApellido2;
+    }
+
+    public List<ClienteContacto> getClienteContactoList() {
+        return clienteContactoList;
+    }
+
+    public void setClienteContactoList(List<ClienteContacto> clienteContactoList) {
+        this.clienteContactoList = clienteContactoList;
     }
 
     @Override

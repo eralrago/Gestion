@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Candado Salida</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Facturación" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Candado Salida"
+					outcome="/protected/catalogos/candadoSalida" />
+			</p:breadCrumb>
+
+			<div class="p-col-12">
+				<div class="card">
+
+					<p:growl id="messages" showDetail="true" />
+
+					<p:dataTable id="dtCandado" widgetVar="dtCandado" var="lista"
+						value="#{candadoSalidaBean.lista}" rowKey="#{lista.id}"
+						reflow="true" selection="#{candadoSalidaBean.seleccion}"
+						paginator="true" rows="10" paginatorPosition="bottom">
+
+						<f:facet name="header">
+							<div class="products-table-header" align="center">
+								<span> El candado de salida es modificado automáticamente
+									a las 00:00 hrs bloqueando la salida de mercancia de los
+									clientes con saldo vencido.</span>
+							</div>
+						</f:facet>
+
+						<p:column headerText="No. Cliente">
+							<h:outputText value="#{lista.cteCve}" />
+						</p:column>
+						<p:column headerText="Nombre">
+							<h:outputText />
+						</p:column>
+						<p:column headerText="Permitir Salida (1 dia)">
+							<h:outputText value="#{lista.habilitado ? 'Si' : 'No'}" />
+						</p:column>
+						<p:column headerText="No. Salidas Permitidas">
+							<h:outputText value="#{lista.numSalidas}" />
+						</p:column>
+						<p:column class="p-text-center">
+							<p:commandButton value="Modificar" icon="pi pi-pencil"
+								styleClass="ui-button-warning p-mr-2 p-mb-2"
+								update="form:frm-modifica" process="@this"
+								oncomplete="PF('dg-modifica').show()">
+								<f:setPropertyActionListener value="#{lista}"
+									target="#{candadoSalidaBean.seleccion}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+
+				</div>
+			</div>
+
+			<p:dialog header="Modificar Candado Salida" widgetVar="dg-modifica"
+				modal="true" showEffect="fade" responsive="true">
+				<p:outputPanel id="frm-modifica" class="ui-fluid">
+					<div class="p-field">
+						<p:outputLabel for="@next" value="Numero Cliente:" />
+						<p:inputText value="#{candadoSalidaBean.seleccion.cteCve}"
+							required="true" disabled="true" />
+					</div>
+					<div class="p-field">
+						<p:outputLabel for="@next" value="Nombre Cliente:" />
+						<p:inputText disabled="true" />
+					</div>
+					<div class="p-field">
+						<p:outputLabel for="@next" value="Permitir Salida (1 dia):" />
+						<p:selectBooleanCheckbox styleClass="p-ml-3"
+							value="#{candadoSalidaBean.seleccion.habilitado}" />
+					</div>
+					<div class="p-field">
+						<p:outputLabel for="@next" value="Numero Salidas Permitidas:" />
+						<p:inputNumber value="#{candadoSalidaBean.seleccion.numSalidas}"
+							required="true" decimalPlaces="0" />
+					</div>
+				</p:outputPanel>
+
+				<f:facet name="footer">
+					<p:commandButton value="Actualizar" icon="pi pi-check"
+						actionListener="#{candadoSalidaBean.update()}"
+						process="frm-modifica @this" update="frm-modifica" />
+					<p:commandButton value="Cancelar" icon="pi pi-times"
+						class="ui-button-secondary" oncomplete="PF('dg-modifica').hide()" />
+				</f:facet>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

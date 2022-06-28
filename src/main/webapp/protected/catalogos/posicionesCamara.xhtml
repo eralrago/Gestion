@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Posiciones en cámara</ui:define>
+
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Inventarios" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Posiciones en cámara"
+					outcome="/protected/catalogos/posicionesCamara" />
+			</p:breadCrumb>
+			<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+			<div class="p-col-12">
+				<div class="card">
+					<p:dataTable widgetVar="Posicion" var="posicion"
+						value="#{posicionCamaraBean.posiciones}" reflow="true"
+						paginator="true" rows="10" paginatorPosition="bottom"
+						rowSelectMode="add">
+						<f:facet name="header">
+							<div class="customers-table-header">
+								<span style="font-weight: bold">Consulta de Posiciones</span>
+
+								<div class="ui-fluid p-formgrid p-grid">
+
+
+									<div class="p-field p-col-12 p-md-4">
+										<p:outputLabel for="@next" value="planta:" />
+										<p:selectOneMenu id="planta" value="#{posicion.idPlanta}"
+											dynamic="true">
+											<f:selectItem
+												itemLabel="TODAS LAS PLANTAS (Seleccione una planta)"
+												itemValue="" />
+											<f:selectItems value="#{selectOneMenuView.options}" />
+										</p:selectOneMenu>
+									</div>
+
+									<div class="p-field ">
+										<p:outputLabel for="@next" value="Camara: " />
+										<p:selectOneMenu id="camara" value="#{posicion.idCamara}"
+											dynamic="true">
+											<f:selectItem itemLabel="" itemValue="" />
+											<f:selectItems value="#{selectOneMenuView.options}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+								<div>
+									<p:button value="Buscar Posiciones"
+										styleClass="ui-button-raised ui-button-success"
+										style="width: auto" />
+									<p:toolbar styleClass="p-mb-4">
+										<p:toolbarGroup>
+											<p:commandButton value="Agregar" icon="pi pi-plus"
+												styleClass="ui-button-success p-mr-2 p-mb-2"
+												oncomplete="PF('dg-agrega').show();" update="frm-agrega"
+												actionListener="#{plantaBean.openNew()}" process="@this" />
+										</p:toolbarGroup>
+									</p:toolbar>
+								</div>
+
+							</div>
+						</f:facet>
+
+						<p:column headerText="Planta">
+							<h:outputText value="#{posicion.idPlanta}" />
+						</p:column>
+						<p:column headerText="Camara">
+							<h:outputText value="#{posicion.idCamara}" />
+						</p:column>
+						<p:column headerText="Clave Posicion">
+							<h:outputText value="#{posicion.codPosicion}" />
+						</p:column>
+						<p:column headerText="Descripción">
+							<h:outputText value="#{posicion.descPosicion}" />
+						</p:column>
+						<p:column headerText="Temp. Min.°C">
+							<h:outputText value="#{posicion.tempIni}" />
+						</p:column>
+						<p:column headerText="Temp. Max.°C">
+							<h:outputText value="#{posicion.tempFin}" />
+						</p:column>
+						<p:column headerText="Status">
+							<h:form>
+								<p:growl id="msg" />
+
+								<h5 class="p-mt-0">Desactivar/Activar</h5>
+								<p:toggleSwitch
+									value="#{posicion.habilitada  ? 'habilitada' : 'No habilitada' }" />
+							</h:form>
+						</p:column>
+
+
+					</p:dataTable>
+				</div>
+			</div>
+
+
+			<p:dialog header="AGREGAR NUEVA SERIE" widgetVar="dg-agrega"
+				modal="true" showEffect="fade" responsive="true">
+
+				<p:outputPanel id="frm-agrega" class="ui-fluid">
+
+					<div class="p-field">
+						<p:outputLabel for="@next">Planta:</p:outputLabel>
+						<p:selectOneMenu value="#{null}" required="true">
+							<f:selectItem itemLabel="---SELECCIONE UN TIPO DE FACTURACION---"
+								itemValue="null"></f:selectItem>
+							<f:selectItems itemLabel="#{null}" value="#{null}" />
+						</p:selectOneMenu>
+					</div>
+					<div class="p-field">
+						<p:outputLabel for="@next">Camara:</p:outputLabel>
+						<p:selectOneMenu value="#{null}" required="true">
+							<f:selectItem itemLabel="Selecciona un Status" itemValue="null"></f:selectItem>
+							<f:selectItems itemLabel="#{null}" value="#{null}" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="p-field">
+						<p:outputLabel for="@next">Clave:</p:outputLabel>
+						<p:inputText value="#{null}"></p:inputText>
+					</div>
+
+
+					<div class="p-field">
+						<p:outputLabel for="@next">NDescripción:</p:outputLabel>
+						<p:inputText value="#{null}"></p:inputText>
+					</div>
+					
+					<div class="p-text-left">Rango de Temperaturas</div>
+
+					<div class="p-field">
+						<p:outputLabel for="@next">°C (min):</p:outputLabel>
+						<p:inputText value="#{null}"></p:inputText>
+					</div>
+					<div class="p-field">
+						<p:outputLabel for="@next">°C(Max):</p:outputLabel>
+						<p:inputText value="#{null}"></p:inputText>
+					</div>
+
+
+				</p:outputPanel>
+
+				<f:facet name="footer">
+					<p:commandButton value="Agregar" icon="pi pi-check"
+						actionListener="#{plantaBean.save()}" update="frm-agrega"
+						process="frm-agrega @this" />
+					<p:commandButton value="Cancelar" icon="pi pi-times"
+						class="ui-button-secondary" oncomplete="PF('dg-agrega').hide()" />
+				</f:facet>
+
+			</p:dialog>
+
+
+
+		</h:form>
+	</ui:define>
+
+
+</ui:composition>

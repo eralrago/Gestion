@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Unidad de tipoPago</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Facturación" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Formas de Pago"
+					outcome="/protected/catalogos/tipoPago" />
+			</p:breadCrumb>
+			<div class="p-grid button-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:commandButton value="Agregar" icon="pi pi-plus"
+							actionListener="#{tipoPagoBean.nuevoTipoPago}"
+							update="manage-pay-content-new form:manage-pay-content-new"
+							oncomplete="PF('nuevoTipoPagoDialog').show()"
+							styleClass="p-mr-2 p-mb-2" process="@this" />
+					</div>
+				</div>
+			</div>
+
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<p:dataTable id="dt-tipoPago" widgetVar="dtTipoPago" var="tipoPago"
+							value="#{tipoPagoBean.listaTipoPago}" reflow="true"
+							rowKey="#{tipoPago.id}" paginator="true" rows="10"
+							paginatorPosition="bottom" rowSelectMode="add">
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Tipos de Pago</span> <span
+										class="ui-input-icon-left filter-container"> <i
+										class="pi pi-search" /> <p:inputText id="globalFilter"
+											onkeyup="PF('dtTipoPago').filter()" placeholder="Búsqueda" />
+									</span>
+								</div>
+							</f:facet>
+
+							<!-- 							<p:ajax event="rowSelect" update=":form:delete-servicios-button" /> -->
+							<!-- 							<p:ajax event="rowUnselect" -->
+							<!-- 								update=":form:delete-tipoPago-button" /> -->
+							<!-- 							<p:ajax event="rowSelectCheckbox" -->
+							<!-- 								update=":form:delete-tipoPago-button" /> -->
+							<!-- 							<p:ajax event="rowUnselectCheckbox" -->
+							<!-- 								update=":form:delete-tipoPago-button" /> -->
+							<!-- 							<p:ajax event="toggleSelect" -->
+							<!-- 								update=":form:delete-tipoPago-button" /> -->
+
+							<p:column selectionMode="multiple" />
+
+							<p:column headerText="Nombre" sortBy="#{tipoPago.nombre}"
+								filterBy="#{tipoPago.nombre}" style="text-align:center">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{tipoPago.nombre}" />
+							</p:column>
+							<p:column headerText="Descripción" sortBy="#{tipoPago.descripcion}"
+								filterBy="#{tipoPago.descripcion}" style="text-align:center">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{tipoPago.descripcion}" />
+							</p:column>
+							<p:column headerText="Acción" style="text-align:center">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-pay-content-new" value="Modificar"
+									oncomplete="PF('nuevoTipoPagoDialog').show()"
+									styleClass="p-mr-2 p-mb-2" process="@this">
+									<f:setPropertyActionListener value="#{tipoPago}"
+										target="#{tipoPagoBean.tipoPagoSelected}" />
+								</p:commandButton>
+								<p:commandButton value="Eliminar" styleClass="p-mr-2 p-mb-2"
+									icon="pi pi-trash" process="@this"
+									oncomplete="PF('deleteTipoPagoDialog').show()">
+									<f:setPropertyActionListener value="#{tipoPago}"
+										target="#{tipoPagoBean.tipoPagoSelected}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<p:dialog header="Agregar/Editar Formas de Pago" showEffect="fade"
+				modal="true" widgetVar="nuevoTipoPagoDialog" responsive="true">
+				<p:outputPanel id="manage-pay-content-new" class="ui-fluid">
+					<p:outputPanel
+						rendered="#{not empty tipoPagoBean.tipoPagoSelected}">
+						<div class="p-field">
+							<p:outputLabel for="tipoPago-new"
+								value="Tipo de Pago" />
+							<p:inputText id="tipoPago-new"
+								value="#{tipoPagoBean.tipoPagoSelected.nombre}"
+								required="true" />
+						</div>
+						<div class="p-field">
+							<p:outputLabel for="descripcion-new"
+								value="Descripción" />
+							<p:inputText id="descripcion-new"
+								value="#{tipoPagoBean.tipoPagoSelected.descripcion}"
+								required="true" />
+						</div>
+					</p:outputPanel>
+				</p:outputPanel>
+				<f:facet name="footer">
+					<p:commandButton value="Guardar" icon="pi pi-plus"
+						actionListener="#{tipoPagoBean.guardarTipoPago()}"
+						update=":form:manage-pay-content-new" styleClass="p-mr-2 p-mb-2" />
+					<p:commandButton value="Cancelar" icon="pi pi-times"
+						onclick="PF('nuevoTipoPagoDialog').hide()"
+						class="ui-button-secondary" />
+				</f:facet>
+			</p:dialog>
+			<p:confirmDialog widgetVar="deleteTipoPagoDialog" showEffect="fade"
+				width="400" message="Desea eliminar el Tipo de Pago?"
+				header="Eliminar" severity="warn">
+				<p:commandButton value="Sí" icon="pi pi-check"
+					actionListener="#{tipoPagoBean.eliminandoTipoPago()}"
+					process="@this" oncomplete="PF('deleteTipoPagoDialog').hide()" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-button-secondary" icon="pi pi-times"
+					onclick="PF('deleteTipoPagoDialog').hide()" />
+			</p:confirmDialog>
+			<p:confirmDialog global="true" showEffect="fade" width="400"
+				header="Eliminar">
+				<p:commandButton value="Sí" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no ui-button-secondary"
+					icon="pi pi-times" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

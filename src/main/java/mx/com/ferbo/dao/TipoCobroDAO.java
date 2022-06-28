@@ -1,6 +1,5 @@
 package mx.com.ferbo.dao;
 
-import static mx.com.ferbo.util.EntityManagerUtil.getEntityManager;
 
 import java.util.List;
 
@@ -8,6 +7,7 @@ import javax.persistence.EntityManager;
 
 import mx.com.ferbo.commons.dao.IBaseDAO;
 import mx.com.ferbo.model.TipoCobro;
+import mx.com.ferbo.util.EntityManagerUtil;
 
 public class TipoCobroDAO extends IBaseDAO<TipoCobro, Integer> {
 
@@ -19,8 +19,8 @@ public class TipoCobroDAO extends IBaseDAO<TipoCobro, Integer> {
 
 	@Override
 	public List<TipoCobro> buscarTodos() {
-		EntityManager em = getEntityManager();
 		List<TipoCobro> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		listado = em.createNamedQuery("TipoCobro.findAll", TipoCobro.class).getResultList();
 		return listado;
 	}
