@@ -116,7 +116,14 @@
 				/> -->
 	<!-- 	</properties>  -->
 
-		<properties> <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/gestion?useSSL=false&amp;useTimezone=true&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/> 
+	<!-- 	<properties> <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/gestion?useSSL=false&amp;useTimezone=true&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/> 
+			<property name="javax.persistence.jdbc.user" value="JuanZassu"/> <property 
+			name="javax.persistence.jdbc.password" value="123456789"/> <property name="javax.persistence.jdbc.driver" 
+			value="com.mysql.cj.jdbc.Driver"/> <property name="hibernate.show_sql" value="true"/> 
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/> 
+			</properties> -->
+			
+			<properties> <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/gestiondb?useSSL=false&amp;useTimezone=true&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/> 
 			<property name="javax.persistence.jdbc.user" value="JuanZassu"/> <property 
 			name="javax.persistence.jdbc.password" value="123456789"/> <property name="javax.persistence.jdbc.driver" 
 			value="com.mysql.cj.jdbc.Driver"/> <property name="hibernate.show_sql" value="true"/> 

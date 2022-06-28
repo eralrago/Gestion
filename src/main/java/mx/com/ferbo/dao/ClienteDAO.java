@@ -13,7 +13,10 @@ public class ClienteDAO extends IBaseDAO<Cliente, Integer> {
 	@Override
 	public Cliente buscarPorId(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = EntityManagerUtil.getEntityManager();		
+		return em.createNamedQuery("Cliente.findByCteCve", Cliente.class).
+				setParameter("cteCve", id)
+				.getSingleResult();
 	}
 
 	@Override
