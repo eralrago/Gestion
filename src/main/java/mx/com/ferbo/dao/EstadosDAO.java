@@ -10,7 +10,7 @@ import mx.com.ferbo.model.AsentamientoHumano;
 import mx.com.ferbo.model.Estados;
 import mx.com.ferbo.util.EntityManagerUtil;
 
-public class EstadosDAO extends IBaseDAO<Estados, Integer> {
+public class EstadosDAO extends IBaseDAO<Estados, Integer>{
 
 	@Override
 	public Estados buscarPorId(Integer id) {
@@ -20,12 +20,19 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer> {
 
 	@Override
 	public List<Estados> buscarTodos() {
-		List<Estados> listado;
+		List<Estados> listado = null;
 		EntityManager em = EntityManagerUtil.getEntityManager();
 		listado = em.createNamedQuery("Estados.findAll", Estados.class).getResultList();
 		return listado;
 	}
 
+	public List<Estados> buscarPorCriteriosEstados(Estados e) {
+		List<Estados> listado = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		listado = em.createNamedQuery("Estados.findByPaisCve", Estados.class).setParameter("paisCve", e.getPaises().getPaisCve()).getResultList();
+		return listado;
+	}
+	
 	@Override
 	public List<Estados> buscarPorCriterios(Estados e) {
 		// TODO Auto-generated method stub
@@ -37,24 +44,51 @@ public class EstadosDAO extends IBaseDAO<Estados, Integer> {
 			return listado;
 		} else {
 			return null;
+		} 
+	}
+
+	@Override
+	public String actualizar(Estados estados) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.merge(estados);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR actualizando Estado" + e.getMessage());
+			return "ERROR";
 		}
-	}
-
-	@Override
-	public String actualizar(Estados e) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String guardar(Estados e) {
-		// TODO Auto-generated method stub
+	public String guardar(Estados estados) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.persist(estados);
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR guardando Estado" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
 	@Override
-	public String eliminar(Estados e) {
-		// TODO Auto-generated method stub
+	public String eliminar(Estados estados) {
+		try {
+			EntityManager em = EntityManagerUtil.getEntityManager();
+			em.getTransaction().begin();
+			em.remove(em.merge(estados));
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			System.out.println("ERROR" + e.getMessage());
+			return "ERROR";
+		}
 		return null;
 	}
 
