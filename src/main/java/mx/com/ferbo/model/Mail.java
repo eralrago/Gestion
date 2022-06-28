@@ -6,12 +6,18 @@
 package mx.com.ferbo.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,18 +30,17 @@ import javax.validation.constraints.Size;
 @Table(name = "mail")
 @NamedQueries({
     @NamedQuery(name = "Mail.findAll", query = "SELECT m FROM Mail m"),
-    @NamedQuery(name = "Mail.findByIdMedio", query = "SELECT m FROM Mail m WHERE m.idMedio = :idMedio"),
+    @NamedQuery(name = "Mail.findByIdMail", query = "SELECT m FROM Mail m WHERE m.idMail = :idMail"),
     @NamedQuery(name = "Mail.findByNbMail", query = "SELECT m FROM Mail m WHERE m.nbMail = :nbMail"),
-    @NamedQuery(name = "Mail.findByStPrincipal", query = "SELECT m FROM Mail m WHERE m.stPrincipal = :stPrincipal"),
-    @NamedQuery(name = "Mail.findByTpMail", query = "SELECT m FROM Mail m WHERE m.tpMail = :tpMail")})
+    @NamedQuery(name = "Mail.findByStPrincipal", query = "SELECT m FROM Mail m WHERE m.stPrincipal = :stPrincipal")})
 public class Mail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_medio")
-    private Integer idMedio;
+    @Column(name = "id_mail")
+    private Integer idMail;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -45,31 +50,31 @@ public class Mail implements Serializable {
     @NotNull
     @Column(name = "st_principal")
     private boolean stPrincipal;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "tp_mail")
-    private short tpMail;
+    @JoinColumn(name = "tp_mail", referencedColumnName = "tp_mail")
+    @ManyToOne(optional = false)
+    private TipoMail tpMail;
+    @OneToMany(mappedBy = "idMail")
+    private List<MedioCnt> medioCntList;
 
     public Mail() {
     }
 
-    public Mail(Integer idMedio) {
-        this.idMedio = idMedio;
+    public Mail(Integer idMail) {
+        this.idMail = idMail;
     }
 
-    public Mail(Integer idMedio, String nbMail, boolean stPrincipal, short tpMail) {
-        this.idMedio = idMedio;
+    public Mail(Integer idMail, String nbMail, boolean stPrincipal) {
+        this.idMail = idMail;
         this.nbMail = nbMail;
         this.stPrincipal = stPrincipal;
-        this.tpMail = tpMail;
     }
 
-    public Integer getIdMedio() {
-        return idMedio;
+    public Integer getIdMail() {
+        return idMail;
     }
 
-    public void setIdMedio(Integer idMedio) {
-        this.idMedio = idMedio;
+    public void setIdMail(Integer idMail) {
+        this.idMail = idMail;
     }
 
     public String getNbMail() {
@@ -88,18 +93,26 @@ public class Mail implements Serializable {
         this.stPrincipal = stPrincipal;
     }
 
-    public short getTpMail() {
+    public TipoMail getTpMail() {
         return tpMail;
     }
 
-    public void setTpMail(short tpMail) {
+    public void setTpMail(TipoMail tpMail) {
         this.tpMail = tpMail;
+    }
+
+    public List<MedioCnt> getMedioCntList() {
+        return medioCntList;
+    }
+
+    public void setMedioCntList(List<MedioCnt> medioCntList) {
+        this.medioCntList = medioCntList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idMedio != null ? idMedio.hashCode() : 0);
+        hash += (idMail != null ? idMail.hashCode() : 0);
         return hash;
     }
 
@@ -110,7 +123,7 @@ public class Mail implements Serializable {
             return false;
         }
         Mail other = (Mail) object;
-        if ((this.idMedio == null && other.idMedio != null) || (this.idMedio != null && !this.idMedio.equals(other.idMedio))) {
+        if ((this.idMail == null && other.idMail != null) || (this.idMail != null && !this.idMail.equals(other.idMail))) {
             return false;
         }
         return true;
@@ -118,7 +131,7 @@ public class Mail implements Serializable {
 
     @Override
     public String toString() {
-        return "mx.com.ferbo.model.Mail[ idMedio=" + idMedio + " ]";
+        return "mx.com.ferbo.model.Mail[ idMail=" + idMail + " ]";
     }
     
 }
