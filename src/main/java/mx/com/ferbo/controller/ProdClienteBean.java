@@ -5,20 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import mx.com.ferbo.dao.ClienteDAO;
-import mx.com.ferbo.dao.PrecioServicioDAO;
-import mx.com.ferbo.dao.ProductoClienteDAO;
-import mx.com.ferbo.dao.ProductoDAO;
-import mx.com.ferbo.dao.ServicioDAO;
-import mx.com.ferbo.dao.UnidadManejoDAO;
-import mx.com.ferbo.model.Aviso;
-import mx.com.ferbo.model.Cliente;
-import mx.com.ferbo.model.PrecioServicio;
-import mx.com.ferbo.model.Producto;
-import mx.com.ferbo.model.ProductoPorCliente;
-import mx.com.ferbo.model.Servicio;
-import mx.com.ferbo.model.UnidadDeManejo;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -26,6 +12,13 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
+
+import mx.com.ferbo.dao.ClienteDAO;
+import mx.com.ferbo.dao.ProductoClienteDAO;
+import mx.com.ferbo.dao.ProductoDAO;
+import mx.com.ferbo.model.Cliente;
+import mx.com.ferbo.model.Producto;
+import mx.com.ferbo.model.ProductoPorCliente;
 
 @Named
 @ViewScoped
