@@ -19,26 +19,33 @@
 						<p:growl id="messages" showDetail="true" />
 						<div class="p-col-12">
 							<div class="card">
-								<span class="ui-float-label">								 
-								 <p:inputText id="folioSelected" value="#{kardexBean.folioClienteSelected}"/>
-								 <p:outputLabel for="@previous"	value="Folio" styleClass="ui-float-label p-mr-2 p-mb-2" /> 
-								 <p:commandButton id="buscarFolio" actionListener="#{kardexBean.buscaDatos()}"
+								<span class="ui-float-label"> <p:inputText
+										id="folioSelected" value="#{kardexBean.folioClienteSelected}" />
+									<p:outputLabel for="@previous" value="Folio"
+										styleClass="ui-float-label p-mr-2 p-mb-2" /> <p:commandButton
+										id="buscarFolio" actionListener="#{kardexBean.buscaDatos()}"
 										icon="pi pi-search" process="@this folioSelected"
 										styleClass="edit-button ui-button-primary" value="Buscar"
 										update="dt-entradasKardex" /> <p:commandButton
 										value="Limpiar" styleClass="edit-button ui-button-secondary" />
+									<p:commandButton value="Traspasos"
+										styleClass="edit-button ui-botton-primary" process="@this"
+										oncomplete="PF('traspasosDialog').show()"
+										update="form:panel-traspasos" />
 								</span>
 							</div>
-							
+
 							<p:dataTable var="pPartidas" id="dt-entradasKardex"
-								value="#{kardexBean.listPartida}" paginator="true"
-								rows="10" paginatorPosition="bottom" rowKey="#{partida.partidaCve}">
+								value="#{kardexBean.listPartida}" paginator="true" rows="10"
+								paginatorPosition="bottom" rowKey="#{partida.partidaCve}">
 								<p:headerRow field="partidaCve">
 									<p:column colspan="6">
 										<div class="p-d-inline-flex p-ai-center"
 											style="vertical-align: middle">
-											<h:outputText styleClass="p-ml-2" value="#{kardexBean.clienteSelected.cteCve}" />
-											<h:outputText styleClass="p-ml-2" value="#{kardexBean.clienteSelected.cteNombre}" />
+											<h:outputText styleClass="p-ml-2"
+												value="#{kardexBean.clienteSelected.cteCve}" />
+											<h:outputText styleClass="p-ml-2"
+												value="#{kardexBean.clienteSelected.cteNombre}" />
 										</div>
 									</p:column>
 								</p:headerRow>
@@ -47,23 +54,27 @@
 								</p:column>
 
 								<p:column headerText="Fecha de ingreso" width="40">
-									<h:outputText value="#{kardexBean.constanciaDepositoSelected.fechaIngreso}" />
+									<h:outputText
+										value="#{kardexBean.constanciaDepositoSelected.fechaIngreso}" />
 								</p:column>
 
 								<p:column headerText="Entrada" width="40">
-									<h:outputText value="#{kardexBean.constanciaDepositoSelected.folio}" />
+									<h:outputText
+										value="#{kardexBean.constanciaDepositoSelected.folio}" />
 								</p:column>
 
 								<p:column headerText="Producto" width="120">
-									<h:outputText value="#{pPartidas.unidadDeProductoCve.productoCve.productoDs}" />
+									<h:outputText
+										value="#{pPartidas.unidadDeProductoCve.productoCve.productoDs}" />
 								</p:column>
 
 								<p:column headerText="Piezas Entrada" width="20">
-									<h:outputText value="#{pPartidas.cantidadTotal}"  />
+									<h:outputText value="#{pPartidas.cantidadTotal}" />
 								</p:column>
 
 								<p:column headerText="Unidad" width="30">
-									<h:outputText value="#{pPartida.unidadDeProductoCve.unidadDeManejoCve.unidadDeManejoDs}" />
+									<h:outputText
+										value="#{pPartida.unidadDeProductoCve.unidadDeManejoCve.unidadDeManejoDs}" />
 								</p:column>
 
 								<p:column headerText="Kilos Entrada" width="30">
@@ -117,6 +128,25 @@
 									</div>
 								</p:rowExpansion>
 							</p:dataTable>
+
+							<p:dialog header="Traspasos" showEffect="fade" modal="true"
+								widgetVar="traspasosDialog" responsive="true">
+								<p:outputPanel id="panel-traspasos" class="ui-fluid">
+									<p:dataTable id="dt-traspasos" widgetVar="dtTraspasos"
+										value="#{dataTableDemoView.products1}" paginator="true"
+										rows="10" paginatorPosition="bottom" rowKey="#{product.id}">
+										<p:column headerText="Traspasos">
+											<h:outputText value="Traspaso1" />
+										</p:column>
+										<p:column headerText="Descripcion">
+											<h:outputText value="Descripcion1" />
+										</p:column>
+										<p:column headerText="Cantidad">
+											<h:outputText value="Cantidad1" />
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
+							</p:dialog>
 
 
 						</div>
