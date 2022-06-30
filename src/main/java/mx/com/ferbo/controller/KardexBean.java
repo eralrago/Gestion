@@ -1,6 +1,7 @@
 package mx.com.ferbo.controller;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import org.primefaces.PrimeFaces;
 import mx.com.ferbo.dao.CamaraDAO;
 import mx.com.ferbo.dao.ClienteDAO;
 import mx.com.ferbo.dao.ConstanciaDeDepositoDAO;
+import mx.com.ferbo.dao.ConstanciaSalidaDAO;
+import mx.com.ferbo.dao.DetalleConstanciaSalidaDAO;
 import mx.com.ferbo.dao.PartidaDAO;
 import mx.com.ferbo.dao.PlantaDAO;
 import mx.com.ferbo.dao.ProductoDAO;
@@ -21,6 +24,8 @@ import mx.com.ferbo.dao.UnidadDeProductoDAO;
 import mx.com.ferbo.model.Camara;
 import mx.com.ferbo.model.Cliente;
 import mx.com.ferbo.model.ConstanciaDeDeposito;
+import mx.com.ferbo.model.ConstanciaSalida;
+import mx.com.ferbo.model.DetalleConstanciaSalida;
 import mx.com.ferbo.model.Partida;
 import mx.com.ferbo.model.Planta;
 import mx.com.ferbo.model.Producto;
@@ -68,7 +73,6 @@ public class KardexBean implements Serializable {
 	/**
 	 * Objetos para Constancia de deposito
 	 */
-	private List<ConstanciaDeDeposito> listConstanciaDeposito;
 	private ConstanciaDeDeposito constanciaDepositoSelected;
 	private ConstanciaDeDepositoDAO constanciaDeDepositoDAO;
 	private List<ConstanciaDeDeposito> listConstanciaDepositoFiltered;
@@ -95,9 +99,24 @@ public class KardexBean implements Serializable {
 	private UnidadDeProductoDAO unidadDeProductoDAO;
 
 	/**
+	 * Objetos para Detalle de Constancia de Salida
+	 */
+	private List<DetalleConstanciaSalida> listDetalleSalida;
+	private DetalleConstanciaSalida detalleSalidaSelected;
+	private DetalleConstanciaSalidaDAO detalleSalidaDAO;
+
+	/**
+	 * Objetos para traspasos
+	 */
+
+	/**
 	 * Auxiliares
 	 */
 	private String folioClienteSelected;
+	private Integer cantidadSalida;
+	private BigDecimal pesoSalida;
+	private Integer cantidadTotal;
+	private BigDecimal pesoTotal;
 
 	/**
 	 * Constructores
@@ -105,21 +124,34 @@ public class KardexBean implements Serializable {
 	public KardexBean() {
 		this.clienteDAO = new ClienteDAO();
 		this.constanciaDeDepositoDAO = new ConstanciaDeDepositoDAO();
-		partidaDAO = new PartidaDAO();
-
+		this.partidaDAO = new PartidaDAO();
+		this.detalleSalidaDAO = new DetalleConstanciaSalidaDAO();
+		this.cantidadSalida = 0;
+		this.cantidadTotal = 0;
+		this.pesoSalida = new BigDecimal(0);
+		this.pesoTotal = new BigDecimal(0);
 	}
 
 	@PostConstruct
 	public void init() {
 		lstClientes = clienteDAO.buscarTodos();
-		listConstanciaDeposito = constanciaDeDepositoDAO.buscarTodos();
 		listConstanciaDepositoFiltered = new ArrayList<>();
+		listDetalleSalida = new ArrayList<>();
 		listPartida = new ArrayList<>();
 	}
 
 	public void buscaDatos() {
+		if (this.folioClienteSelected == null || this.folioClienteSelected != "") {
+			// Kardex Entradas
+			manejaEntradas();
+			System.out.println(constanciaDepositoSelected.getFolioCliente());
+			PrimeFaces.current().ajax().update("form:dt-entradasKardex");
+		}
+	}
+
+	private void manejaEntradas() {
+
 		listConstanciaDepositoFiltered = new ArrayList<>();
-		constanciaDepositoSelected = new ConstanciaDeDeposito();
 		ConstanciaDeDeposito consAux = new ConstanciaDeDeposito();
 		consAux.setFolio(Integer.parseInt(folioClienteSelected));
 		listConstanciaDepositoFiltered = constanciaDeDepositoDAO.buscarPorFolio(consAux);
@@ -128,10 +160,28 @@ public class KardexBean implements Serializable {
 			clienteSelected = new Cliente();
 			clienteSelected = clienteDAO.buscarPorId(constanciaDepositoSelected.getCteCve().getCteCve());
 			listPartida = partidaDAO.buscarPorConstanciaDeposito(consAux);
+			listDetalleSalida = new ArrayList<>();
+			if (listPartida != null && listPartida.size() > 0) {
+				for (Partida p : listPartida) {
+					manejaSalida(p);
+				}
+			}
 		}
-		System.out.println(constanciaDepositoSelected.getFolioCliente());
-		
-		PrimeFaces.current().ajax().update("form:dt-entradasKardex");
+	}
+
+	private void manejaSalida(Partida p) {
+		detalleSalidaSelected = new DetalleConstanciaSalida();
+		if (p != null) {
+			if (!detalleSalidaDAO.buscarPorParams(p, constanciaDepositoSelected).isEmpty()) {
+				detalleSalidaSelected = detalleSalidaDAO.buscarPorParams(p, constanciaDepositoSelected).get(0);
+				listDetalleSalida.add(detalleSalidaSelected);
+				this.cantidadSalida = detalleSalidaSelected.getCantidad();
+				this.pesoSalida = detalleSalidaSelected.getPeso();
+				this.cantidadTotal = p.getCantidadTotal() - cantidadSalida;
+				this.pesoTotal.subtract(pesoSalida);
+			}
+
+		}
 	}
 
 	/**
@@ -232,14 +282,6 @@ public class KardexBean implements Serializable {
 
 	public void setCamaraDAO(CamaraDAO camaraDAO) {
 		this.camaraDAO = camaraDAO;
-	}
-
-	public List<ConstanciaDeDeposito> getListConstanciaDeposito() {
-		return listConstanciaDeposito;
-	}
-
-	public void setListConstanciaDeposito(List<ConstanciaDeDeposito> listConstanciaDeposito) {
-		this.listConstanciaDeposito = listConstanciaDeposito;
 	}
 
 	public ConstanciaDeDeposito getConstanciaDepositoSelected() {
@@ -344,6 +386,62 @@ public class KardexBean implements Serializable {
 
 	public void setListConstanciaDepositoFiltered(List<ConstanciaDeDeposito> listConstanciaDepositoFiltered) {
 		this.listConstanciaDepositoFiltered = listConstanciaDepositoFiltered;
+	}
+
+	public List<DetalleConstanciaSalida> getListDetalleSalida() {
+		return listDetalleSalida;
+	}
+
+	public void setListDetalleSalida(List<DetalleConstanciaSalida> listDetalleSalida) {
+		this.listDetalleSalida = listDetalleSalida;
+	}
+
+	public DetalleConstanciaSalida getDetalleSalidaSelected() {
+		return detalleSalidaSelected;
+	}
+
+	public void setDetalleSalidaSelected(DetalleConstanciaSalida detalleSalidaSelected) {
+		this.detalleSalidaSelected = detalleSalidaSelected;
+	}
+
+	public DetalleConstanciaSalidaDAO getDetalleSalidaDAO() {
+		return detalleSalidaDAO;
+	}
+
+	public void setDetalleSalidaDAO(DetalleConstanciaSalidaDAO detalleSalidaDAO) {
+		this.detalleSalidaDAO = detalleSalidaDAO;
+	}
+
+	public Integer getCantidadSalida() {
+		return cantidadSalida;
+	}
+
+	public void setCantidadSalida(Integer cantidadSalida) {
+		this.cantidadSalida = cantidadSalida;
+	}
+
+	public BigDecimal getPesoSalida() {
+		return pesoSalida;
+	}
+
+	public void setPesoSalida(BigDecimal pesoSalida) {
+		this.pesoSalida = pesoSalida;
+	}
+
+	public Integer getCantidadTotal() {
+		return cantidadTotal;
+	}
+
+	public void setCantidadTotal(Integer cantidadTotal) {
+		this.cantidadTotal = cantidadTotal;
+	}
+
+	public BigDecimal getPesoTotal() {
+		return pesoTotal;
+	}
+
+	public void setPesoTotal(BigDecimal pesoTotal) {
+		this.pesoTotal = pesoTotal;
 	}
 
 }
