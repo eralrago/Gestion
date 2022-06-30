@@ -133,21 +133,36 @@
 								widgetVar="traspasosDialog" responsive="true">
 								<p:outputPanel id="panel-traspasos" class="ui-fluid">
 									<p:dataTable id="dt-traspasos" widgetVar="dtTraspasos"
-										value="#{dataTableDemoView.products1}" paginator="true"
-										rows="10" paginatorPosition="bottom" rowKey="#{product.id}">
-										<p:column headerText="Traspasos">
-											<h:outputText value="Traspaso1" />
-										</p:column>
+										var="pPartidas" value="#{dataTableDemoView.products1}"
+										paginator="true" rows="10" paginatorPosition="bottom"
+										rowKey="#{product.id}">
+										<p:headerRow field="id">
+											<p:column colspan="6">
+												<div class="p-d-inline-flex p-ai-center"
+													style="vertical-align: middle">
+													<h:outputText styleClass="p-ml-2" value="Traspaso 001" />
+													<h:outputText styleClass="p-ml-2" value="2022-06-29" />
+												</div>
+											</p:column>
+										</p:headerRow>
 										<p:column headerText="Descripcion">
-											<h:outputText value="Descripcion1" />
+											<h:outputText value="Producto1" />
 										</p:column>
 										<p:column headerText="Cantidad">
-											<h:outputText value="Cantidad1" />
+											<h:outputText value="2100" />
+										</p:column>
+										<p:column headerText="Unidad">
+											<h:outputText value="Cajas" />
+										</p:column>
+										<p:column headerText="Origen">
+											<h:outputText value="Refrigeracion1" />
+										</p:column>
+										<p:column headerText="Destino">
+											<h:outputText value="Refrigeracion4" />
 										</p:column>
 									</p:dataTable>
 								</p:outputPanel>
 							</p:dialog>
-
 
 						</div>
 					</div>
