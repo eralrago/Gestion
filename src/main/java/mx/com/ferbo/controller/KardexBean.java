@@ -178,6 +178,7 @@ public class KardexBean implements Serializable {
 				this.cantidadSalida = detalleSalidaSelected.getCantidad();
 				this.pesoSalida = detalleSalidaSelected.getPeso();
 				this.cantidadTotal = p.getCantidadTotal() - cantidadSalida;
+				this.pesoTotal = p.getPesoTotal();
 				this.pesoTotal.subtract(pesoSalida);
 			}
 
