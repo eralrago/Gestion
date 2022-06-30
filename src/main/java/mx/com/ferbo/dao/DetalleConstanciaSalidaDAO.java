@@ -55,7 +55,7 @@ public class DetalleConstanciaSalidaDAO extends IBaseDAO<DetalleConstanciaSalida
 	}
 	
 	public List<DetalleConstanciaSalida> buscarPorParams(Partida p, ConstanciaDeDeposito cDepSel) {
-		EntityManager em = EntityManagerUtil.getEntityManager();		
+	EntityManager em = EntityManagerUtil.getEntityManager();		
 		return em.createNamedQuery("DetalleConstanciaSalida.findByParams", DetalleConstanciaSalida.class)
 				.setParameter("partidaCve", p.getPartidaCve().intValue())
 				.setParameter("folioEntrada", cDepSel.getFolio().toString())
