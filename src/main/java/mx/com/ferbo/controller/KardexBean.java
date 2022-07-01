@@ -150,7 +150,8 @@ public class KardexBean implements Serializable {
 	}
 
 	private void manejaEntradas() {
-
+		this.cantidadSalida =0;
+		this.setPesoSalida(new BigDecimal(0));
 		listConstanciaDepositoFiltered = new ArrayList<>();
 		ConstanciaDeDeposito consAux = new ConstanciaDeDeposito();
 		consAux.setFolio(Integer.parseInt(folioClienteSelected));
@@ -172,14 +173,18 @@ public class KardexBean implements Serializable {
 	private void manejaSalida(Partida p) {
 		detalleSalidaSelected = new DetalleConstanciaSalida();
 		if (p != null) {
-			if (!detalleSalidaDAO.buscarPorParams(p, constanciaDepositoSelected).isEmpty()) {
-				detalleSalidaSelected = detalleSalidaDAO.buscarPorParams(p, constanciaDepositoSelected).get(0);
-				listDetalleSalida.add(detalleSalidaSelected);
-				this.cantidadSalida = detalleSalidaSelected.getCantidad();
-				this.pesoSalida = detalleSalidaSelected.getPeso();
-				this.cantidadTotal = p.getCantidadTotal() - cantidadSalida;
-				this.pesoTotal = p.getPesoTotal();
-				this.pesoTotal.subtract(pesoSalida);
+			List<DetalleConstanciaSalida> detalleAux = new ArrayList<>();
+			detalleAux = detalleSalidaDAO.buscarPorParams(p, constanciaDepositoSelected);
+			this.cantidadTotal = p.getCantidadTotal();
+			this.pesoTotal = p.getPesoTotal();
+			if (!detalleAux.isEmpty()) {
+				for (DetalleConstanciaSalida ds : detalleAux) {
+					listDetalleSalida.add(ds);
+					this.cantidadSalida += ds.getCantidad();
+					this.pesoSalida = this.pesoSalida.add(ds.getPeso());
+				}
+				this.cantidadTotal -=  this.cantidadSalida;
+				this.pesoTotal = this.pesoTotal.subtract(pesoSalida);
 			}
 
 		}
