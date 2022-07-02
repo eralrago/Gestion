@@ -42,7 +42,7 @@
 								<div class="p-d-inline-flex p-ai-center"
 									style="vertical-align: middle">
 									<h:outputText id="numeroCliente" styleClass="p-ml-2"
-										value="#{kardexBean.clienteSelected.cteCve}" />
+										value="#{kardexBean.clienteSelected.numeroCte}" />
 									<h:outputText id="nombreCliente" styleClass="p-ml-2"
 										value="#{kardexBean.clienteSelected.cteNombre}" />
 								</div>
@@ -103,7 +103,7 @@
 												<h:outputText value="#{pSalidas.constanciaCve.fecha}" />
 											</p:column>
 											<p:column headerText="Salida" width="30">
-												<h:outputText value="#{pSalidas.constanciaCve.id}" />
+												<h:outputText value="#{pSalidas.constanciaCve.numero}" />
 											</p:column>
 											<p:column headerText="Producto" width="150">
 												<h:outputText value="#{pSalidas.producto}" />
@@ -128,19 +128,19 @@
 												<h:outputText value="#{pPartidas.cantidadTotal}" />
 											</p:column>
 											<p:column headerText="Total piezas Salida">
-												<h:outputText value="#{kardexBean.cantidadSalida}" />
+												<h:outputText value="#{kardexBean.obtenTotales().cantidad}" />
 											</p:column>
 											<p:column headerText="Saldo Piezas">
-												<h:outputText value="#{pPartidas.cantidadTotal - pPartidas.cantidadSalida}" />
+												<h:outputText value="#{pPartidas.cantidadTotal - kardexBean.obtenTotales().cantidad}" />
 											</p:column>
 											<p:column headerText="Total Kilos Entrada">
 												<h:outputText value="#{pPartidas.pesoTotal}" />
 											</p:column>
 											<p:column headerText="Total Kilos Salida">
-												<h:outputText value="#{kardexBean.pesoSalida}" />
+												<h:outputText value="#{kardexBean.obtenTotales().peso}" />
 											</p:column>
 											<p:column headerText="Saldo Kilos">
-												<h:outputText value="#{kardexBean.pesoTotal}" />
+												<h:outputText value="#{pPartidas.pesoTotal - kardexBean.obtenTotales().peso}" />
 											</p:column>
 										</p:dataTable>
 									</div>

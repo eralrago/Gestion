@@ -2,6 +2,7 @@ package mx.com.ferbo.controller;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import mx.com.ferbo.model.Planta;
 import mx.com.ferbo.model.Producto;
 import mx.com.ferbo.model.UnidadDeManejo;
 import mx.com.ferbo.model.UnidadDeProducto;
+import mx.com.ferbo.util.KardexTotalsBean;
 
 @Named
 @ViewScoped
@@ -104,6 +106,11 @@ public class KardexBean implements Serializable {
 	private List<DetalleConstanciaSalida> listDetalleSalida;
 	private DetalleConstanciaSalida detalleSalidaSelected;
 	private DetalleConstanciaSalidaDAO detalleSalidaDAO;
+	
+	/**
+	 * Objetos auxiliares para Totales de Salidas
+	 */
+	private List<KardexTotalsBean> totalSalidaKardex;
 
 	/**
 	 * Objetos para traspasos
@@ -178,16 +185,30 @@ public class KardexBean implements Serializable {
 			this.cantidadTotal = p.getCantidadTotal();
 			this.pesoTotal = p.getPesoTotal();
 			if (!detalleAux.isEmpty()) {
-				for (DetalleConstanciaSalida ds : detalleAux) {
+				Integer auxCantidadSalida = 0;
+				BigDecimal auxPesoSalida = new BigDecimal(0);
+				String unidadAux = "";
+				for (DetalleConstanciaSalida ds : detalleAux) {					
 					listDetalleSalida.add(ds);
-					this.cantidadSalida += ds.getCantidad();
-					this.pesoSalida = this.pesoSalida.add(ds.getPeso());
+					auxCantidadSalida += ds.getCantidad();
+					auxPesoSalida = auxPesoSalida.add(ds.getPeso());
+					unidadAux = ds.getUnidad();
 				}
+				DetalleConstanciaSalida dsAux = new DetalleConstanciaSalida();
+				dsAux.setId(0);
+				dsAux.setCantidad(auxCantidadSalida);
+				dsAux.setProducto("Totales Salidas");
+				dsAux.setUnidad(unidadAux);
+				dsAux.setPeso(auxPesoSalida);
+				listDetalleSalida.add(dsAux);
 				this.cantidadTotal -=  this.cantidadSalida;
 				this.pesoTotal = this.pesoTotal.subtract(pesoSalida);
 			}
-
 		}
+	}
+	
+	public DetalleConstanciaSalida obtenTotales() {
+		return listDetalleSalida.get(listDetalleSalida.size()-1);
 	}
 
 	/**
@@ -450,4 +471,12 @@ public class KardexBean implements Serializable {
 		this.pesoTotal = pesoTotal;
 	}
 
+	public List<KardexTotalsBean> getTotalSalidaKardex() {
+		return totalSalidaKardex;
+	}
+
+	public void setTotalSalidaKardex(List<KardexTotalsBean> totalSalidaKardex) {
+		this.totalSalidaKardex = totalSalidaKardex;
+	}
+	
 }
