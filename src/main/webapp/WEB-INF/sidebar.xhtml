@@ -14,8 +14,12 @@
 					</p:link>
 				</div>
 				<div class="profile">
-					<a id="profile-button" href="#"> <span class="username">Peggy
-							Olson</span> <i class="pi pi-fw pi-cog" />
+					<a id="profile-button" href="#">
+						<span class="username">
+							<p:outputLabel value="#{sideBarBean.usuario.nombre}"/><h:outputText value="&#160;" />
+							<p:outputLabel value="#{sideBarBean.usuario.apellido1}"/><h:outputText value="&#160;" />
+							<p:outputLabel value="#{sideBarBean.usuario.apellido2}"/>
+						</span> <i class="pi pi-fw pi-cog" />
 					</a>
 					<ul>
 						<li><a href="${application.contextPath}/login.xhtml"> <i

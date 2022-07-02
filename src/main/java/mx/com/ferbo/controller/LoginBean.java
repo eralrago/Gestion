@@ -21,9 +21,10 @@ public class LoginBean implements Serializable {
 	private static final long serialVersionUID = 491768169161736335L;
 	private static final Logger log = Logger.getLogger(LoginBean.class);
 	
-	private String usuario;
+	private String username;
 	private String password;
 	private UsuarioDAO usuarioDAO;
+	private Usuario usuario;
 	private FacesContext faceContext;
     private HttpServletRequest httpServletRequest;
 	
@@ -31,12 +32,12 @@ public class LoginBean implements Serializable {
 		usuarioDAO = new UsuarioDAO();
 	}
 	
-	public String getUsuario() {
-		return usuario;
+	public String getUsername() {
+		return username;
 	}
-
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
+	
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -47,11 +48,19 @@ public class LoginBean implements Serializable {
 		this.password = password;
 	}
 	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
 	public void login() {
 		FacesMessage message = null;
 		
 		try {
-			if(this.usuario == null) {
+			if(this.username == null) {
 				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario o contraseña incorrecto.", null);
 				log.warn("Inicio de sesión incorrecto (usuario incorrecto).");
 				FacesContext.getCurrentInstance().addMessage(null, message);
@@ -64,7 +73,7 @@ public class LoginBean implements Serializable {
 				return;
 			}
 				
-			Usuario usr = usuarioDAO.buscarPorUsuario(this.usuario);
+			Usuario usr = usuarioDAO.buscarPorUsuario(this.username);
 			if(usr == null) {
 				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario o contraseña incorrecto.", null);
 				log.warn("Inicio de sesión incorrecto (usuario/contraseña no encontrado).");
@@ -72,7 +81,7 @@ public class LoginBean implements Serializable {
 				return;
 			}
 			
-			if(usr.getUsuario().equals(this.usuario) == false) {
+			if(usr.getUsuario().equals(this.username) == false) {
 				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario o contraseña incorrecto.", null);
 				log.warn("Inicio de sesión incorrecto (usuario incorrecto).");
 				FacesContext.getCurrentInstance().addMessage(null, message);
@@ -90,8 +99,8 @@ public class LoginBean implements Serializable {
 			//el usuario en sesión y redirigir a la página de bienvenida.
 			faceContext = FacesContext.getCurrentInstance();
 	        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
-	        httpServletRequest.getSession(true).setAttribute("usuario", usuario);                
-	        
+	        httpServletRequest.getSession(true).setAttribute("usuario", usr);                
+	        this.setUsuario(usr);
 	        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Acceso correcto", null);
 	        FacesContext.getCurrentInstance().addMessage(null, message);
 				faceContext.getExternalContext().redirect("dashboard.xhtml");

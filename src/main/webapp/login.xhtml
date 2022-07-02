@@ -16,8 +16,8 @@
     </h:head>
 
     <h:body styleClass="login-body">
-    	<p:growl id="growl" sticky="true" showDetail="true"></p:growl>
     	<h:form id="login_form">
+	    	<p:growl id="growl" life="5000" />
 	        <div id="login-wrapper">
 	            <p:graphicImage name="images/login.png" library="omega-layout" style="width:100%"/>
 	            
@@ -26,7 +26,7 @@
 	
 	                <div class="p-grid ui-fluid">
 	                    <div class="p-col-12">
-	                        <p:inputText placeholder="Usuario" id="usuario" required="true" requiredMessage="Usuario requerido." value="#{loginBean.usuario}"/>
+	                        <p:inputText placeholder="Usuario" id="usuario" required="true" requiredMessage="Usuario requerido." value="#{loginBean.username}"/>
 	                        <p:message for="usuario"/>
 	                    </div>
 	                    <div class="p-col-12">
