@@ -99,7 +99,7 @@ public class CiudadesBean implements Serializable {
 	
 	public void guardarCiudad() {
 		if (this.ciudadSelect.getCiudadesPK().getCiudadCve() == 0) {
-			List<Ciudades> listaCiudadMunicipioEstadoPais = ciudadesDao.buscarPorCriterios(ciudadSelect);
+			List<Ciudades> listaCiudadMunicipioEstadoPais = ciudadesDao.buscarPorCriteriosCiudades(ciudadSelect);
 			int tamanioListaCiudadMunicipioEstadoPais = listaCiudadMunicipioEstadoPais.size() + 1;
 			ciudadPKSelect.setCiudadCve(tamanioListaCiudadMunicipioEstadoPais);
 			ciudadSelect.setCiudadesPK(ciudadPKSelect);
@@ -112,7 +112,7 @@ public class CiudadesBean implements Serializable {
 			}
 		} else {
 			if(ciudadesDao.actualizar(ciudadSelect) == null) {
-				this.listaCiudades.add(this.ciudadSelect);
+//				this.listaCiudades.add(this.ciudadSelect);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ciudad Actualizada"));
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -138,10 +138,9 @@ public class CiudadesBean implements Serializable {
 
 	public void handleContrySelect() {
 		if (this.idPais != -1) {
-			this.paisSelect.setPaisCve(idPais);
-			estadoSelect.setPaises(paisSelect);
+			this.estadoPkSelect.setPaisCve(idPais);
+			this.estadoSelect.setEstadosPK(estadoPkSelect);
 			listaEstados = estadosDao.buscarPorCriteriosEstados(estadoSelect);
-//			PrimeFaces.current().ajax().update("form:dtEstados");
 		}
 	}
 	
