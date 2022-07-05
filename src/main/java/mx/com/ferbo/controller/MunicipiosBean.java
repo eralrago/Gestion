@@ -112,6 +112,13 @@ public class MunicipiosBean implements Serializable {
 	}
 
 	public void eliminandoMunicipio() {
+		int idMunicipio = this.municipioSelect.getMunicipiosPK().getMunicipioCve();
+		municipioSelect = new Municipios();
+		municipioPkSelect = new MunicipiosPK();
+		municipioPkSelect.setPaisCve(idPais);
+		municipioPkSelect.setEstadoCve(idEstado);
+		municipioPkSelect.setMunicipioCve(idMunicipio);
+		municipioSelect.setMunicipiosPK(municipioPkSelect);
 		if (municipiosDao.eliminar(municipioSelect) == null) {
 			this.listaMunicipios.remove(this.municipioSelect);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Municipio Eliminado"));
