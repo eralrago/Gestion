@@ -100,7 +100,7 @@ public class MunicipiosBean implements Serializable {
 			}
 		} else {
 			if(municipiosDao.actualizar(municipioSelect) == null) {
-				this.listaMunicipios.add(this.municipioSelect);
+//				this.listaMunicipios.add(this.municipioSelect);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Municipio Actualizado"));
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -132,8 +132,8 @@ public class MunicipiosBean implements Serializable {
 
 	public void handleContrySelect() {
 		if (this.idPais != -1) {
-			this.paisSelect.setPaisCve(idPais);
-			estadoSelect.setPaises(paisSelect);
+			this.estadoPkSelect.setPaisCve(idPais);
+			this.estadoSelect.setEstadosPK(estadoPkSelect);
 			listaEstados = estadosDao.buscarPorCriteriosEstados(estadoSelect);
 		}
 	}
