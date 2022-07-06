@@ -123,10 +123,6 @@ public class AsentamientoHumanoBean implements Serializable {
 		this.ciudadSelect = new Ciudades();
 		this.ciudadPKSelect = new CiudadesPK();
 		ciudadSelect.setCiudadesPK(ciudadPKSelect);
-		this.tipoAsentamientoSelect = new TipoAsentamiento();
-		asentamientoHumanoSelect.setTipoAsentamiento(tipoAsentamientoSelect);
-		this.entidadPostalSelect = new EntidadPostal();
-		asentamientoHumanoSelect.setEntidadPostal(entidadPostalSelect);
 		this.asentamientoHumanoPKSelect = new AsentamientoHumanoPK();
 		asentamientoHumanoSelect.setAsentamientoHumanoPK(asentamientoHumanoPKSelect);
 	}
@@ -136,6 +132,8 @@ public class AsentamientoHumanoBean implements Serializable {
 			List<AsentamientoHumano> listaAsentamientoCiudadMunicipioEstadoPais = asentamientoHumandoDao.buscarPorCriterios(asentamientoHumanoSelect);
 			int tamanioListaAsentamientoCiudadMunicipioEstadoPais = listaAsentamientoCiudadMunicipioEstadoPais.size() + 1;
 			asentamientoHumanoPKSelect.setAsentamientoCve(tamanioListaAsentamientoCiudadMunicipioEstadoPais);
+			asentamientoHumanoPKSelect.setEntidadpostalCve(idEntidadPostal);
+			asentamientoHumanoPKSelect.setTipoasntmntoCve(idTipoAsentamiento);
 			asentamientoHumanoSelect.setAsentamientoHumanoPK(asentamientoHumanoPKSelect);
 			if(asentamientoHumandoDao.guardar(asentamientoHumanoSelect) == null) {
 				this.listaAsentamientoHumano.add(this.asentamientoHumanoSelect);
