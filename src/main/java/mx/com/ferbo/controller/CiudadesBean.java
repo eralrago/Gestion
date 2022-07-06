@@ -34,9 +34,7 @@ public class CiudadesBean implements Serializable {
 
 	private List<Paises> listaPaises;
 	private List<Estados> listaEstados;
-	private List<Estados> listaTmpEstados;
 	private List<Municipios> listaMunicipios;
-	private List<Municipios> listaTmpMunicipios;
 	private List<Ciudades> listaCiudades;
 
 	private List<Ciudades> listaCiudadesSelect;
@@ -72,9 +70,6 @@ public class CiudadesBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		listaPaises = paisesDao.buscarTodos();
-//		listaEstados = estadosDao.buscarTodos();
-//		listaMunicipios = municipiosDao.buscarTodos();
-//		listaCiudades = ciudadesDao.buscarTodos();
 		this.paisSelect = new Paises();
 		this.estadoSelect = new Estados();
 		this.estadoPkSelect = new EstadosPK();
@@ -179,14 +174,6 @@ public class CiudadesBean implements Serializable {
 		this.listaEstados = listaEstados;
 	}
 
-	public List<Estados> getListaTmpEstados() {
-		return listaTmpEstados;
-	}
-
-	public void setListaTmpEstados(List<Estados> listaTmpEstados) {
-		this.listaTmpEstados = listaTmpEstados;
-	}
-
 	public List<Municipios> getListaMunicipios() {
 		return listaMunicipios;
 	}
@@ -194,15 +181,7 @@ public class CiudadesBean implements Serializable {
 	public void setListaMunicipios(List<Municipios> listaMunicipios) {
 		this.listaMunicipios = listaMunicipios;
 	}
-
-	public List<Municipios> getListaTmpMunicipios() {
-		return listaTmpMunicipios;
-	}
-
-	public void setListaTmpMunicipios(List<Municipios> listaTmpMunicipios) {
-		this.listaTmpMunicipios = listaTmpMunicipios;
-	}
-
+	
 	public List<Ciudades> getListaCiudades() {
 		return listaCiudades;
 	}
