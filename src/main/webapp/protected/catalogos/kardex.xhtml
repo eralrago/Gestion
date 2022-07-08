@@ -30,10 +30,6 @@
 										
 										 <p:commandButton
 										value="Limpiar" styleClass="edit-button ui-button-secondary" />
-									<p:commandButton value="Traspasos"
-										styleClass="edit-button ui-botton-primary" process="@this"
-										oncomplete="PF('traspasosDialog').show()"
-										update="form:panel-traspasos" />
 								</span>
 							</div>
 							
@@ -45,6 +41,10 @@
 										value="#{kardexBean.clienteSelected.numeroCte}" />
 									<h:outputText id="nombreCliente" styleClass="p-ml-2"
 										value="#{kardexBean.clienteSelected.cteNombre}" />
+										<p:commandButton value="Traspasos"
+										styleClass="edit-button ui-botton-primary" process="@this"
+										oncomplete="PF('traspasosDialog').show()"
+										update="form:panel-traspasos" />
 								</div>
 							</div>
 							<p:dataTable id="dt-entradasKardex" widgetVar="dtEntradasKardex"
