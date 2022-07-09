@@ -58,11 +58,9 @@ public class DetalleConstanciaSalidaDAO extends IBaseDAO<DetalleConstanciaSalida
 	EntityManager em = EntityManagerUtil.getEntityManager();		
 		return em.createNamedQuery("DetalleConstanciaSalida.findByParams", DetalleConstanciaSalida.class)
 				.setParameter("partidaCve", p.getPartidaCve().intValue())
-				.setParameter("folioEntrada", cDepSel.getFolio().toString())
+				.setParameter("folioEntrada", cDepSel.getFolioCliente())
 				.setParameter("producto", p.getUnidadDeProductoCve().getProductoCve().getProductoDs())
-				.getResultList();
-		
-		
+				.getResultList();		
 	}
 
 }
