@@ -44,10 +44,6 @@
 										value="#{kardexBean.clienteSelected.numeroCte}" />
 									<h:outputText id="nombreCliente" styleClass="p-ml-2"
 										value="#{kardexBean.clienteSelected.cteNombre}" />
-										<p:commandButton value="Traspasos"
-										styleClass="edit-button ui-botton-primary" process="@this"
-										oncomplete="PF('traspasosDialog').show()"
-										update="form:panel-traspasos" />
 								</div>
 							</div>
 
@@ -116,7 +112,7 @@
 												<h:outputText value="#{pSalidas.cantidad}" />
 											</p:column>
 											<p:column headerText="Unidad" width="30">
-												<h:outputText value="#{pSalidas.unidad}" />
+												<h:outputText value="#{pTotals.partSelected.unidadDeProductoCve.unidadDeManejoCve.unidadDeManejoDs}" />
 											</p:column>
 											<p:column headerText="Kilos Salida" width="30">
 												<h:outputText value="#{pSalidas.peso}" />
