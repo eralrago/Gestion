@@ -1,3 +1,4 @@
+
 package mx.com.ferbo.controller;
 
 import java.io.Serializable;
@@ -14,23 +15,26 @@ import org.primefaces.PrimeFaces;
 import mx.com.ferbo.dao.CamaraDAO;
 import mx.com.ferbo.dao.ClienteDAO;
 import mx.com.ferbo.dao.ConstanciaDeDepositoDAO;
-import mx.com.ferbo.dao.ConstanciaSalidaDAO;
+import mx.com.ferbo.dao.ConstanciaTraspasoDAO;
 import mx.com.ferbo.dao.DetalleConstanciaSalidaDAO;
 import mx.com.ferbo.dao.PartidaDAO;
 import mx.com.ferbo.dao.PlantaDAO;
 import mx.com.ferbo.dao.ProductoDAO;
+import mx.com.ferbo.dao.TraspasoPartidaDAO;
 import mx.com.ferbo.dao.UnidadDeManejoDAO;
 import mx.com.ferbo.dao.UnidadDeProductoDAO;
 import mx.com.ferbo.model.Camara;
 import mx.com.ferbo.model.Cliente;
 import mx.com.ferbo.model.ConstanciaDeDeposito;
-import mx.com.ferbo.model.ConstanciaSalida;
+import mx.com.ferbo.model.ConstanciaTraspaso;
 import mx.com.ferbo.model.DetalleConstanciaSalida;
 import mx.com.ferbo.model.Partida;
 import mx.com.ferbo.model.Planta;
 import mx.com.ferbo.model.Producto;
+import mx.com.ferbo.model.TraspasoPartida;
 import mx.com.ferbo.model.UnidadDeManejo;
 import mx.com.ferbo.model.UnidadDeProducto;
+import mx.com.ferbo.util.KardexTotalsBean;
 
 @Named
 @ViewScoped
@@ -106,8 +110,23 @@ public class KardexBean implements Serializable {
 	private DetalleConstanciaSalidaDAO detalleSalidaDAO;
 
 	/**
-	 * Objetos para traspasos
+	 * Objetos auxiliares para Totales de Salidas
 	 */
+	private List<KardexTotalsBean> totalSalidaKardex;
+
+	/**
+	 * Objetos para Constancia traspasos
+	 */
+	private List<ConstanciaTraspaso> listContanciaTraspaso;
+	private ConstanciaTraspaso constanciaTraspasoSelected;
+	private ConstanciaTraspasoDAO constanciaTraspasoDAO;
+
+	/**
+	 * Objetos para Traspaso Partida
+	 */
+	private List<TraspasoPartida> listTraspasoPartida;
+	private TraspasoPartida traspasoPartidaSelected;
+	private TraspasoPartidaDAO traspasoPartidaDAO;
 
 	/**
 	 * Auxiliares
@@ -117,6 +136,7 @@ public class KardexBean implements Serializable {
 	private BigDecimal pesoSalida;
 	private Integer cantidadTotal;
 	private BigDecimal pesoTotal;
+	private boolean pintaTraspaso;
 
 	/**
 	 * Constructores
@@ -126,6 +146,8 @@ public class KardexBean implements Serializable {
 		this.constanciaDeDepositoDAO = new ConstanciaDeDepositoDAO();
 		this.partidaDAO = new PartidaDAO();
 		this.detalleSalidaDAO = new DetalleConstanciaSalidaDAO();
+		this.constanciaTraspasoDAO = new ConstanciaTraspasoDAO();
+		this.traspasoPartidaDAO = new TraspasoPartidaDAO();
 		this.cantidadSalida = 0;
 		this.cantidadTotal = 0;
 		this.pesoSalida = new BigDecimal(0);
@@ -138,6 +160,10 @@ public class KardexBean implements Serializable {
 		listConstanciaDepositoFiltered = new ArrayList<>();
 		listDetalleSalida = new ArrayList<>();
 		listPartida = new ArrayList<>();
+		totalSalidaKardex = new ArrayList<>();
+		listContanciaTraspaso = new ArrayList<>();
+		listTraspasoPartida = new ArrayList<>();
+		pintaTraspaso = false;
 	}
 
 	public void buscaDatos() {
@@ -145,42 +171,89 @@ public class KardexBean implements Serializable {
 			// Kardex Entradas
 			manejaEntradas();
 			System.out.println(constanciaDepositoSelected.getFolioCliente());
-			PrimeFaces.current().ajax().update("form:dt-entradasKardex");
+			PrimeFaces.current().ajax().update("form:dt-entradasKardex", "form:dt-salidasKardex", "form:dt-traspasos",
+					"form:button-traspasos");
 		}
 	}
 
 	private void manejaEntradas() {
-
+		totalSalidaKardex.clear();
+		this.cantidadSalida = 0;
+		this.setPesoSalida(new BigDecimal(0));
 		listConstanciaDepositoFiltered = new ArrayList<>();
 		ConstanciaDeDeposito consAux = new ConstanciaDeDeposito();
-		consAux.setFolio(Integer.parseInt(folioClienteSelected));
-		listConstanciaDepositoFiltered = constanciaDeDepositoDAO.buscarPorFolio(consAux);
+		consAux.setFolioCliente(folioClienteSelected);
+		listConstanciaDepositoFiltered = constanciaDeDepositoDAO.buscarPorFolioCliente(consAux);
 		if (!listConstanciaDepositoFiltered.isEmpty() && listConstanciaDepositoFiltered.size() > 0) {
-			constanciaDepositoSelected = listConstanciaDepositoFiltered.get(0);
-			clienteSelected = new Cliente();
-			clienteSelected = clienteDAO.buscarPorId(constanciaDepositoSelected.getCteCve().getCteCve());
-			listPartida = partidaDAO.buscarPorConstanciaDeposito(consAux);
+			for (ConstanciaDeDeposito dep : listConstanciaDepositoFiltered) {
+				constanciaDepositoSelected = dep;
+				listPartida = new ArrayList<>();
+				clienteSelected = new Cliente();
+				clienteSelected = clienteDAO.buscarPorId(dep.getCteCve().getCteCve());
+				listPartida.addAll(partidaDAO.buscarPorConstanciaDeposito(consAux));
+				// listPartida = partidaDAO.buscarPorConstanciaDeposito(consAux);
+			}
 			listDetalleSalida = new ArrayList<>();
 			if (listPartida != null && listPartida.size() > 0) {
 				for (Partida p : listPartida) {
-					manejaSalida(p);
+					KardexTotalsBean krdx = manejaSalida(p);
+					totalSalidaKardex.add(krdx);
+					this.buscaTraspaso(p);
 				}
 			}
 		}
+		if (!this.listTraspasoPartida.isEmpty()) {
+			this.pintaTraspaso = true;
+		}else {
+			this.pintaTraspaso = false;
+		}
 	}
 
-	private void manejaSalida(Partida p) {
+	private KardexTotalsBean manejaSalida(Partida p) {
+		KardexTotalsBean krdx = new KardexTotalsBean();
+		krdx.setConsDepKardex(constanciaDepositoSelected);
+		krdx.setPartSelected(p);
 		detalleSalidaSelected = new DetalleConstanciaSalida();
 		if (p != null) {
-			if (!detalleSalidaDAO.buscarPorParams(p, constanciaDepositoSelected).isEmpty()) {
-				detalleSalidaSelected = detalleSalidaDAO.buscarPorParams(p, constanciaDepositoSelected).get(0);
-				listDetalleSalida.add(detalleSalidaSelected);
-				this.cantidadSalida = detalleSalidaSelected.getCantidad();
-				this.pesoSalida = detalleSalidaSelected.getPeso();
-				this.cantidadTotal = p.getCantidadTotal() - cantidadSalida;
-				this.pesoTotal.subtract(pesoSalida);
+			List<DetalleConstanciaSalida> detalleAux = new ArrayList<>();
+			detalleAux = detalleSalidaDAO.buscarPorParams(p, constanciaDepositoSelected);
+			this.cantidadTotal = p.getCantidadTotal();
+			this.pesoTotal = p.getPesoTotal();
+			if (!detalleAux.isEmpty()) {
+				Integer auxCantidadSalida = 0;
+				BigDecimal auxPesoSalida = new BigDecimal(0);
+				for (DetalleConstanciaSalida ds : detalleAux) {
+					listDetalleSalida.add(ds);
+					auxCantidadSalida += ds.getCantidad();
+					auxPesoSalida = auxPesoSalida.add(ds.getPeso());
+					String unidadAux = ds.getUnidad();
+					krdx.setUnidad(unidadAux);
+				}
+				krdx.setListDetalleSalida(listDetalleSalida);
+				krdx.setCantidadSalida(auxCantidadSalida);
+				krdx.setPesoSalida(auxPesoSalida);
+				listDetalleSalida = new ArrayList<>();
+				this.cantidadTotal -= this.cantidadSalida;
+				this.pesoTotal = this.pesoTotal.subtract(pesoSalida);
 			}
 
+		}
+		krdx.setCantidadTotal(cantidadTotal);
+		krdx.setPesoTotal(pesoTotal);
+		return krdx;
+	}
+
+	public void buscaTraspaso(Partida p) {
+		List<TraspasoPartida> trspPartida = new ArrayList<>();
+		traspasoPartidaSelected = new TraspasoPartida();
+		traspasoPartidaSelected.setPartida(p);
+		trspPartida = traspasoPartidaDAO.buscarPorCriterios(traspasoPartidaSelected);
+		if (!trspPartida.isEmpty()) {
+			constanciaTraspasoSelected = constanciaTraspasoDAO.buscarPorId(trspPartida.get(0).getId());
+
+			for (TraspasoPartida trsAux : trspPartida) {
+				listTraspasoPartida.add(trsAux);
+			}
 		}
 	}
 
@@ -442,6 +515,70 @@ public class KardexBean implements Serializable {
 
 	public void setPesoTotal(BigDecimal pesoTotal) {
 		this.pesoTotal = pesoTotal;
+	}
+
+	public List<KardexTotalsBean> getTotalSalidaKardex() {
+		return totalSalidaKardex;
+	}
+
+	public void setTotalSalidaKardex(List<KardexTotalsBean> totalSalidaKardex) {
+		this.totalSalidaKardex = totalSalidaKardex;
+	}
+
+	public List<ConstanciaTraspaso> getListContanciaTraspaso() {
+		return listContanciaTraspaso;
+	}
+
+	public void setListContanciaTraspaso(List<ConstanciaTraspaso> listContanciaTraspaso) {
+		this.listContanciaTraspaso = listContanciaTraspaso;
+	}
+
+	public ConstanciaTraspaso getConstanciaTraspasoSelected() {
+		return constanciaTraspasoSelected;
+	}
+
+	public void setConstanciaTraspasoSelected(ConstanciaTraspaso constanciaTraspasoSelected) {
+		this.constanciaTraspasoSelected = constanciaTraspasoSelected;
+	}
+
+	public List<TraspasoPartida> getListTraspasoPartida() {
+		return listTraspasoPartida;
+	}
+
+	public void setListTraspasoPartida(List<TraspasoPartida> listTraspasoPartida) {
+		this.listTraspasoPartida = listTraspasoPartida;
+	}
+
+	public ConstanciaTraspasoDAO getConstanciaTraspasoDAO() {
+		return constanciaTraspasoDAO;
+	}
+
+	public void setConstanciaTraspasoDAO(ConstanciaTraspasoDAO constanciaTraspasoDAO) {
+		this.constanciaTraspasoDAO = constanciaTraspasoDAO;
+	}
+
+	public TraspasoPartida getTraspasoPartidaSelected() {
+		return traspasoPartidaSelected;
+	}
+
+	public void setTraspasoPartidaSelected(TraspasoPartida traspasoPartidaSelected) {
+		this.traspasoPartidaSelected = traspasoPartidaSelected;
+	}
+
+	public TraspasoPartidaDAO getTraspasoPartidaDAO() {
+		return traspasoPartidaDAO;
+	}
+
+	public void setTraspasoPartidaDAO(TraspasoPartidaDAO traspasoPartidaDAO) {
+		this.traspasoPartidaDAO = traspasoPartidaDAO;
+	}
+
+	public boolean isPintaTraspaso() {
+		return pintaTraspaso;
+	}
+
+	public void setPintaTraspaso(boolean pintaTraspaso) {
+		this.pintaTraspaso = pintaTraspaso;
 	}
 
 }
