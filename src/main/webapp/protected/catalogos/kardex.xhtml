@@ -26,12 +26,14 @@
 										id="buscarFolio" actionListener="#{kardexBean.buscaDatos()}"
 										icon="pi pi-search" process="@this folioSelected"
 										styleClass="edit-button ui-button-primary" value="Buscar"
+
 										update="form:dt-entradasKardex form:numeroCliente form:nombreCliente form:button-traspasos" />
 									<p:commandButton value="Traspasos" id="button-traspasos"
 										styleClass="edit-button ui-botton-primary" process="@this"
 										oncomplete="PF('traspasosDialog').show()"
 										update="form:panel-traspasos form:dt-traspasos @this"
 										disabled="#{kardexBean.pintaTraspaso eq false}" />
+
 								</span>
 							</div>
 
@@ -110,7 +112,7 @@
 												<h:outputText value="#{pSalidas.cantidad}" />
 											</p:column>
 											<p:column headerText="Unidad" width="30">
-												<h:outputText value="#{pSalidas.unidad}" />
+												<h:outputText value="#{pTotals.partSelected.unidadDeProductoCve.unidadDeManejoCve.unidadDeManejoDs}" />
 											</p:column>
 											<p:column headerText="Kilos Salida" width="30">
 												<h:outputText value="#{pSalidas.peso}" />
