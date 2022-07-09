@@ -26,12 +26,14 @@
 										id="buscarFolio" actionListener="#{kardexBean.buscaDatos()}"
 										icon="pi pi-search" process="@this folioSelected"
 										styleClass="edit-button ui-button-primary" value="Buscar"
+
 										update="form:dt-entradasKardex form:numeroCliente form:nombreCliente form:button-traspasos" />
 									<p:commandButton value="Traspasos" id="button-traspasos"
 										styleClass="edit-button ui-botton-primary" process="@this"
 										oncomplete="PF('traspasosDialog').show()"
 										update="form:panel-traspasos form:dt-traspasos @this"
 										disabled="#{kardexBean.pintaTraspaso eq false}" />
+
 								</span>
 							</div>
 
@@ -42,6 +44,10 @@
 										value="#{kardexBean.clienteSelected.numeroCte}" />
 									<h:outputText id="nombreCliente" styleClass="p-ml-2"
 										value="#{kardexBean.clienteSelected.cteNombre}" />
+										<p:commandButton value="Traspasos"
+										styleClass="edit-button ui-botton-primary" process="@this"
+										oncomplete="PF('traspasosDialog').show()"
+										update="form:panel-traspasos" />
 								</div>
 							</div>
 
