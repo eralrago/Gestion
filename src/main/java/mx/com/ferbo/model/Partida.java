@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,16 +31,17 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "PARTIDA")
 @NamedQueries({
-    @NamedQuery(name = "Partida.findAll", query = "SELECT p FROM Partida p"),
-    @NamedQuery(name = "Partida.findByPartidaCve", query = "SELECT p FROM Partida p WHERE p.partidaCve = :partidaCve"),
-    @NamedQuery(name = "Partida.findByPesoTotal", query = "SELECT p FROM Partida p WHERE p.pesoTotal = :pesoTotal"),
-    @NamedQuery(name = "Partida.findByCantidadTotal", query = "SELECT p FROM Partida p WHERE p.cantidadTotal = :cantidadTotal"),
-    @NamedQuery(name = "Partida.findByUnidadDeProductoCve", query = "SELECT p FROM Partida p WHERE p.unidadDeProductoCve = :unidadDeProductoCve"),
-    @NamedQuery(name = "Partida.findByCantidadDeCobro", query = "SELECT p FROM Partida p WHERE p.cantidadDeCobro = :cantidadDeCobro"),
-    @NamedQuery(name = "Partida.findByPartidaSeq", query = "SELECT p FROM Partida p WHERE p.partidaSeq = :partidaSeq"),
-    @NamedQuery(name = "Partida.findByValorMercancia", query = "SELECT p FROM Partida p WHERE p.valorMercancia = :valorMercancia"),
-    @NamedQuery(name = "Partida.findByRendimiento", query = "SELECT p FROM Partida p WHERE p.rendimiento = :rendimiento"),
-    @NamedQuery(name = "Partida.findByNoTarimas", query = "SELECT p FROM Partida p WHERE p.noTarimas = :noTarimas")})
+        @NamedQuery(name = "Partida.findAll", query = "SELECT p FROM Partida p"),
+        @NamedQuery(name = "Partida.findByPartidaCve", query = "SELECT p FROM Partida p WHERE p.partidaCve = :partidaCve"),
+        @NamedQuery(name = "Partida.findByPesoTotal", query = "SELECT p FROM Partida p WHERE p.pesoTotal = :pesoTotal"),
+        @NamedQuery(name = "Partida.findByCantidadTotal", query = "SELECT p FROM Partida p WHERE p.cantidadTotal = :cantidadTotal"),
+        @NamedQuery(name = "Partida.findByUnidadDeProductoCve", query = "SELECT p FROM Partida p WHERE p.unidadDeProductoCve = :unidadDeProductoCve"),
+        @NamedQuery(name = "Partida.findByCantidadDeCobro", query = "SELECT p FROM Partida p WHERE p.cantidadDeCobro = :cantidadDeCobro"),
+        @NamedQuery(name = "Partida.findByPartidaSeq", query = "SELECT p FROM Partida p WHERE p.partidaSeq = :partidaSeq"),
+        @NamedQuery(name = "Partida.findByValorMercancia", query = "SELECT p FROM Partida p WHERE p.valorMercancia = :valorMercancia"),
+        @NamedQuery(name = "Partida.findByRendimiento", query = "SELECT p FROM Partida p WHERE p.rendimiento = :rendimiento"),
+        @NamedQuery(name = "Partida.findByNoTarimas", query = "SELECT p FROM Partida p WHERE p.noTarimas = :noTarimas"),
+        @NamedQuery(name = "Partida.findByConstanciaDeDeposito", query = "SELECT p FROM Partida p WHERE p.folio.folioCliente = :folioCliente") })
 public class Partida implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,13 +50,14 @@ public class Partida implements Serializable {
     @Basic(optional = false)
     @Column(name = "PARTIDA_CVE")
     private Integer partidaCve;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?) @Min(value=?)//if you know range of your decimal fields
+    // consider using these annotations to enforce field validation
     @Column(name = "PESO_TOTAL")
     private BigDecimal pesoTotal;
     @Column(name = "CANTIDAD_TOTAL")
     private Integer cantidadTotal;
-    @Column(name = "UNIDAD_DE_PRODUCTO_CVE")
-    private Integer unidadDeProductoCve;
+    // @Column(name = "UNIDAD_DE_PRODUCTO_CVE")
+    // private Integer unidadDeProductoCve;
     @Column(name = "cantidad_de_cobro")
     private BigDecimal cantidadDeCobro;
     @Column(name = "partida_seq")
@@ -80,6 +83,14 @@ public class Partida implements Serializable {
     private UnidadDeManejo unidadDeCobro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partidaCve")
     private List<DetalleConstanciaSalida> detalleConstanciaSalidaList;
+
+    @JoinColumn(name = "UNIDAD_DE_PRODUCTO_CVE", referencedColumnName = "UNIDAD_DE_PRODUCTO_CVE")
+    @ManyToOne(optional = false)
+    private UnidadDeProducto unidadDeProductoCve;
+
+    public void setUnidadDeProductoCve(UnidadDeProducto unidadDeProductoCve) {
+        this.unidadDeProductoCve = unidadDeProductoCve;
+    }
 
     public Partida() {
     }
@@ -115,14 +126,6 @@ public class Partida implements Serializable {
 
     public void setCantidadTotal(Integer cantidadTotal) {
         this.cantidadTotal = cantidadTotal;
-    }
-
-    public Integer getUnidadDeProductoCve() {
-        return unidadDeProductoCve;
-    }
-
-    public void setUnidadDeProductoCve(Integer unidadDeProductoCve) {
-        this.unidadDeProductoCve = unidadDeProductoCve;
     }
 
     public BigDecimal getCantidadDeCobro() {
@@ -205,6 +208,10 @@ public class Partida implements Serializable {
         this.detalleConstanciaSalidaList = detalleConstanciaSalidaList;
     }
 
+    public UnidadDeProducto getUnidadDeProductoCve() {
+        return unidadDeProductoCve;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -219,7 +226,8 @@ public class Partida implements Serializable {
             return false;
         }
         Partida other = (Partida) object;
-        if ((this.partidaCve == null && other.partidaCve != null) || (this.partidaCve != null && !this.partidaCve.equals(other.partidaCve))) {
+        if ((this.partidaCve == null && other.partidaCve != null)
+                || (this.partidaCve != null && !this.partidaCve.equals(other.partidaCve))) {
             return false;
         }
         return true;
@@ -229,5 +237,5 @@ public class Partida implements Serializable {
     public String toString() {
         return "mx.com.ferbo.model.Partida[ partidaCve=" + partidaCve + " ]";
     }
-    
+
 }

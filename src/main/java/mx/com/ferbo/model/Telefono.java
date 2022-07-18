@@ -6,12 +6,18 @@
 package mx.com.ferbo.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,18 +30,17 @@ import javax.validation.constraints.Size;
 @Table(name = "telefono")
 @NamedQueries({
     @NamedQuery(name = "Telefono.findAll", query = "SELECT t FROM Telefono t"),
-    @NamedQuery(name = "Telefono.findByIdMedio", query = "SELECT t FROM Telefono t WHERE t.idMedio = :idMedio"),
+    @NamedQuery(name = "Telefono.findByIdTelefono", query = "SELECT t FROM Telefono t WHERE t.idTelefono = :idTelefono"),
     @NamedQuery(name = "Telefono.findByNbTelefono", query = "SELECT t FROM Telefono t WHERE t.nbTelefono = :nbTelefono"),
-    @NamedQuery(name = "Telefono.findByStPrincipal", query = "SELECT t FROM Telefono t WHERE t.stPrincipal = :stPrincipal"),
-    @NamedQuery(name = "Telefono.findByTpTelefono", query = "SELECT t FROM Telefono t WHERE t.tpTelefono = :tpTelefono")})
+    @NamedQuery(name = "Telefono.findByStPrincipal", query = "SELECT t FROM Telefono t WHERE t.stPrincipal = :stPrincipal")})
 public class Telefono implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_medio")
-    private Integer idMedio;
+    @Column(name = "id_telefono")
+    private Integer idTelefono;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 16)
@@ -45,31 +50,31 @@ public class Telefono implements Serializable {
     @NotNull
     @Column(name = "st_principal")
     private boolean stPrincipal;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "tp_telefono")
-    private short tpTelefono;
+    @JoinColumn(name = "tp_telefono", referencedColumnName = "tp_telefono")
+    @ManyToOne(optional = false)
+    private TipoTelefono tpTelefono;
+    @OneToMany(mappedBy = "idTelefono")
+    private List<MedioCnt> medioCntList;
 
     public Telefono() {
     }
 
-    public Telefono(Integer idMedio) {
-        this.idMedio = idMedio;
+    public Telefono(Integer idTelefono) {
+        this.idTelefono = idTelefono;
     }
 
-    public Telefono(Integer idMedio, String nbTelefono, boolean stPrincipal, short tpTelefono) {
-        this.idMedio = idMedio;
+    public Telefono(Integer idTelefono, String nbTelefono, boolean stPrincipal) {
+        this.idTelefono = idTelefono;
         this.nbTelefono = nbTelefono;
         this.stPrincipal = stPrincipal;
-        this.tpTelefono = tpTelefono;
     }
 
-    public Integer getIdMedio() {
-        return idMedio;
+    public Integer getIdTelefono() {
+        return idTelefono;
     }
 
-    public void setIdMedio(Integer idMedio) {
-        this.idMedio = idMedio;
+    public void setIdTelefono(Integer idTelefono) {
+        this.idTelefono = idTelefono;
     }
 
     public String getNbTelefono() {
@@ -88,18 +93,26 @@ public class Telefono implements Serializable {
         this.stPrincipal = stPrincipal;
     }
 
-    public short getTpTelefono() {
+    public TipoTelefono getTpTelefono() {
         return tpTelefono;
     }
 
-    public void setTpTelefono(short tpTelefono) {
+    public void setTpTelefono(TipoTelefono tpTelefono) {
         this.tpTelefono = tpTelefono;
+    }
+
+    public List<MedioCnt> getMedioCntList() {
+        return medioCntList;
+    }
+
+    public void setMedioCntList(List<MedioCnt> medioCntList) {
+        this.medioCntList = medioCntList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idMedio != null ? idMedio.hashCode() : 0);
+        hash += (idTelefono != null ? idTelefono.hashCode() : 0);
         return hash;
     }
 
@@ -110,7 +123,7 @@ public class Telefono implements Serializable {
             return false;
         }
         Telefono other = (Telefono) object;
-        if ((this.idMedio == null && other.idMedio != null) || (this.idMedio != null && !this.idMedio.equals(other.idMedio))) {
+        if ((this.idTelefono == null && other.idTelefono != null) || (this.idTelefono != null && !this.idTelefono.equals(other.idTelefono))) {
             return false;
         }
         return true;
@@ -118,7 +131,7 @@ public class Telefono implements Serializable {
 
     @Override
     public String toString() {
-        return "mx.com.ferbo.model.Telefono[ idMedio=" + idMedio + " ]";
+        return "mx.com.ferbo.model.Telefono[ idTelefono=" + idTelefono + " ]";
     }
     
 }

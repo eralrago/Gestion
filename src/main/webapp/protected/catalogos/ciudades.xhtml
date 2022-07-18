@@ -1,0 +1,203 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Ciudades</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Home" outcome="/dashboard" />
+				<p:menuitem value="Facturación" />
+				<p:menuitem value="Catálogos" />
+				<p:menuitem value="Domicilios" />
+				<p:menuitem value="Cambios" />
+				<p:menuitem value="Ciudades" outcome="/protected/catalogos/ciudades" />
+			</p:breadCrumb>
+			<div class="p-grid button-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:commandButton value="Agregar" icon="pi pi-plus"
+							actionListener="#{ciudadesBean.nuevaCiudad}"
+							update="manage-city-content-new form:manage-city-content-new"
+							oncomplete="PF('nuevaCiudadDialog').show()"
+							styleClass="p-mr-2 p-mb-2" process="@this" />
+					</div>
+					<div class="card">
+						<p:outputLabel for="countries-som" value="Paises:" />
+						<p:selectOneMenu id="countries-som" autoWidth="false"
+							value="#{ciudadesBean.idPais}">
+							<f:selectItem itemLabel="Selecione Pais" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedCountriesOne"
+								value="#{ciudadesBean.listaPaises}"
+								itemLabel="#{selectedCountriesOne.paisDesc}"
+								itemValue="#{selectedCountriesOne.paisCve}" />
+							<p:ajax listener="#{ciudadesBean.handleContrySelect()}"
+								update="states-som" />
+						</p:selectOneMenu>
+						<p:outputLabel for="states-som" value="Estados:" />
+						<p:selectOneMenu id="states-som" autoWidth="false"
+							value="#{ciudadesBean.idEstado}">
+							<f:selectItem itemLabel="Selecione Estado" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedStatesOne"
+								value="#{ciudadesBean.listaEstados}"
+								itemLabel="#{selectedStatesOne.estadoDesc}"
+								itemValue="#{selectedStatesOne.estadosPK.estadoCve}" />
+							<p:ajax listener="#{ciudadesBean.handleStateSelect()}"
+								update="municipalities-som" />
+						</p:selectOneMenu>
+						<p:outputLabel for="municipalities-som" value="Municipios:" />
+						<p:selectOneMenu id="municipalities-som" autoWidth="false"
+							value="#{ciudadesBean.idMunicipio}">
+							<f:selectItem itemLabel="Selecione Municipio" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems var="selectedMunicipalitiesOne"
+								value="#{ciudadesBean.listaMunicipios}"
+								itemLabel="#{selectedMunicipalitiesOne.municipioDs}"
+								itemValue="#{selectedMunicipalitiesOne.municipiosPK.municipioCve}" />
+							<p:ajax listener="#{ciudadesBean.handleMunicipalitySelect()}"
+								update="dt-Ciudades" />
+						</p:selectOneMenu>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<p:dataTable id="dt-Ciudades" widgetVar="dtCiudades" var="ciudades"
+							value="#{ciudadesBean.listaCiudades}" reflow="true"
+							rowKey="#{ciudades.ciudadDs}" paginator="true" rows="10"
+							paginatorPosition="bottom" rowSelectMode="add">
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Ciudades</span> <span
+										class="ui-input-icon-left filter-container"> <i
+										class="pi pi-search" /> <p:inputText id="globalFilter"
+											onkeyup="PF('dtCiudades').filter()" placeholder="Búsqueda" />
+									</span>
+								</div>
+							</f:facet>
+
+							<!-- 							<p:ajax event="rowSelect" update=":form:delete-servicios-button" /> -->
+							<!-- 							<p:ajax event="rowUnselect" -->
+							<!-- 								update=":form:delete-Ciudads-button" /> -->
+							<!-- 							<p:ajax event="rowSelectCheckbox" -->
+							<!-- 								update=":form:delete-Ciudads-button" /> -->
+							<!-- 							<p:ajax event="rowUnselectCheckbox" -->
+							<!-- 								update=":form:delete-Ciudads-button" /> -->
+							<!-- 							<p:ajax event="toggleSelect" -->
+							<!-- 								update=":form:delete-Ciudads-button" /> -->
+
+							<p:column selectionMode="multiple" />
+							<p:column headerText="Pais" sortBy="#{ciudades.municipios.estados.paises.paisDesc}"
+								filterBy="#{ciudades.municipios.estados.paises.paisDesc}" style="text-align:center">
+								<h:outputText style="vertical-align: middle; margin-left: .2rem; margin-right: .2rem"
+									value="#{ciudades.municipios.estados.paises.paisDesc}" />
+							</p:column>
+							<p:column headerText="Estado" sortBy="#{ciudades.municipios.estados.estadoDesc}"
+								filterBy="#{ciudades.municipios.estados.estadoDesc}" style="text-align:center">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{ciudades.municipios.estados.estadoDesc}" />
+							</p:column>
+							<p:column headerText="Municipio" sortBy="#{ciudades.municipios.municipioDs}"
+								filterBy="#{ciudades.municipios.municipioDs}" style="text-align:center">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{ciudades.municipios.municipioDs}" />
+							</p:column>
+							<p:column headerText="Ciudad" sortBy="#{ciudades.ciudadDs}"
+								filterBy="#{ciudades.ciudadDs}" style="text-align:center">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{ciudades.ciudadDs}" />
+							</p:column>
+							<p:column headerText="Acción" style="text-align:center">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-city-content-new" value="Modificar"
+									oncomplete="PF('nuevaCiudadDialog').show()"
+									styleClass="p-mr-2 p-mb-2" process="@this">
+									<f:setPropertyActionListener value="#{ciudades}"
+										target="#{ciudadesBean.ciudadSelect}" />
+								</p:commandButton>
+								<p:commandButton value="Eliminar" styleClass="p-mr-2 p-mb-2"
+									icon="pi pi-trash" process="@this"
+									oncomplete="PF('deleteCiudadDialog').show()">
+									<f:setPropertyActionListener value="#{ciudades}"
+										target="#{ciudadesBean.ciudadSelect}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<p:dialog header="Agregar/Editar un Ciudad" showEffect="fade"
+				modal="true" widgetVar="nuevaCiudadDialog" responsive="true">
+				<p:outputPanel id="manage-city-content-new" class="ui-fluid">
+					<p:outputPanel rendered="#{not empty ciudadesBean.ciudadSelect}">
+						<div class="p-field">
+						<p:outputLabel for="towns" value="Paises:"/>
+						<p:selectOneMenu id="towns" autoWidth="false" value="#{ciudadesBean.idPais}">
+							<f:selectItem itemLabel="Selecione Pais" itemValue="" noSelectionOption="true"/>
+							<f:selectItems var="selectedTowns"  value="#{ciudadesBean.listaPaises}" itemLabel="#{selectedTowns.paisDesc}" itemValue="#{selectedTowns.paisCve}"/>
+							<p:ajax listener="#{ciudadesBean.handleContrySelect}" process="@this" update=":form:manage-city-content-new"/>
+						</p:selectOneMenu>
+						</div>
+						<div class="p-field">
+						<p:outputLabel for="municipalities" value="Estado:"/>
+						<p:selectOneMenu id="municipalities" autoWidth="false" value="#{ciudadesBean.idEstado}">
+							<f:selectItem itemLabel="Selecione Estado" itemValue="" noSelectionOption="true"/>
+							<f:selectItems var="selectedmunicipalities"  value="#{ciudadesBean.listaEstados}" itemLabel="#{selectedmunicipalities.estadoDesc}" itemValue="#{selectedmunicipalities.estadosPK.estadoCve}"/>
+							<p:ajax listener="#{ciudadesBean.handleStateSelect}" process="@this" update=":form:manage-city-content-new"/>
+						</p:selectOneMenu>
+						</div>
+						<div class="p-field">
+						<p:outputLabel for="municipality" value="Municipio:"/>
+						<p:selectOneMenu id="municipality" autoWidth="false" value="#{ciudadesBean.idMunicipio}">
+							<f:selectItem itemLabel="Selecione Municipio" itemValue="" noSelectionOption="true"/>
+							<f:selectItems var="selectedmunicipality"  value="#{ciudadesBean.listaMunicipios}" itemLabel="#{selectedmunicipality.municipioDs}" itemValue="#{selectedmunicipality.municipiosPK.municipioCve}"/>
+							<p:ajax listener="#{ciudadesBean.handleMunicipalitySelect}" process="@this" update=":form:manage-city-content-new"/>
+						</p:selectOneMenu>
+						</div>
+						<div class="p-field">
+							<p:outputLabel for="Ciudad-new" value="Ciudad" />
+							<p:inputText id="Ciudad-new"
+								value="#{ciudadesBean.ciudadSelect.ciudadDs}" required="true" />
+						</div>
+					</p:outputPanel>
+				</p:outputPanel>
+				<f:facet name="footer">
+					<p:commandButton value="Guardar" icon="pi pi-plus"
+						actionListener="#{ciudadesBean.guardarCiudad()}"
+						update=":form:manage-city-content-new"
+						styleClass="p-mr-2 p-mb-2" />
+					<p:commandButton value="Cancelar" icon="pi pi-times"
+						onclick="PF('nuevaCiudadDialog').hide()"
+						class="ui-button-secondary" />
+				</f:facet>
+			</p:dialog>
+			<p:confirmDialog widgetVar="deleteCiudadDialog" showEffect="fade"
+				width="400" message="Desea eliminar la Ciudad?" header="Eliminar"
+				severity="warn">
+				<p:commandButton value="Sí" icon="pi pi-check"
+					actionListener="#{ciudadesBean.eliminandoCiudad()}" process="@this"
+					oncomplete="PF('deleteCiudadDialog').hide()" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-button-secondary" icon="pi pi-times"
+					onclick="PF('deleteCiudadDialog').hide()" />
+			</p:confirmDialog>
+			<p:confirmDialog global="true" showEffect="fade" width="400"
+				header="Eliminar">
+				<p:commandButton value="Sí" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no ui-button-secondary"
+					icon="pi pi-times" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

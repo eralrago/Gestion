@@ -8,12 +8,17 @@ package mx.com.ferbo.model;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -23,47 +28,63 @@ import javax.validation.constraints.NotNull;
 @Table(name = "medio_cnt")
 @NamedQueries({
     @NamedQuery(name = "MedioCnt.findAll", query = "SELECT m FROM MedioCnt m"),
-    @NamedQuery(name = "MedioCnt.findByIdMedio", query = "SELECT m FROM MedioCnt m WHERE m.medioCntPK.idMedio = :idMedio"),
-    @NamedQuery(name = "MedioCnt.findByTpMedio", query = "SELECT m FROM MedioCnt m WHERE m.medioCntPK.tpMedio = :tpMedio"),
-    @NamedQuery(name = "MedioCnt.findByStMedio", query = "SELECT m FROM MedioCnt m WHERE m.stMedio = :stMedio"),
-    @NamedQuery(name = "MedioCnt.findByIdContacto", query = "SELECT m FROM MedioCnt m WHERE m.idContacto = :idContacto")})
+    @NamedQuery(name = "MedioCnt.findByIdMedio", query = "SELECT m FROM MedioCnt m WHERE m.idMedio = :idMedio"),
+    @NamedQuery(name = "MedioCnt.findByTpMedio", query = "SELECT m FROM MedioCnt m WHERE m.tpMedio = :tpMedio"),
+    @NamedQuery(name = "MedioCnt.findByStMedio", query = "SELECT m FROM MedioCnt m WHERE m.stMedio = :stMedio")})
 public class MedioCnt implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected MedioCntPK medioCntPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id_medio")
+    private Integer idMedio;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1)
+    @Column(name = "tp_medio")
+    private String tpMedio;
     @Basic(optional = false)
     @NotNull
     @Column(name = "st_medio")
     private boolean stMedio;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_contacto")
-    private int idContacto;
+    @JoinColumn(name = "id_contacto", referencedColumnName = "id_contacto")
+    @ManyToOne(optional = false)
+    private Contacto idContacto;
+    @JoinColumn(name = "id_mail", referencedColumnName = "id_mail")
+    @ManyToOne
+    private Mail idMail;
+    @JoinColumn(name = "id_telefono", referencedColumnName = "id_telefono")
+    @ManyToOne
+    private Telefono idTelefono;
 
     public MedioCnt() {
     }
 
-    public MedioCnt(MedioCntPK medioCntPK) {
-        this.medioCntPK = medioCntPK;
+    public MedioCnt(Integer idMedio) {
+        this.idMedio = idMedio;
     }
 
-    public MedioCnt(MedioCntPK medioCntPK, boolean stMedio, int idContacto) {
-        this.medioCntPK = medioCntPK;
+    public MedioCnt(Integer idMedio, String tpMedio, boolean stMedio) {
+        this.idMedio = idMedio;
+        this.tpMedio = tpMedio;
         this.stMedio = stMedio;
-        this.idContacto = idContacto;
     }
 
-    public MedioCnt(int idMedio, String tpMedio) {
-        this.medioCntPK = new MedioCntPK(idMedio, tpMedio);
+    public Integer getIdMedio() {
+        return idMedio;
     }
 
-    public MedioCntPK getMedioCntPK() {
-        return medioCntPK;
+    public void setIdMedio(Integer idMedio) {
+        this.idMedio = idMedio;
     }
 
-    public void setMedioCntPK(MedioCntPK medioCntPK) {
-        this.medioCntPK = medioCntPK;
+    public String getTpMedio() {
+        return tpMedio;
+    }
+
+    public void setTpMedio(String tpMedio) {
+        this.tpMedio = tpMedio;
     }
 
     public boolean getStMedio() {
@@ -74,18 +95,34 @@ public class MedioCnt implements Serializable {
         this.stMedio = stMedio;
     }
 
-    public int getIdContacto() {
+    public Contacto getIdContacto() {
         return idContacto;
     }
 
-    public void setIdContacto(int idContacto) {
+    public void setIdContacto(Contacto idContacto) {
         this.idContacto = idContacto;
+    }
+
+    public Mail getIdMail() {
+        return idMail;
+    }
+
+    public void setIdMail(Mail idMail) {
+        this.idMail = idMail;
+    }
+
+    public Telefono getIdTelefono() {
+        return idTelefono;
+    }
+
+    public void setIdTelefono(Telefono idTelefono) {
+        this.idTelefono = idTelefono;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (medioCntPK != null ? medioCntPK.hashCode() : 0);
+        hash += (idMedio != null ? idMedio.hashCode() : 0);
         return hash;
     }
 
@@ -96,7 +133,7 @@ public class MedioCnt implements Serializable {
             return false;
         }
         MedioCnt other = (MedioCnt) object;
-        if ((this.medioCntPK == null && other.medioCntPK != null) || (this.medioCntPK != null && !this.medioCntPK.equals(other.medioCntPK))) {
+        if ((this.idMedio == null && other.idMedio != null) || (this.idMedio != null && !this.idMedio.equals(other.idMedio))) {
             return false;
         }
         return true;
@@ -104,7 +141,7 @@ public class MedioCnt implements Serializable {
 
     @Override
     public String toString() {
-        return "mx.com.ferbo.model.MedioCnt[ medioCntPK=" + medioCntPK + " ]";
+        return "mx.com.ferbo.model.MedioCnt[ idMedio=" + idMedio + " ]";
     }
     
 }
