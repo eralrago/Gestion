@@ -29,18 +29,18 @@
 							<p:inputText />
 <!-- 						</div> -->
 <!-- 						<div class="card"> -->
-							<p:outputLabel for="countries-som" value="Por Clientes:" />
+							<p:outputLabel for="cliente-som" value="Por Clientes:" />
 <!-- 						</div> -->
 <!-- 						<div class="card"> -->
-							<p:selectOneMenu id="countries-som" autoWidth="false"
-								value="#{estadosBean.idPais}" filter="true"
+							<p:selectOneMenu id="cliente-som" autoWidth="false"
+								value="#{constanciaServicioBean.idCliente}" filter="true"
 								filterMatchMode="startsWith">
-								<f:selectItem itemLabel="Selecione Pais" itemValue=""
+								<f:selectItem itemLabel="Selecione Cliente" itemValue=""
 									noSelectionOption="true" />
-								<f:selectItems var="selectedCountriesOne"
-									value="#{estadosBean.listaPaises}"
-									itemLabel="#{selectedCountriesOne.paisDesc}"
-									itemValue="#{selectedCountriesOne.paisCve}" />
+								<f:selectItems var="selectedCliente"
+									value="#{constanciaServicioBean.listaClientes}"
+									itemLabel="#{selectedCliente.cteNombre}"
+									itemValue="#{selectedCliente.cteCve}" />
 							</p:selectOneMenu>
 <!-- 						</div> -->
 <!-- 						<div class="card"> -->
